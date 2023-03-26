@@ -1,4 +1,3 @@
-/* animations.js */
 document.addEventListener('DOMContentLoaded', function() {
     const mainHeader = document.querySelector('main h3');
     const mainText = document.querySelector('main p');
@@ -13,12 +12,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function initTypewriter() {
-        mainHeader.textContent = 'Welcome to Project Leyber 212';
-        mainText.textContent = 'Join us on this exciting journey as we explore the endless possibilities of the universe and the human spirit. Our mission is to inspire and empower our audience by sharing valuable insights and knowledge in diverse fields, from space science and fitness to data engineering and artificial intelligence. Together, we\'ll navigate this rapidly changing landscape and foster a community of forward-thinking individuals who embrace progress and seek to make a positive impact in the world.';
+        mainHeader.textContent = '';
+        mainText.textContent = '';
+
         setTimeout(() => typeWriter(mainHeader), 1000);
         setTimeout(() => typeWriter(mainText), 2000);
     }
 
     initTypewriter();
-});
+    
+    const countdown = document.querySelector('.countdown');
+    const launchDate = new Date('Jan 1, 2024 00:00:00').getTime();
 
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = launchDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdown.innerHTML = `
+            <div>${days}<span>Days</span></div>
+            <div>${hours}<span>Hours</span></div>
+            <div>${minutes}<span>Minutes</span></div>
+            <div>${seconds}<span>Seconds</span></div>
+        `;
+    }
+
+    setInterval(updateCountdown, 1000);
+});
