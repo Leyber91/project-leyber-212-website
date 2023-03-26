@@ -1,0 +1,61 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+header {
+    background-color: black;
+    padding: 20px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 2s forwards;
+}
+
+header h1 {
+    font-size: 40px;
+    color: white;
+}
+
+header h2 {
+    font-size: 24px;
+    color: red;
+}
+
+main {
+    padding: 40px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 2s forwards 1s;
+}
+
+main h3 {
+    font-size: 28px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+main p {
+    font-size: 18px;
+    color: black;
+    line-height: 1.5;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
