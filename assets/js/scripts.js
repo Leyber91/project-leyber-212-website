@@ -10,32 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('main').appendChild(tryverseSection);
   });
 
-// GSAP Animations
-const tl = gsap.timeline({ defaults: { duration: 1, ease: 'power2.out' } });
+  document.addEventListener('DOMContentLoaded', function () {
+    // Toggle sidebar on click
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('#sidebar');
 
-// Logo and navigation links animation
-tl.from('.logo, .nav-links li a', { opacity: 0, y: '-100%', stagger: 0.2 });
+    menuToggle.addEventListener('click', function () {
+        sidebar.classList.toggle('show');
+    });
 
-// Sidebar animation
-tl.from('#sidebar', { x: '-100%', duration: 0.5 });
+    // Add parallax effect to the title
+    const title = document.querySelector('.title');
 
-// Sidebar blocks animation
-tl.from('.sidebar-block', { opacity: 0, y: '-50%', stagger: 0.2, duration: 0.5 });
-
-// Main content animation
-tl.from('main', { opacity: 0, x: '100%', duration: 0.5 });
-
-// Hover effect on sidebar blocks
-const sidebarBlocks = document.querySelectorAll('.sidebar-block');
-
-sidebarBlocks.forEach((block) => {
-  block.addEventListener('mouseover', () => {
-    gsap.to(block, { scale: 1.1, duration: 0.3, ease: 'power2.out' });
-    gsap.to(block.nextElementSibling, { scale: 0.9, duration: 0.3, ease: 'power2.out' });
-  });
-
-  block.addEventListener('mouseout', () => {
-    gsap.to(block, { scale: 1, duration: 0.3, ease: 'power2.out' });
-    gsap.to(block.nextElementSibling, { scale: 1, duration: 0.3, ease: 'power2.out' });
-  });
+    window.addEventListener('scroll', function () {
+        let scrollPosition = window.pageYOffset;
+        title.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
+    });
 });
