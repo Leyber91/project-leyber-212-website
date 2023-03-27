@@ -123,6 +123,11 @@ function addSidebarToggle() {
 
     toggleButton.addEventListener('click', () => {
         sidebar.classList.toggle('open');
+        if (sidebar.classList.contains('open')) {
+            gsap.to(sidebar, { x: '0%', duration: 0.5, ease: 'power2.out' });
+        } else {
+            gsap.to(sidebar, { x: '-100%', duration: 0.5, ease: 'power2.out' });
+        }
     });
 }
 
