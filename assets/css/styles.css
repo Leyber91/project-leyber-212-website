@@ -1,4 +1,4 @@
-/* Header *//* Reset and Basic Styles */
+/* Reset and Basic Styles */
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +14,9 @@ body {
     background-position: 0 0, 15px 15px;
     background: linear-gradient(135deg, #0a1a31 0%, #0e324d 100%);
     overflow-x: hidden;
+    transition: background-color 0.3s;
 }
+
 .hidden {
     opacity: 0;
 }
@@ -29,6 +31,7 @@ header {
     position: fixed;
     width: 100%;
     z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 
 body, h1, h2, h3, h4, h5, h6, a {
@@ -72,6 +75,8 @@ body, h1, h2, h3, h4, h5, h6, a {
     padding: 2rem;
     z-index: 500;
     transition: transform 0.3s;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
 }
 
 #sidebar.show {
@@ -83,11 +88,14 @@ body, h1, h2, h3, h4, h5, h6, a {
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
+    position: relative;
+    overflow: hidden;
 }
 
 .sidebar-block:hover {
     background-color: #3a3f55;
+    transform: scale(1.05);
 }
 
 .sidebar-block h3 {
@@ -142,7 +150,6 @@ main {
     padding: 1.111em;
     padding-top: 4.444em;
     padding-bottom: 4rem; /* Adjust based on the height of the footer */
-
 }
 
 .text-box {
@@ -207,9 +214,7 @@ main section {
     left: -100%;
     height: 100%;
     overflow-y: auto;
-}
-.fractal-clip-path {
-    clip-path: url(#fractal-clip);
+    border-right: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Custom scrollbar */
@@ -287,4 +292,27 @@ footer {
 .sidebar-block-wrapper {
     position: relative; /* Make sure the SVG is positioned relative to the wrapper */
     margin-bottom: 1rem; /* Add some spacing between the blocks */
+}
+
+#toggle-sidebar {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    background-color: #0ef;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#toggle-sidebar:hover {
+    background-color: #4bf;
+}
+
+#sidebar.open {
+    left: 0;
+    transition: left 0.3s;
 }
