@@ -9,6 +9,9 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     background-color: #1e1e1e;
+    background-image: radial-gradient(#3c3c3c 20%, transparent 20%), radial-gradient(#3c3c3c 20%, transparent 20%);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
 }
 
 /* Header */
@@ -71,6 +74,11 @@ header {
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
+    transition: background-color 0.3s;
+}
+
+.sidebar-block:hover {
+    background-color: #4c4c4c;
 }
 
 .sidebar-block h3 {
@@ -118,4 +126,12 @@ main {
         margin-left: 0;
         padding-top: 6rem;
     }
+}
+
+.sidebar-block:hover {
+    transform: scale(1.1);
+}
+
+.sidebar-block:hover ~ .sidebar-block {
+    transform: scale(0.9);
 }
