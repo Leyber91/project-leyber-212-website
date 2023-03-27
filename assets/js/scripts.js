@@ -16,12 +16,15 @@ function addTryverseSection() {
 }
 
 function addParallaxEffectToTitle() {
-    const title = document.querySelector('.title');
+// Add parallax effect to sections
+const sections = document.querySelectorAll('main section');
 
-    window.addEventListener('scroll', function () {
-        let scrollPosition = window.pageYOffset;
-        title.style.transform = 'translateY(' + scrollPosition * 0.5 + 'px)';
+window.addEventListener('scroll', function () {
+    let scrollPosition = window.pageYOffset;
+    sections.forEach((section, index) => {
+        section.style.transform = 'translateY(' + (scrollPosition * 0.2 * (index + 1)) + 'px)';
     });
+});
 }
 
 function initializeGSAPAnimations() {
