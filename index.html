@@ -18,11 +18,12 @@
     <svg width="0" height="0" style="position:absolute">
         <defs>
             <clipPath id="fractal-clip" clipPathUnits="objectBoundingBox">
-                <path d="M0,0 L1,0 L1,1 Q0.7,0.8 0.5,1 Q0.3,0.8 0,1 Z"/>
+                <polygon points="0,0 1,0 1,1 0.8,0.8 0.5,1 0.2,0.8 0,1"/>
             </clipPath>
         </defs>
-    </svg>
+    </svg>    
     <header>
+        <button id="toggle-sidebar" aria-label="Toggle Sidebar">&#9776;</button>
         <a href="#" class="logo">Project Leyber 212</a>
     </header>
     <section class="hero">
@@ -30,45 +31,55 @@
     </section>
     
     <div id="sidebar" class="parallax">
-        <div class="sidebar-block">
-            <h3>Space</h3>
-            <ul>
-                <li><a href="#">Subtopic 1</a></li>
-                <li><a href="#">Subtopic 2</a></li>
-                <li><a href="#">Subtopic 3</a></li>
-            </ul>
-        </div>
-        <div class="sidebar-block">
-            <h3>Fitness</h3>
-            <ul>
-                <li><a href="#">Subtopic 1</a></li>
-                <li><a href="#">Subtopic 2</a></li>
-                <li><a href="#">Subtopic 3</a></li>
-            </ul>
-        </div>
-        <div class="sidebar-block">
-            <h3>Data Driven</h3>
-            <ul>
-                <li><a href="#">Subtopic 1</a></li>
-                <li><a href="#">Subtopic 2</a></li>
-                <li><a href="#">Subtopic 3</a></li>
-            </ul>
-        </div>
-        <div class="sidebar-block">
-            <h3>Self Improvement</h3>
-            <ul>
-                <li><a href="#">Subtopic 1</a></li>
-                <li><a href="#">Subtopic 2</a></li>
-                <li><a href="#">Subtopic 3</a></li>
-            </ul>
-        </div>
-        <div class="sidebar-block">
-            <h3>Viral</h3>
-            <ul>
-                <li><a href="#">Subtopic 1</a></li>
-                <li><a href="#">Subtopic 2</a></li>
-                <li><a href="#">Subtopic 3</a></li>
-            </ul>
+        <div class="sidebar-block-wrapper">
+            <svg class="sidebar-background" width="100%" height="100%">
+                <defs>
+                    <clipPath id="crystal-clip" clipPathUnits="objectBoundingBox">
+                        <!-- The polygon will be added dynamically using JavaScript -->
+                    </clipPath>
+                </defs>
+                <rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.2)" clip-path="url(#crystal-clip)"></rect>
+            </svg>
+            <div class="sidebar-block">
+                <h3>Space</h3>
+                <ul>
+                    <li><a href="#">Subtopic 1</a></li>
+                    <li><a href="#">Subtopic 2</a></li>
+                    <li><a href="#">Subtopic 3</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-block">
+                <h3>Fitness</h3>
+                <ul>
+                    <li><a href="#">Subtopic 1</a></li>
+                    <li><a href="#">Subtopic 2</a></li>
+                    <li><a href="#">Subtopic 3</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-block">
+                <h3>Data Driven</h3>
+                <ul>
+                    <li><a href="#">Subtopic 1</a></li>
+                    <li><a href="#">Subtopic 2</a></li>
+                    <li><a href="#">Subtopic 3</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-block">
+                <h3>Self Improvement</h3>
+                <ul>
+                    <li><a href="#">Subtopic 1</a></li>
+                    <li><a href="#">Subtopic 2</a></li>
+                    <li><a href="#">Subtopic 3</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-block">
+                <h3>Viral</h3>
+                <ul>
+                    <li><a href="#">Subtopic 1</a></li>
+                    <li><a href="#">Subtopic 2</a></li>
+                    <li><a href="#">Subtopic 3</a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <main class="fractal-clip-path">
@@ -83,6 +94,10 @@
             <p>Join us on this exciting journey, and let's explore the endless possibilities of the universe and the human spirit. Welcome to Project Leyber 212.</p>
         </section>
     </main>
+    <footer>
+        <p>&copy; 2023 Project Leyber 212. All rights reserved.</p>
+    </footer>
+    
     <script src="assets\js\scripts.js"></script>
 </body>
 </html>

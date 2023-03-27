@@ -91,6 +91,10 @@ $(document).ready(function() {
 document.addEventListener('DOMContentLoaded', () => {
     // ...
     addIntersectionObserver();
+    addSidebarToggle();
+    createRandomCrystalClip();
+    createRandomCrystalClips();
+
 });
 
 function addIntersectionObserver() {
@@ -111,3 +115,48 @@ function addIntersectionObserver() {
     });
 }
 
+function addSidebarToggle() {
+    const toggleButton = document.getElementById('toggle-sidebar');
+    const sidebar = document.getElementById('sidebar');
+    let sidebarIsOpen = false;
+
+    toggleButton.addEventListener('click', () => {
+        sidebarIsOpen = !sidebarIsOpen;
+        sidebar.style.left = sidebarIsOpen ? '0' : '-100%';
+    });
+}
+
+function createRandomCrystalClip() {
+    const clipPath = document.getElementById('crystal-clip');
+    const pointCount = 6; // Change this value to adjust the number of points in the polygon
+    const points = [];
+
+    for (let i = 0; i < pointCount; i++) {
+        const x = Math.random();
+        const y = Math.random();
+        points.push(`${x},${y}`);
+    }
+
+    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    polygon.setAttribute('points', points.join(' '));
+    clipPath.appendChild(polygon);
+}
+
+function createRandomCrystalClips() {
+    const clipPaths = document.querySelectorAll('#sidebar .sidebar-background defs clipPath');
+    const pointCount = 6;
+
+    clipPaths.forEach((clipPath, index) => {
+        const points = [];
+
+        for (let i = 0; i < pointCount; i++) {
+            const x = Math.random();
+            const y = Math.random();
+            points.push(`${x},${y}`);
+        }
+
+        const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        polygon.setAttribute('points', points.join(' '));
+        clipPath.appendChild(polygon);
+    });
+}
