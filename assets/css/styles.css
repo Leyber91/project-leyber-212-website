@@ -120,3 +120,33 @@ footer {
     text-align: center;
     padding: 1rem;
 }
+
+/* Add these styles to your existing styles.css */
+/* Background Animation */
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Apply the animation to the hero section */
+.hero {
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+}
+
+/* Add parallax effect to the introduction section */
+.introduction {
+    position: relative;
+    background-attachment: fixed;
+    background-image: url("https://source.unsplash.com/random");
+    background-size: cover;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
