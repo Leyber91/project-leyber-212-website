@@ -11,12 +11,11 @@ body {
     min-height: 100vh;
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-color: #1c1f27;
-    background-image: url('assets\\images\\neural_background.png');
+    background-image: url("assets\images\neural_background.png");
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
-    background: linear-gradient(135deg, #0a1a31 0%, #0e324d 100%);
+    /*background: linear-gradient(135deg, #0a1a31 0%, #0e324d 100%);*/
     overflow-x: hidden;
 }
 
@@ -26,15 +25,17 @@ body {
 
 /* Header */
 header {
-    background: rgba(30, 30, 30, 0.9);
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #333;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    position: fixed;
+    padding: 0 1rem;
     width: 100%;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+    z-index: 10;
+    backdrop-filter: blur(6px);
 }
 
 body, h1, h2, h3, h4, h5, h6, a {
@@ -218,11 +219,15 @@ main section {
 
 #sidebar {
     position: fixed;
-    top: 0;
+    top: 4rem;
     left: -100%;
-    height: 100%;
+    height: calc(100% - 4rem); /* Subtract the header height from the total height */
     overflow-y: auto;
     border-right: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: #f4f4f4;
+    transition: left 0.5s ease;
+    z-index: 5; /* Set a lower z-index than the toggle button to avoid overlapping */
+
 }
 
 /* Custom scrollbar */
@@ -305,7 +310,7 @@ footer {
     position: fixed;
     top: 1rem;
     left: 1rem;
-    z-index: 100;
+    z-index: 5;
     background-color: #0ef;
     color: #fff;
     border: none;
@@ -313,6 +318,7 @@ footer {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
+    
 }
 
 #toggle-sidebar:hover {
