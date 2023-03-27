@@ -9,12 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     createRandomCrystalClips();
     addTouchSwipeFunctionality();
     addRandomCrystalClipPath();
-    addIntersectionObserver();
-    addSidebarToggle();
-    createRandomCrystalClip();
-    createRandomCrystalClips();
-    addTouchSwipeFunctionality();
-    addRandomCrystalClipPath();
 });
 
 function addTryverseSection() {
