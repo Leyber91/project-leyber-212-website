@@ -18,8 +18,6 @@ body {
     background-attachment: fixed;
     background: linear-gradient(135deg, #0a1a31 0%, #0e324d 100%);
     overflow-x: hidden;
-    transition: background-color 0.3s;
-    
 }
 
 .hidden {
@@ -151,12 +149,11 @@ body, h1, h2, h3, h4, h5, h6, a {
 
 /* Main content */
 main {
-    flex-grow: 1;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 1rem;
-    border-radius: 10px;
-    margin: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adjust based on the height of the footer */
+    margin-left: 18.333em;
+    padding: 1.111em;
+    padding-top: 4.444em;
+    padding-bottom: 4rem; /* Adjust based on the height of the footer */
+
 }
 
 .text-box {
