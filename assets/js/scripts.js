@@ -49,5 +49,65 @@ function addSidebarBlockHoverEffects() {
             gsap.to(block, { scale: 1, duration: 0.3, ease: 'power2.out' });
             gsap.to(block.nextElementSibling, { scale: 1, duration: 0.3, ease: 'power2.out' });
         });
+        block.addEventListener('click', () => {
+            document.querySelectorAll('.sidebar-block.active').forEach((activeBlock) => {
+                activeBlock.classList.remove('active');
+            });
+            block.classList.add('active');
+        });
     });
 }
+
+// Add TouchSwipe functionality to the sidebar
+$(document).ready(function() {
+    let sidebarIsOpen = false;
+    const sidebar = $('#sidebar');
+
+    sidebar.swipe({
+        swipeStatus: function(event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
+            if (phase === 'start') {
+                sidebarIsOpen = parseInt(sidebar.css('left')) === 0;
+            }
+
+            if (phase === 'move' && (sidebarIsOpen && direction === 'left' || !sidebarIsOpen && direction === 'right')) {
+                let newLeft = sidebarIsOpen ? Math.min(-distance, 0) : Math.max(-sidebar.outerWidth() + distance, -sidebar.outerWidth());
+                sidebar.css('left', newLeft + 'px');
+            }
+
+            if (phase === 'end' || phase === 'cancel') {
+                if (distance > sidebar.outerWidth() / 2) {
+                    sidebarIsOpen = !sidebarIsOpen;
+                }
+
+                let targetLeft = sidebarIsOpen ? 0 : -sidebar.outerWidth();
+                sidebar.animate({ left: targetLeft + 'px' }, 300);
+            }
+        },
+        threshold: 0,
+        fingers: 'all'
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ...
+    addIntersectionObserver();
+});
+
+function addIntersectionObserver() {
+    const sections = document.querySelectorAll('main section');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.remove('hidden');
+                gsap.from(entry.target, { opacity: 0, y: '30px', duration: 1, ease: 'power2.out' });
+            }
+        });
+    }, { threshold: 0.5 });
+
+    sections.forEach((section) => {
+        section.classList.add('hidden');
+        observer.observe(section);
+    });
+}
+
