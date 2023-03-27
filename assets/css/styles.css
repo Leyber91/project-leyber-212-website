@@ -1,209 +1,122 @@
-/* styles.css */
-
-/* Reset styles */
-
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-  background: transparent;
+/* Reset and Basic Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #333;
-  background-color: #fff;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
 }
 
-a {
-  color: #e50a46;
-  text-decoration: none;
-}
-
-a:hover,
-a:focus {
-  color: #f72585;
-  text-decoration: underline;
-}
-
+/* Header */
 header {
-  background-color: #333;
-  color: #fff;
-  padding: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    background: linear-gradient(to right, red, white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
 }
 
-h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.logo {
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
-h2 {
-  font-size: 2rem;
-  font-weight: normal;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.logo:hover {
+    color: #ff8080;
 }
 
-main {
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.nav-links {
+    list-style: none;
+    display: flex;
 }
 
-h3 {
-  font-size: 2rem;
-  font-weight: bold;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1rem;
+    transition: color 0.3s;
 }
 
-p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  max-width: 50rem;
-  line-height: 1.8;
+.nav-links li a:hover {
+    color: #ff8080;
 }
 
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border-radius: 5rem;
-  background-color: #e50a46;
-  color: #fff;
-  font-size: 1.2rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, red, white);
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 2rem;
 }
 
-.btn:hover,
-.btn:focus {
-  background-color: #f72585;
-  cursor: pointer;
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: fadeInDown 2s ease-in-out;
 }
 
-footer {
-  background-color: #333;
-  color: #fff;
-  padding: 1.5rem;
-  text-align: center;
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeInUp 2s ease-in-out;
 }
 
-.social-links {
-  margin-top: 2rem;
-}
-
-.social-links a {
-  display: inline-block;
-  margin-right: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.social-links a:hover,
-.social-links a:focus {
-  transform: scale(1.1);
-}
-
-.social-links img {
-  width: 2rem;
-  height: 2rem;
-}
-
-/* Animations */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideinFromLeft {
+@keyframes fadeInDown {
     0% {
         opacity: 0;
-        transform: translateX(-100%);
-    }
-    50% {
-        opacity: 0.5;
-        transform: translateX(-50%);
+        transform: translateY(-50px);
     }
     100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
     }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Introduction Section */
+.introduction {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
 }
