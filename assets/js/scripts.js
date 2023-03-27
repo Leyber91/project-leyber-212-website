@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     addParallaxEffectToTitle();
     initializeGSAPAnimations();
     addSidebarBlockHoverEffects();
+    addIntersectionObserver();
+    addSidebarToggle();
+    createRandomCrystalClip();
+    createRandomCrystalClips();
+    addTouchSwipeFunctionality();
+    addRandomCrystalClipPath();
 });
 
 function addTryverseSection() {
@@ -59,43 +65,39 @@ function addSidebarBlockHoverEffects() {
 }
 
 // Add TouchSwipe functionality to the sidebar
-$(document).ready(function() {
+function addTouchSwipeFunctionality() {
+    const sidebar = document.getElementById('sidebar');
     let sidebarIsOpen = false;
-    const sidebar = $('#sidebar');
+    let touchStartX = 0;
 
-    sidebar.swipe({
-        swipeStatus: function(event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
-            if (phase === 'start') {
-                sidebarIsOpen = parseInt(sidebar.css('left')) === 0;
-            }
-
-            if (phase === 'move' && (sidebarIsOpen && direction === 'left' || !sidebarIsOpen && direction === 'right')) {
-                let newLeft = sidebarIsOpen ? Math.min(-distance, 0) : Math.max(-sidebar.outerWidth() + distance, -sidebar.outerWidth());
-                sidebar.css('left', newLeft + 'px');
-            }
-
-            if (phase === 'end' || phase === 'cancel') {
-                if (distance > sidebar.outerWidth() / 2) {
-                    sidebarIsOpen = !sidebarIsOpen;
-                }
-
-                let targetLeft = sidebarIsOpen ? 0 : -sidebar.outerWidth();
-                sidebar.animate({ left: targetLeft + 'px' }, 300);
-            }
-        },
-        threshold: 0,
-        fingers: 'all'
+    sidebar.addEventListener('touchstart', (event) => {
+        touchStartX = event.touches[0].clientX;
+        sidebarIsOpen = parseInt(getComputedStyle(sidebar).left) === 0;
     });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    // ...
-    addIntersectionObserver();
-    addSidebarToggle();
-    createRandomCrystalClip();
-    createRandomCrystalClips();
+    sidebar.addEventListener('touchmove', (event) => {
+        const touchCurrentX = event.touches[0].clientX;
+        const distance = touchStartX - touchCurrentX;
 
-});
+        if ((sidebarIsOpen && distance > 0) || (!sidebarIsOpen && distance < 0)) {
+            const newLeft = sidebarIsOpen ? Math.min(-distance, 0) : Math.max(-sidebar.clientWidth + distance, -sidebar.clientWidth);
+            sidebar.style.left = `${newLeft}px`;
+        }
+    });
+
+    sidebar.addEventListener('touchend', (event) => {
+        const touchEndX = event.changedTouches[0].clientX;
+        const distance = touchStartX - touchEndX;
+
+        if (Math.abs(distance) > sidebar.clientWidth / 2) {
+            sidebarIsOpen = !sidebarIsOpen;
+        }
+
+        const targetLeft = sidebarIsOpen ? 0 : -sidebar.clientWidth;
+        sidebar.style.left = `${targetLeft}px`;
+    });
+}
+
 
 function addIntersectionObserver() {
     const sections = document.querySelectorAll('main section');
@@ -118,11 +120,9 @@ function addIntersectionObserver() {
 function addSidebarToggle() {
     const toggleButton = document.getElementById('toggle-sidebar');
     const sidebar = document.getElementById('sidebar');
-    let sidebarIsOpen = false;
 
     toggleButton.addEventListener('click', () => {
-        sidebarIsOpen = !sidebarIsOpen;
-        sidebar.style.left = sidebarIsOpen ? '0' : '-100%';
+        sidebar.classList.toggle('open');
     });
 }
 
@@ -159,4 +159,29 @@ function createRandomCrystalClips() {
         polygon.setAttribute('points', points.join(' '));
         clipPath.appendChild(polygon);
     });
+}
+
+function addRandomCrystalClipPath() {
+    const clipPath = document.getElementById('crystal-clip');
+    const points = getRandomPoints();
+    const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    polygon.setAttribute('points', points);
+    clipPath.appendChild(polygon);
+}
+
+function getRandomPoints() {
+    const startPoint = '0,0';
+    const endPoint = '1,1';
+    const pointCount = 4;
+    const randomPoints = [];
+
+    for (let i = 0; i < pointCount; i++) {
+        const x = Math.random();
+        const y = Math.random() * 0.2;
+        randomPoints.push(`${x},${y}`);
+    }
+
+    randomPoints.sort((a, b) => parseFloat(a.split(',')[0]) - parseFloat(b.split(',')[0]));
+
+    return [startPoint, ...randomPoints, endPoint].join(' ');
 }
