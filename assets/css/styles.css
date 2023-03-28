@@ -445,7 +445,29 @@ main .content {
 /* Styles for small screens */
 @media (max-width: 768px) {
     .logo {
-        font-size: 20px;
+        font-size: 24px;
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        width: 250px;
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+
+    #sidebar.active {
+        left: 0;
+    }
+
+    .sidebar-block {
+        margin: 20px;
+    }
+    #sidebar.hidden {
+        display: none;
+      }
+    .sidebar-background {
+        display: none;
     }
 }
-
