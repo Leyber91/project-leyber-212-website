@@ -48,18 +48,6 @@ body, h1, h2, h3, h4, h5, h6, a {
     font-family: 'Orbitron', sans-serif;
 }
 
-.logo {
-    color: #0ef;
-    font-size: 1.5rem;
-    text-decoration: none;
-    transition: color 0.3s;
-    position: relative;
-}
-
-.logo:hover {
-    color: #0bc;
-}
-
 .nav-links {
     list-style: none;
     display: flex;
@@ -82,7 +70,7 @@ body, h1, h2, h3, h4, h5, h6, a {
     left: 0;
     top: 6rem;
     width: 16.667em;
-    background-color: rgba(10, 26, 49, 0.8);
+    background-color: rgba(57, 71, 71, 0.5); /* Adjust the color and opacity to your liking */
     padding: 2rem;
     z-index: 500;
     transition: transform 0.3s;
@@ -98,7 +86,7 @@ body, h1, h2, h3, h4, h5, h6, a {
 }
 
 .sidebar-block {
-    background-color: #2e3241;
+    background-color: #2d4a63a6;
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -260,14 +248,15 @@ main section {
 }
 
 .logo {
-    font-size: 2.5rem; /* Adjust the font size as desired */
+    font-size: 3rem; /* Adjust the font size as desired */
     font-weight: 700; /* Make the text thicker */
     color: #0ef;
-    text-shadow: 0 0 5px #FFFFFF, /* Outer white glow */
-                0 0 10px #0ef, /* Blue glow */
-                0 0 20px #0ef, /* Blue glow */
-                0 0 30px #0ef, /* Blue glow */
-                0 0 40px #0ef; /* Blue glow */
+    text-shadow: 0 0 5px #000, /* Inner black shadow */
+                 0 0 10px #0ef, /* Blue glow */
+                 0 0 20px #0ef, /* Blue glow */
+                 0 0 30px #0ef, /* Blue glow */
+                 0 0 40px #0ef; /* Blue glow */
+
 
     text-decoration: none;
     transition: all 0.3s ease;
@@ -278,14 +267,49 @@ main section {
     transform: translateX(-50%);
 }
 
-.logo:hover {
-    text-shadow: 0 0 10px #FFFFFF, /* Outer white glow */
-                0 0 15px #007BFF, /* Blue glow */
-                0 0 25px #007BFF, /* Blue glow */
-                0 0 35px #007BFF, /* Blue glow */
-                0 0 45px #007BFF; /* Blue glow */
-    transform: scale(1.1);
+@keyframes vortex {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1); }
 }
+
+@keyframes vortex-hover {
+    0%, 100% { transform: rotate(90deg) scale(0.8); }
+    50% { transform: rotate(270deg) scale(0.8); }
+}
+
+.logo::before,
+.logo::after,
+.logo::nth-child(1),
+.logo::nth-child(2) {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle at center, transparent, #0ef 75%, transparent 100%);
+    opacity: 0.5;
+    z-index: -1;
+}
+
+.logo::before,
+.logo::nth-child(1) {
+    animation: vortex 3s infinite linear;
+}
+
+.logo::after,
+.logo::nth-child(2) {
+    animation: vortex-hover 4s infinite linear;
+}
+
+.logo:hover::before,
+.logo:hover::nth-child(1) {
+    animation: vortex-hover 3s infinite linear;
+}
+
+.logo:hover::after,
+.logo:hover::nth-child(2) {
+    animation: vortex 4s infinite linear;
+}
+
 
 .nav-links {
     list-style: none;
@@ -397,7 +421,9 @@ main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    
+    align-items: center;
+    width: 100%;
+    justify-content: space-evenly;
     padding-bottom: 4rem; /* Adjust based on the height of the footer */
     min-height: calc(100vh - 4.444em - 4rem); /* Subtract the header and footer heights from the total height */
     padding: 1.111em;
