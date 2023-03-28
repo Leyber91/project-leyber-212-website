@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     addSidebarBlockHoverEffects();
     addIntersectionObserver();
     addSidebarToggle();
-    `createRandomCrystalClip();
-    createRandomCrystalClips();`
+    createRandomCrystalClip();
+    createRandomCrystalClips();
     addTouchSwipeFunctionality();
     addRandomCrystalClipPath();
 });
@@ -100,7 +100,7 @@ function addTouchSwipeFunctionality() {
 
 
 function addIntersectionObserver() {
-    const sections = document.querySelectorAll('main section');
+    const sections = document.querySelectorAll('main section:not(.tryverse)');
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
