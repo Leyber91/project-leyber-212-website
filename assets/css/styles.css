@@ -469,6 +469,15 @@ main .content {
     .sidebar-block {
         margin: 20px;
     }
+    .sidebar-block.active {
+        background-color: rgba(12, 36, 70, 0.8);
+        color: #0ef;
+        border: 1px solid #0ef;
+        box-shadow: 0 0 15px #0ef;
+        background-color: rgba(0, 164, 175, 0.233);
+        border-left: 3px solid #0ef;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
     
     #sidebar.hidden {
         display: none;

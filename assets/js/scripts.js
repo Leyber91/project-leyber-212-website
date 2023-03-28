@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     addSidebarBlockHoverEffects();
     addIntersectionObserver();
     addSidebarToggle();
-    `createRandomCrystalClip();
-    createRandomCrystalClips();`
     addTouchSwipeFunctionality();
     addRandomCrystalClipPath();
 
@@ -237,7 +235,14 @@ function createBlackHoleEffect() {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        if (this.size > 0.2) this.size -= 0.1;
+        if (this.size <= 0.2) {
+            // Reset particle properties
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 5 + 1;
+            this.speedX = Math.random() * 3 - 1.5;
+            this.speedY = Math.random() * 3 - 1.5;
+        }
 
         // Creating black hole effect
         const dx = canvas.width / 2 - this.x;
@@ -286,10 +291,6 @@ function createBlackHoleEffect() {
         particlesArray[i].update();
         particlesArray[i].draw();
 
-        if (particlesArray[i].size <= 0.2) {
-        particlesArray.splice(i, 1);
-        i--;
-        }
     }
 
     requestAnimationFrame(animate);
