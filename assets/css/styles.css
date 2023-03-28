@@ -268,49 +268,50 @@ main section {
     left: 50%;
     transform: translateX(-50%);
 }
-
-@keyframes vortex {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1); }
-}
-
-@keyframes vortex-hover {
-    0%, 100% { transform: rotate(90deg) scale(0.8); }
-    50% { transform: rotate(270deg) scale(0.8); }
-}
-
 .logo::before,
-.logo::after,
-.logo:nth-child(1),
-.logo:nth-child(2) {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(circle at center, transparent, #0ef 75%, transparent 100%);
-    opacity: 0.5;
-    z-index: -1;
+.logo::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.7);
+  animation: pulsate 2s ease-out infinite;
 }
 
-.logo::before,
-.logo:nth-child(1) {
-    animation: vortex 3s infinite linear;
+.logo::before {
+  animation-delay: 0.5s;
 }
 
-.logo::after,
-.logo:nth-child(2) {
-    animation: vortex-hover 4s infinite linear;
+@keyframes pulsate {
+  0% {
+    transform: scale(0.1, 0.1);
+    opacity: 0.0;
+  }
+  50% {
+    opacity: 1.0;
+  }
+  100% {
+    transform: scale(1.2, 1.2);
+    opacity: 0.0;
+  }
 }
 
-.logo:hover::before,
-.logo:hover:nth-child(1) {
-    animation: vortex-hover 3s infinite linear;
+.logo::after {
+  animation: spin 5s linear infinite;
 }
 
-.logo:hover::after,
-.logo:hover:nth-child(2) {
-    animation: vortex 4s infinite linear;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.7);
+  }
+  100% {
+    transform: rotate(360deg);
+    box-shadow: 0 0 0 200px rgba(0, 0, 0, 0.7);
+  }
 }
+
 
 
 .nav-links {
