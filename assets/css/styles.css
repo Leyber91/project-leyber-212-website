@@ -279,8 +279,8 @@ main section {
 
 .logo::before,
 .logo::after,
-.logo::nth-child(1),
-.logo::nth-child(2) {
+.logo:nth-child(1),
+.logo:nth-child(2) {
     content: "";
     position: absolute;
     width: 100%;
@@ -291,22 +291,22 @@ main section {
 }
 
 .logo::before,
-.logo::nth-child(1) {
+.logo:nth-child(1) {
     animation: vortex 3s infinite linear;
 }
 
 .logo::after,
-.logo::nth-child(2) {
+.logo:nth-child(2) {
     animation: vortex-hover 4s infinite linear;
 }
 
 .logo:hover::before,
-.logo:hover::nth-child(1) {
+.logo:hover:nth-child(1) {
     animation: vortex-hover 3s infinite linear;
 }
 
 .logo:hover::after,
-.logo:hover::nth-child(2) {
+.logo:hover:nth-child(2) {
     animation: vortex 4s infinite linear;
 }
 
@@ -429,6 +429,7 @@ main {
     padding: 1.111em;
     padding-top: 4.444em;
     margin-bottom: 4rem; /* Adjust this value depending on your footer's height */
+    padding-bottom: 5em;
 }
 
 main .content {

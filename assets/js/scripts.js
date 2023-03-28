@@ -101,21 +101,24 @@ function addTouchSwipeFunctionality() {
 
 function addIntersectionObserver() {
     const sections = document.querySelectorAll('main section:not(.tryverse)');
-
+  
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.remove('hidden');
-                gsap.from(entry.target, { opacity: 0, y: '30px', duration: 1, ease: 'power2.out' });
-            }
-        });
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('hidden');
+          gsap.from(entry.target, { opacity: 0, y: '30px', duration: 1, ease: 'power2.out' });
+        } else {
+          gsap.to(entry.target, { opacity: 1, duration: 1, ease: 'power2.out' });
+        }
+      });
     }, { threshold: 0.5 });
-
+  
     sections.forEach((section) => {
-        section.classList.add('hidden');
-        observer.observe(section);
+      section.classList.add('hidden');
+      observer.observe(section);
     });
 }
+  
 
 function addSidebarToggle() {
     const toggleButton = document.getElementById('toggle-sidebar');
