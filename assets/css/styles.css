@@ -260,10 +260,16 @@ main section {
 
 .logo {
     font-size: 2.5rem; /* Adjust the font size as desired */
-    color: #0cb5bb; /* Change the color to a more contrasting one */
-    text-shadow: 0 0 10px rgb(0, 255, 234); /* Add a glowing effect */
+    color: #007BFF; /* A shade of blue */
+    text-shadow: 0 0 5px #FFFFFF, /* Outer white glow */
+    0 0 10px #007BFF, /* Blue glow */
+    0 0 20px #007BFF, /* Blue glow */
+    0 0 30px #007BFF, /* Blue glow */
+    0 0 40px #007BFF; /* Blue glow */
+
     text-decoration: none;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
+
     z-index: 10;
     position: relative;
     left: 50%;
@@ -271,7 +277,12 @@ main section {
 }
 
 .logo:hover {
-    color: #4bf;
+    text-shadow: 0 0 10px #FFFFFF, /* Outer white glow */
+                0 0 15px #007BFF, /* Blue glow */
+                0 0 25px #007BFF, /* Blue glow */
+                0 0 35px #007BFF, /* Blue glow */
+                0 0 45px #007BFF; /* Blue glow */
+    transform: scale(1.1);
 }
 
 .nav-links {
