@@ -444,38 +444,8 @@ main .content {
 
 /* Styles for small screens */
 @media (max-width: 768px) {
-    header h1, footer h1 {
-        font-size: 24px;
-    }
-}
-
-
-@media (max-width: 768px) {
-    #sidebar {
-        width: 100%;
-        position: static;
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .content {
-        font-size: 16px;
-        line-height: 1.5;
-    }
-}
-
-@media (max-width: 768px) {
-    .translucent {
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 5px;
-    }
-}
-
-/* Styles for small screens */
-@media (max-width: 768px) {
     .logo {
         font-size: 20px;
     }
 }
+
