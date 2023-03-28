@@ -212,93 +212,82 @@ function getRandomPoints() {
     return [startPoint, ...randomPoints, endPoint].join(' ');
 }
 function createBlackHoleEffect() {
-    const canvas = document.getElementById('blackHole');
-    const ctx = canvas.getContext('2d');
-
-
+    const canvas = document.getElementById("blackHole");
+    const ctx = canvas.getContext("2d");
+  
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
-
+  
     const particlesArray = [];
     const particlesCount = 200;
-
+  
     class Particle {
-    constructor() {
+      constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 5 + 1;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
-    }
-
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.size <= 0.2) {
-            // Reset particle properties
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 5 + 1;
-            this.speedX = Math.random() * 3 - 1.5;
-            this.speedY = Math.random() * 3 - 1.5;
-        }
-
-        // Creating black hole effect
+      }
+  
+      update() {
         const dx = canvas.width / 2 - this.x;
         const dy = canvas.height / 2 - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         const forceDirectionX = dx / distance;
         const forceDirectionY = dy / distance;
-        const maxDistance = canvas.width / 2;
+        const maxDistance = Math.max(canvas.width, canvas.height);
         const force = (maxDistance - distance) / maxDistance;
-        const directionX = forceDirectionX * force * this.size;
-        const directionY = forceDirectionY * force * this.size;
-        // Check if the particle is within the title area
-        const titleRadius = 100; // Adjust this value to change the size of the title area
-        const dxTitle = canvas.width / 2 - this.x;
-        const dyTitle = canvas.height / 2 - this.y;
-        const distanceTitle = Math.sqrt(dxTitle * dxTitle + dyTitle * dyTitle);
-
-        if (distanceTitle < titleRadius) {
-            this.x -= directionX * 1.5;
-            this.y -= directionY * 1.5;
-        } else {
-        this.x -= this.speedX;
-        this.y -= this.speedY;
-        }
-    }
-
-    draw() {
+        const directionX = forceDirectionX * force * this.size * 5;
+        const directionY = forceDirectionY * force * this.size * 5;
+  
+        this.speedX += directionX;
+        this.speedY += directionY;
+  
+        this.x += this.speedX;
+        this.y += this.speedY;
+      }
+  
+      draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.closePath();
-        ctx.fillStyle = 'rgba(58, 123, 213,' + this.size / 5 + ')';
+        const opacity = Math.min(1, this.size / 3);
+        const gradient = ctx.createRadialGradient(
+          this.x,
+          this.y,
+          0,
+          this.x,
+          this.y,
+          this.size
+        );
+        gradient.addColorStop(0, `rgba(58, 123, 213, ${opacity})`);
+        gradient.addColorStop(1, `rgba(0, 0, 0, 0)`);
+        ctx.fillStyle = gradient;
         ctx.fill();
+      }
     }
-    }
-
+  
     function init() {
-    for (let i = 0; i < particlesCount; i++) {
+      for (let i = 0; i < particlesCount; i++) {
         particlesArray.push(new Particle());
+      }
     }
-    }
-
+  
     function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (let i = 0; i < particlesArray.length; i++) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+      for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
         particlesArray[i].draw();
-
+      }
+  
+      requestAnimationFrame(animate);
     }
-
-    requestAnimationFrame(animate);
-    }
-
+  
     init();
     animate();
-
-}
+  }
+  
 
 window.addEventListener('DOMContentLoaded', createBlackHoleEffect);
