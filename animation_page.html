@@ -79,8 +79,6 @@
     // Call animateBlackHole here
     animateBlackHole();
 
-    // Start the animation loop
-    animate();
 
     // Return the scene and camera objects for future use
     return { scene, camera };
@@ -245,19 +243,25 @@
     function animateAccretionDisk() {
       accretionDisk.rotation.z -= 0.002;
     }
+
+    function init() {
+    animate();
+  }
+
   </script>
-    <script>
-        // Add event listeners for buttons
-        document.getElementById('start-animation').addEventListener('click', () => {
-          // Call the init function from the animation code to start the animation
-          init();
-        });
-    
-        document.getElementById('back-to-main').addEventListener('click', () => {
-          // Navigate back to the main page
-          window.location.href = 'index.html';
-        });
-      </script>
+<script>
+    // Update the event listener for the "Start Animation" button to call init()
+    document.getElementById("start-animation").addEventListener("click", () => {
+      init();
+      document.getElementById("start-animation").disabled = true;
+    });
+  
+    document.getElementById("back-to-main").addEventListener("click", () => {
+      // Navigate back to the main page
+      window.location.href = "index.html";
+    });
+  </script>
+  
     
 </body>
 </html>
