@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     addSidebarBlockHoverEffects();
     addIntersectionObserver();
     addSidebarToggle();
-    createRandomCrystalClip();
-    createRandomCrystalClips();
+    `createRandomCrystalClip();
+    createRandomCrystalClips();`
     addTouchSwipeFunctionality();
     addRandomCrystalClipPath();
 });
