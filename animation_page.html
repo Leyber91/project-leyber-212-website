@@ -39,45 +39,53 @@
       </div>
     
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/objects/Lensflare.js"></script>
+  <script src="assets\js\LensFlare.js"></script>
   <script>
     // Set up the 3D environment using a WebGL library such as Three.js
     function setupScene() {
-      // Set up the renderer
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
+    // Set up the renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-      // Create a scene
-      const scene = new THREE.Scene();
+    // Create a scene
+    const scene = new THREE.Scene();
 
-      // Create a camera
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 5;
+    // Create a camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
 
-      // Add a resize event listener
-      window.addEventListener('resize', () => {
+    // Add a resize event listener
+    window.addEventListener('resize', () => {
         const width = window.innerWidth;
         const height = window.innerHeight;
         renderer.setSize(width, height);
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
-      });
+    });
 
-      // Set up an animation loop
-      function animate() {
+    // Set up an animation loop
+    function animate() {
         requestAnimationFrame(animate);
         animateBlackHole();
         animateAccretionDisk();
         renderer.render(scene, camera);
-      }
-
-      // Start the animation loop
-      animate();
-
-      // Return the scene and camera objects for future use
-      return { scene, camera };
     }
+
+    // Create the black hole
+    blackHole = createBlackHole();
+    scene.add(blackHole);
+
+    // Call animateBlackHole here
+    animateBlackHole();
+
+    // Start the animation loop
+    animate();
+
+    // Return the scene and camera objects for future use
+    return { scene, camera };
+    }
+
 
     // Initialize the 3D environment
     const { scene, camera } = setupScene();
