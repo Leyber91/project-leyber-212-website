@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     addSidebarBlockHoverEffects();
     addIntersectionObserver();
     addSidebarToggle();
-    createRandomCrystalClip();
-    createRandomCrystalClips();
+    `createRandomCrystalClip();
+    createRandomCrystalClips();`
     addTouchSwipeFunctionality();
     addRandomCrystalClipPath();
 });
@@ -133,7 +133,7 @@ function addSidebarToggle() {
 
 function createRandomCrystalClip() {
     const clipPath = document.getElementById('crystal-clip');
-    const pointCount = 6; // Change this value to adjust the number of points in the polygon
+    const pointCount = 26; // Change this value to adjust the number of points in the polygon
     const points = [];
 
     for (let i = 0; i < pointCount; i++) {

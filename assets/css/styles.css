@@ -33,7 +33,7 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #333;
+    background-image: url("../images/neural-connect.png");
     display: flex;
     justify-content: flex-start;
     align-items: center;
