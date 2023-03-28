@@ -97,7 +97,8 @@ body, h1, h2, h3, h4, h5, h6, a {
     overflow: hidden;
 }
 .sidebar-block h3 {
-color: #3a3f55;
+    text-shadow: 0 0 5px #000, 0 0 10px #000, 0 0 20px rgb(0, 195, 255), 0 0 30px rgb(0, 255, 242), 0 0 40px rgb(0, 183, 255);
+    color: #3a3f55;
 }
 
 .sidebar-block:hover {
@@ -289,14 +290,14 @@ main section {
 }
 
 .nav-links li a {
-    color: #0ef;
-    text-decoration: none;
+    color: #75efff; /* Adjust the color to a darker shade */
+    text-shadow: 1px 1px 2px rgba(5, 22, 36, 0.384); /* Add a subtle text shadow */
+    font-weight: bold;
     margin-left: 1rem;
     transition: color 0.3s;
 }
-
 .nav-links li a:hover {
-    color: #4bf;
+    color: rgba(68, 186, 255, 0.753);
 }
 
 .sidebar-block.active {
@@ -406,6 +407,7 @@ main {
     padding-top: 4.444em;
     margin-bottom: 4rem; /* Adjust this value depending on your footer's height */
     padding-bottom: 5em;
+    overflow: scroll;
 }
 
 main .content {
@@ -448,4 +450,30 @@ main .content {
     .sidebar-background {
         display: none;
     }
+}
+
+body::-webkit-scrollbar,
+main::-webkit-scrollbar {
+  width: 8px; /* Adjust the width of the scrollbar as needed */
+  height: 8px; /* Adjust the height of the scrollbar as needed */
+}
+
+body::-webkit-scrollbar-track,
+main::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Set a transparent background for the scrollbar track */
+}
+
+body::-webkit-scrollbar-thumb,
+main::-webkit-scrollbar-thumb {
+  background: rgba(58, 123, 213, 0.6); /* Set the color of the scrollbar thumb with transparency */
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover,
+main::-webkit-scrollbar-thumb:hover {
+  background: rgba(58, 123, 213, 1); /* Set a darker color for the scrollbar thumb when hovered */
+}
+
+body {
+  overflow-y: scroll; /* Add a vertical scrollbar to the body element */
 }
