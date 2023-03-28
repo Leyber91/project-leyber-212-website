@@ -104,6 +104,8 @@ body, h1, h2, h3, h4, h5, h6, a {
 
 .sidebar-block h3 {
     margin-bottom: 1rem;
+    color: rgb(2, 234, 255);
+    font-weight: bolder;
 }
 
 .sidebar-block ul {
@@ -295,7 +297,11 @@ main section {
 }
 
 .sidebar-block.active {
-    background-color: rgba(0, 238, 255, 0.1);
+    background-color: rgba(12, 36, 70, 0.8);
+    color: #0ef;
+    border: 1px solid #0ef;
+    box-shadow: 0 0 15px #0ef;
+    background-color: rgba(0, 164, 175, 0.233);
     border-left: 3px solid #0ef;
     transition: background-color 0.3s, border-color 0.3s;
 }
@@ -432,6 +438,7 @@ main .content {
     .sidebar-block {
         margin: 20px;
     }
+    
     #sidebar.hidden {
         display: none;
       }
