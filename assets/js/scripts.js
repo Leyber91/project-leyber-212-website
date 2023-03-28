@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    addTryverseSection();
     addWelcomeSection();
+    addTryverseSection();
     addParallaxEffectToTitle();
     initializeGSAPAnimations();
     addSidebarBlockHoverEffects();
@@ -39,12 +39,16 @@ function addTryverseSection() {
 
 function addParallaxEffectToTitle() {
 // Add parallax effect to sections
+const totalHeight = document.querySelector('main').offsetHeight - window.innerHeight;
+
 const sections = document.querySelectorAll('main section');
 
 window.addEventListener('scroll', function () {
     let scrollPosition = window.pageYOffset;
+    let scrollRatio = scrollPosition / totalHeight;
+
     sections.forEach((section, index) => {
-        section.style.transform = 'translateY(' + (scrollPosition * 0.2 * (index + 1)) + 'px)';
+        section.style.transform = 'translateY(' + (scrollRatio * 0.2 * (index + 1) * totalHeight) + 'px)';
     });
 });
 }
