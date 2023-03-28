@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background-image: url("assets/images/neural_background.png");
+    background-image: url("../images/neural_background.png");
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
@@ -35,7 +35,7 @@ header {
     padding: 0 1rem;
     width: 100%;
     z-index: 10;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(5px);
 }
 
 body, h1, h2, h3, h4, h5, h6, a {
@@ -150,6 +150,7 @@ body, h1, h2, h3, h4, h5, h6, a {
 
 /* Main content */
 main {
+    background-image: url("../images/neural_background.png");
     margin-left: 18.333em;
     padding: 1.111em;
     padding-top: 4.444em;
@@ -191,9 +192,9 @@ main {
 }
 
 main section {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.7);
     padding: 1rem;
-    border-radius: 10px;
+    border-radius: 2em;
     margin-bottom: 1rem;
 }
 
@@ -221,7 +222,7 @@ main section {
     position: fixed;
     top: 4rem;
     left: -100%;
-    height: calc(100% - 4rem); /* Subtract the header height from the total height */
+    height: calc(100% - 2rem); /* Subtract the header height from the total height */
     overflow-y: auto;
     border-right: 2px solid rgba(255, 255, 255, 0.3);
     background-color: #f4f4f4;
@@ -307,7 +308,6 @@ footer {
 }
 
 #toggle-sidebar {
-    position: fixed;
     top: 1rem;
     left: 1rem;
     z-index: 5;
@@ -348,9 +348,9 @@ main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    
     padding-bottom: 4rem; /* Adjust based on the height of the footer */
     min-height: calc(100vh - 4.444em - 4rem); /* Subtract the header and footer heights from the total height */
-    margin-left: 18.333em;
     padding: 1.111em;
     padding-top: 4.444em;
 }
