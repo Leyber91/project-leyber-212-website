@@ -78,7 +78,7 @@ body, h1, h2, h3, h4, h5, h6, a {
     opacity: 0.5; /* Adjust the opacity value as needed */
     background-repeat: no-repeat;
     background-size: cover;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(4px);
 
 
 }
