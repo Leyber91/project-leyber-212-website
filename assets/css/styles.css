@@ -70,14 +70,16 @@ body, h1, h2, h3, h4, h5, h6, a {
     left: 0;
     top: 6rem;
     width: 16.667em;
-    background-color: rgba(57, 71, 71, 0.5); /* Adjust the color and opacity to your liking */
+    background-image: url("../images/neural-connect.png"); /* Replace with your own image path */
     padding: 2rem;
     z-index: 500;
     transition: transform 0.3s;
     overflow-y: auto;
+    opacity: 0.5; /* Adjust the opacity value as needed */
+    background-repeat: no-repeat;
+    background-size: cover;
     backdrop-filter: blur(10px);
-    -webkit-filter: grayscale(0%) contrast(130%) brightness(110%) sepia(50%) hue-rotate(90deg) saturate(1000%);
-    filter: grayscale(0%) contrast(130%) brightness(110%) sepia(50%) hue-rotate(90deg) saturate(1000%);
+
 
 }
 
