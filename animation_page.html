@@ -41,6 +41,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="assets\js\LensFlare.js"></script>
   <script>
+    let blackHole;
     // Set up the 3D environment using a WebGL library such as Three.js
     function setupScene() {
     // Set up the renderer
@@ -74,7 +75,6 @@
 
     // Create the black hole
     blackHole = createBlackHole();
-    scene.add(blackHole);
 
     // Call animateBlackHole here
     animateBlackHole();
@@ -135,7 +135,6 @@
     }
 
     // Add the black hole to the scene
-    const blackHole = createBlackHole();
     scene.add(blackHole);
 
     // Generate random positions within the accretion disk
