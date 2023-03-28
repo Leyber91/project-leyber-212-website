@@ -75,7 +75,7 @@ body, h1, h2, h3, h4, h5, h6, a {
     z-index: 500;
     transition: transform 0.3s;
     overflow-y: auto;
-    opacity: 0.5; /* Adjust the opacity value as needed */
+    opacity: 0.91; /* Adjust the opacity value as needed */
     background-repeat: no-repeat;
     background-size: cover;
     backdrop-filter: blur(4px);
