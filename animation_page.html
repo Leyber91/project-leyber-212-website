@@ -41,7 +41,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="assets\js\LensFlare.js"></script>
   <script>
-    let blackHole;
     function createRadialGradientTexture(size) {
         const canvas = document.createElement("canvas");
         canvas.width = size;
@@ -80,8 +79,6 @@
     // Create the black hole mesh
     const blackHole = createBlackHole();
 
-    // Add the black hole to the scene
-    scene.add(blackHole);
 
     // Add a resize event listener
     window.addEventListener('resize', () => {
@@ -173,10 +170,9 @@
 
     // Create the black hole mesh
     function createBlackHole() {
-      const geometry = createEventHorizon();
-      const material = createBlackHoleMaterial();
-      const mesh = new THREE.Mesh(geometry, material);
-      return mesh;
+    const geometry = createEventHorizon();
+    const material = createBlackHoleMaterial();
+    return new THREE.Mesh(geometry, material);
     }
 
     // Add the black hole to the scene
