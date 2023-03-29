@@ -86,28 +86,21 @@
         camera.updateProjectionMatrix();
     });
 
+    return { scene, camera, renderer}
+};
+
     // Set up an animation loop
     function animate() {
-        requestAnimationFrame(animate);
-        animateBlackHole();
-        animateAccretionDisk();
-        renderer.render(scene, camera);
-    }
-
-    // Create the black hole
-    blackHole = createBlackHole();
-
-    // Call animateBlackHole here
+    requestAnimationFrame(animate);
     animateBlackHole();
-
-
-    // Return the scene and camera objects for future use
-    return { scene, camera };
+    animateAccretionDisk();
+    renderer.render(scene, camera);
     }
-
 
     // Initialize the 3D environment
-    const { scene, camera } = setupScene();
+    const { scene, camera, renderer } = setup
+
+
 
     // Create the event horizon geometry
     function createEventHorizon() {
