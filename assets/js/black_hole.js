@@ -270,100 +270,110 @@ function init() {
 
 
 
-
   const canvas = document.getElementById('glCanvas');
   const gl = canvas.getContext('webgl');
   
   if (!gl) {
       console.error('WebGL not supported');
   }
-
+  
   // Vertex shader
-const vertexShaderSource = `
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-
-varying vec2 v_texCoord;
-
-void main() {
-    gl_Position = a_position;
-    v_texCoord = a_texCoord;
-}`;
-
-// Fragment shader
-const fragmentShaderSource = `
-precision mediump float;
-
-uniform sampler2D u_texture;
-varying vec2 v_texCoord;
-
-void main() {
-    gl_FragColor = texture2D(u_texture, v_texCoord);
-}`;
-
-function createShader(gl, type, source) {
-  const shader = gl.createShader(type);
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-  if (success) {
-      return shader;
+  const vertexShaderSource = `
+  attribute vec4 a_position;
+  attribute vec2 a_texCoord;
+  
+  varying vec2 v_texCoord;
+  
+  void main() {
+      gl_Position = a_position;
+      v_texCoord = a_texCoord;
+  }`;
+  
+  // Fragment shader
+  const fragmentShaderSource = `
+  precision mediump float;
+  
+  uniform sampler2D u_texture;
+  varying vec2 v_texCoord;
+  
+  void main() {
+      gl_FragColor = texture2D(u_texture, v_texCoord);
+  }`;
+  
+  function createShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    if (success) {
+        return shader;
+    }
+    console.error(gl.getShaderInfoLog(shader));
+    gl.deleteShader(shader);
   }
-  console.error(gl.getShaderInfoLog(shader));
-  gl.deleteShader(shader);
-}
-
-function createProgram(gl, vertexShader, fragmentShader) {
-  const program = gl.createProgram();
-  gl.attachShader(program, vertexShader);
-  gl.attachShader(program, fragmentShader);
-  gl.linkProgram(program);
-  const success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (success) {
-      return program;
+  
+  function createProgram(gl, vertexShader, fragmentShader) {
+    const program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+    if (success) {
+        return program;
+    }
+    console.error(gl.getProgramInfoLog(program));
+    gl.deleteProgram(program);
   }
-  console.error(gl.getProgramInfoLog(program));
-  gl.deleteProgram(program);
-}
-
-const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-const program = createProgram(gl, vertexShader, fragmentShader);
-const textureImageBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAv0lEQVQ4T63TMQ4CMQxFwbBQ8QIQqYXIQqkdAqTlFbTgsZGQLpBuFw/OCyfMiax/8c1YEBXVzGQy6eb7/mz84/89w1BEr6Qn0c8WUQUxLxGRZzHnVmY9q8zqAqYhIu5G5EQk38y8WUStfDvAwne/9zyAe9/n8WU5QHvfpwLwOwC87z1OyH2fIzGnAgAAAABJRU5ErkJggg==';
-
-
-function loadTexture(gl) {
-  const texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-
-  // Placeholder 1x1 pixel texture
-  const level = 0;
-  const internalFormat = gl.RGBA;
-  const width = 1;
-  const height = 1;
-  const border = 0;
-  const srcFormat = gl.RGBA;
-  const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([0, 0, 255, 255]);
-  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border, srcFormat, srcType, pixel);
-
-  const image = new Image();
-  image.onload = function () {
+  
+  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+  const program = createProgram(gl, vertexShader, fragmentShader);
+  
+  function createStripedTexture(gl, size) {
+    const stripes = 32;
+    const data = new Uint8Array(size * size * 4);
+    const stripeWidth = Math.floor(size / stripes);
+  
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        const index = (i * size + j) * 4;
+        const stripe = Math.floor(j / stripeWidth) % 2;
+  
+        data[index] = stripe * 255;
+        data[index + 1] = stripe * 255;
+        data[index + 2] = stripe * 255;
+        data[index + 3] = 255;
+      }
+    }
+  
+    const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, srcFormat, srcType, image);
-
+  
+    const level = 0;
+    const internalFormat = gl.RGBA;
+    const width = size;
+    const height = size;
+    const border = 0;
+    const srcFormat = gl.RGBA;
+    const srcType = gl.UNSIGNED_BYTE;
+  
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border, srcFormat, srcType, data);
+  
     gl.generateMipmap(gl.TEXTURE_2D);
-  };
-  image.src = textureImageBase64;
-
-  return texture;
-}
-
-const texture = loadTexture(gl);
-gl.useProgram(program);
-gl.activeTexture(gl.TEXTURE0);
-gl.bindTexture(gl.TEXTURE_2D, texture);
-gl.uniform1i(gl.getUniformLocation(program, 'u_texture'), 0);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  
+    return texture;
+  }
+  
+  const texture = createStripedTexture(gl, 256);
+  gl.useProgram(program);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.uniform1i(gl.getUniformLocation(program, 'u_texture'), 0);
+  
+  // ... (rest of the code from the previous answer)
+  
 
 
 // Function to create a sphere geometry
