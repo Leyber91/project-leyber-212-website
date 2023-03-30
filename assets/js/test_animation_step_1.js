@@ -17,11 +17,13 @@ const fragmentShaderSource = `
 `;
 
 // Set up WebGL context
+// Set up WebGL context
 const canvasTest = document.getElementById('glCanvas');
 const gl = canvasTest.getContext('webgl2');
 if (!gl) {
   alert('Your browser does not support WebGL 2');
 }
+
 
 // Set up WebGL shader program
 const shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
