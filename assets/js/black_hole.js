@@ -418,6 +418,8 @@ const diskTexCoordBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, diskTexCoordBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(diskTexCoords), gl.STATIC_DRAW);
 
+// ... (all the previous code you provided)
+
 function render() {
   // Clear the canvas
   gl.clearColor(0, 0, 0, 1);
@@ -464,7 +466,18 @@ function render() {
   requestAnimationFrame(render);
 }
 
-// Start rendering
-render();
+// Animation loop
+function animate() {
+    // Update the scene and renderer
+    render();
+
+    // Request the next frame
+    requestAnimationFrame(animate);
+}
+
+// Start the animation when the "Start Animation" button is clicked
+document.getElementById('startAnimation').addEventListener('click', function() {
+    animate();
+});
 
 

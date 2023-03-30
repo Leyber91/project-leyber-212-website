@@ -5,22 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Hole Animation</title>
     <link rel="stylesheet" href="assets/css/styles.css">
-        
 </head>
 <body>
-  <canvas id="glCanvas"></canvas>
-    <div id="container">
-        <!-- The 3D scene will be rendered here -->
-    </div>
+    <canvas id="glCanvas"></canvas>
+
     <!-- Add user interface elements for controlling the animation -->
-    <!-- Add an optional help menu or tooltips container -->
-    <div id="help">
-        <!-- Add help content here -->
+    <div id="controls">
+        <!-- Add sliders, buttons, and other UI elements here -->
+        <button id="startAnimation">Start Animation</button>
     </div>
+    
     <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
 
-    
-    <!-- Add a script for initializing the application -->
-    <script src="assets\js\black_hole.js" type="module"></script>
+    <!-- Include the WebGL script -->
+    <script src="assets\js\webgl.js"></script>
 </body>
 </html>
