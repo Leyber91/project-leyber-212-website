@@ -329,6 +329,8 @@ function createProgram(gl, vertexShader, fragmentShader) {
 const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 const program = createProgram(gl, vertexShader, fragmentShader);
+const textureImageBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAv0lEQVQ4T63TMQ4CMQxFwbBQ8QIQqYXIQqkdAqTlFbTgsZGQLpBuFw/OCyfMiax/8c1YEBXVzGQy6eb7/mz84/89w1BEr6Qn0c8WUQUxLxGRZzHnVmY9q8zqAqYhIu5G5EQk38y8WUStfDvAwne/9zyAe9/n8WU5QHvfpwLwOwC87z1OyH2fIzGnAgAAAABJRU5ErkJggg==';
+
 
 function loadTexture(gl) {
   const texture = gl.createTexture();
