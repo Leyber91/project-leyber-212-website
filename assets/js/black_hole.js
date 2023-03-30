@@ -265,3 +265,206 @@ function init() {
   }
   
   window.addEventListener('DOMContentLoaded', createBlackHoleEffect);*/
+
+
+
+
+
+
+  const canvas = document.getElementById('glCanvas');
+  const gl = canvas.getContext('webgl');
+  
+  if (!gl) {
+      console.error('WebGL not supported');
+  }
+
+  // Vertex shader
+const vertexShaderSource = `
+attribute vec4 a_position;
+attribute vec2 a_texCoord;
+
+varying vec2 v_texCoord;
+
+void main() {
+    gl_Position = a_position;
+    v_texCoord = a_texCoord;
+}`;
+
+// Fragment shader
+const fragmentShaderSource = `
+precision mediump float;
+
+uniform sampler2D u_texture;
+varying vec2 v_texCoord;
+
+void main() {
+    gl_FragColor = texture2D(u_texture, v_texCoord);
+}`;
+
+function createShader(gl, type, source) {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+  if (success) {
+      return shader;
+  }
+  console.error(gl.getShaderInfoLog(shader));
+  gl.deleteShader(shader);
+}
+
+function createProgram(gl, vertexShader, fragmentShader) {
+  const program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (success) {
+      return program;
+  }
+  console.error(gl.getProgramInfoLog(program));
+  gl.deleteProgram(program);
+}
+
+const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+const program = createProgram(gl, vertexShader, fragmentShader);
+
+// Function to create a sphere geometry
+function createSphereGeometry(radius, segments) {
+  const vertices = [];
+  const indices = [];
+  const texCoords = [];
+
+  for (let lat = 0; lat <= segments; lat++) {
+      const theta = lat * Math.PI / segments;
+      const sinTheta = Math.sin(theta);
+      const cosTheta = Math.cos(theta);
+
+      for (let lon = 0; lon <= segments; lon++) {
+          const phi = lon * 2 * Math.PI / segments;
+          const sinPhi = Math.sin(phi);
+          const cosPhi = Math.cos(phi);
+
+          const x = radius * sinTheta * cosPhi;
+          const y = radius * sinTheta * sinPhi;
+          const z = radius * cosTheta;
+
+          vertices.push(x, y, z);
+          texCoords.push(lon / segments, lat / segments);
+      }
+  }
+
+  for (let lat = 0; lat < segments; lat++) {
+      for (let lon = 0; lon < segments; lon++) {
+          const first = lat * (segments + 1) + lon;
+          const second = first + segments + 1;
+
+          indices.push(first, second, first + 1);
+          indices.push(second, second + 1, first + 1);
+      }
+  }
+
+  return { vertices, indices, texCoords };
+}
+
+// Create sphere geometry for the event horizon
+const { vertices: sphereVertices, indices: sphereIndices, texCoords: sphereTexCoords } = createSphereGeometry(5, 32);
+
+// Create a simple disk geometry for the accretion disk
+const diskVertices = [
+  -10, 0, -10,
+  10, 0, -10,
+  10, 0, 10,
+  -10, 0, 10
+];
+
+const diskIndices = [
+  0, 1, 2,
+  2, 3, 0
+];
+
+const diskTexCoords = [
+  0, 0,
+  1, 0,
+  1, 1,
+  0, 1
+];
+
+// Create vertex buffers for the black hole event horizon and accretion disk
+const sphereVertexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sphereVertices), gl.STATIC_DRAW);
+
+const diskVertexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, diskVertexBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(diskVertices), gl.STATIC_DRAW);
+
+// Create index buffers for the black hole event horizon and accretion disk
+const sphereIndexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIndexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(sphereIndices), gl.STATIC_DRAW);
+
+const diskIndexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, diskIndexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(diskIndices), gl.STATIC_DRAW);
+
+// Create texture coordinate buffers for the black hole event horizon and accretion disk
+const sphereTexCoordBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, sphereTexCoordBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sphereTexCoords), gl.STATIC_DRAW);
+
+const diskTexCoordBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, diskTexCoordBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(diskTexCoords), gl.STATIC_DRAW);
+
+function render() {
+  // Clear the canvas
+  gl.clearColor(0, 0, 0, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  // Enable depth testing
+  gl.enable(gl.DEPTH_TEST);
+
+  // Set the viewport size
+  gl.viewport(0, 0, canvas.width, canvas.height);
+
+  // Use the shader program
+  gl.useProgram(program);
+
+  // Set up shader attributes for the event horizon
+  gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexBuffer);
+  const positionAttribute = gl.getAttribLocation(program, 'a_position');
+  gl.vertexAttribPointer(positionAttribute, 3, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(positionAttribute);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, sphereTexCoordBuffer);
+  const texCoordAttribute = gl.getAttribLocation(program, 'a_texCoord');
+  gl.vertexAttribPointer(texCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(texCoordAttribute);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sphereIndexBuffer);
+
+  // Draw the event horizon
+  gl.drawElements(gl.TRIANGLES, sphereIndices.length, gl.UNSIGNED_SHORT, 0);
+
+  // Set up shader attributes for the accretion disk
+  gl.bindBuffer(gl.ARRAY_BUFFER, diskVertexBuffer);
+  gl.vertexAttribPointer(positionAttribute, 3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, diskTexCoordBuffer);
+  gl.vertexAttribPointer(texCoordAttribute, 2, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, diskIndexBuffer);
+
+  // Draw the accretion disk
+  gl.drawElements(gl.TRIANGLES, diskIndices.length, gl.UNSIGNED_SHORT, 0);
+
+  // Request the next frame
+  requestAnimationFrame(render);
+}
+
+// Start rendering
+render();
+
+

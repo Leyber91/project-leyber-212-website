@@ -5,39 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Hole Animation</title>
     <link rel="stylesheet" href="assets/css/styles.css">
-    <script src="assets\js\libraries\three.js"></script>
-    <script src="assets\js\libraries\OrbitControls.js"></script>
-    <script src="assets\js\libraries\webxr-polyfill.min.js"></script>
         
 </head>
 <body>
+  <canvas id="glCanvas"></canvas>
     <div id="container">
         <!-- The 3D scene will be rendered here -->
     </div>
     <!-- Add user interface elements for controlling the animation -->
-    <div id="controls">
-        <!-- Add sliders, buttons, and other UI elements here -->
-        <button id="animation1">Animation 1</button>
-        <button id="animation2">Animation 2</button>
-
-    </div>
     <!-- Add an optional help menu or tooltips container -->
     <div id="help">
         <!-- Add help content here -->
     </div>
     <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
 
-    <script src="assets\js\step1.js" type="module"></script>
-    <!-- 
-    <script src="assets\js\step2.js"></script>
-    <script src="assets\js\step3.js"></script>
-    <script src="assets\js\step4.js"></script>
-    <script src="assets\js\step5.js"></script>
-    <script src="assets\js\step6.js"></script> 
-    <script src="assets\js\step7.js"></script>`-->
-    <!-- Add scripts for additional stages, as needed -->
     
     <!-- Add a script for initializing the application -->
-    <script src="assets\js\init.js" type="module"></script>
+    <script src="assets\js\black_hole.js" type="module"></script>
 </body>
 </html>
