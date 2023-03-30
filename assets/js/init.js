@@ -21,11 +21,9 @@ function initScene() {
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
 
-    // Add a test cube to the scene
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    // Add a black hole to the scene
+    const blackHole = createBlackHole();
+    scene.add(blackHole);
 
     // Implement responsive design
     window.addEventListener('resize', onWindowResize, false);
