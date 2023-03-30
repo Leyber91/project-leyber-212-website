@@ -298,7 +298,7 @@ function drawScene() {
   
   // Start the animation loop
 // ...
-
+let animationId = null;
 // Animation loop function
 function animate() {
     drawScene();
