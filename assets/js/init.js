@@ -16,7 +16,7 @@ function initScene() {
     document.getElementById('container').appendChild(renderer.domElement);
 
     // Set up OrbitControls for camera
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls = new THREE.OrbitControls.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
