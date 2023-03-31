@@ -6,44 +6,32 @@
     <title>Black Hole Animation</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/animation_control.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+
 
 </head>
 <body>
-    <div class="animation-screen">
-        <canvas id="glCanvas"></canvas>
-        <div class="control-room">
-            <div class="control-board">
-                <div class="control-group">
-                    <label for="colorPicker">Color</label>
-                    <input type="color" id="colorPicker">
-                </div>
-                <div class="control-group">
-                    <label for="rangeSpeed">Speed</label>
-                    <input type="range" id="rangeSpeed" min="1" max="10" value="5">
-                </div>
-                <div class="control-group">
-                    <label for="rangeDirection">Direction</label>
-                    <button id="directionButton">Change Direction</button>
-                  </div>
-                <div class="control-group">
-                    <label for="chkLoop">Loop</label>
-                    <input type="checkbox" id="chkLoop">
-                    <label for="chkLoop" class="checkmark"></label>
-                </div>
-                <div class="control-group">
-                    <button id="startAnimation">Start</button>
-                    <button id="stopAnimation">Stop</button>
-                </div>
-                <div class="control-group">
-                  <label for="rangeSize">Size</label>
-                  <input type="range" id="rangeSize" min="10" max="200" value="50">
-                </div>
+  <div class="animation-screen">
+    <canvas id="glCanvas"></canvas>
+    <div class="control-room">
+        <div class="control-board">
+            <div class="control-group">
+                <label for="colorPicker">Color</label>
+                <input type="color" id="colorPicker">
             </div>
-            <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+            <div class="control-group">
+                <label for="rangeSpeed">Speed</label>
+                <input type="range" id="rangeSpeed" min="1" max="10" value="5">
+            </div>
+            <div class="control-group">
+              <label for="rangeSize">Size</label>
+              <input type="range" id="rangeSize" min="10" max="200" value="50">
+            </div>
         </div>
+        <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
     </div>
-    
+  </div>
     <!-- Include the WebGL script -->
-    <script src="assets/js/test_animation_step_0.js"></script>
+    <script src="assets/js/test_animation_step_1.js" type="module"></script>
 </body>
 </html>
