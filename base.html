@@ -9,22 +9,32 @@
 
 </head>
 <body>
-    <canvas id="glCanvas"></canvas>
-
-    <!-- Add user interface elements for controlling the animation -->
-    <div id="controls">
+  <div class="control-board">
+    <div class="control-group">
         <label for="colorPicker">Color:</label>
-        <input type="color" id="colorPicker" value="#ff0000"><br>
+        <input type="color" id="colorPicker" value="#ff0000">
+    </div>
+    <div class="control-group">
         <label for="velocityXSlider">Speed X:</label>
-        <input type="range" id="velocityXSlider" min="-10" max="10" value="2"><br>
+        <input type="range" id="velocityXSlider" min="-10" max="10" value="2">
+    </div>
+    <div class="control-group">
         <label for="velocityYSlider">Speed Y:</label>
-        <input type="range" id="velocityYSlider" min="-10" max="10" value="1"><br>
+        <input type="range" id="velocityYSlider" min="-10" max="10" value="1">
+    </div>
+    <div class="control-group">
         <button id="directionButton">Reverse Direction</button>
-        <label for="loopCheckbox">Loop:</label>
-        <input type="checkbox" id="loopCheckbox" checked><br>
+    </div>
+    <div class="control-group">
+        <input type="checkbox" id="loopCheckbox" checked>
+        <label for="loopCheckbox">Loop</label>
+    </div>
+    <div class="control-group">
         <button id="startAnimation">Start Animation</button>
         <button id="stopAnimation">Stop Animation</button>
     </div>
+</div>
+<canvas id="glCanvas"></canvas>
     
     <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
 
