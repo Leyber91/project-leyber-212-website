@@ -1,37 +1,37 @@
-const createScene = function () {
-  const scene = new BABYLON.Scene(engine);
+// Set up the scene, camera, and renderer
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
-  const camera = new BABYLON.ArcRotateCamera("camera1", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
-  camera.setPosition(new BABYLON.Vector3(0, 0, -100));
-  camera.attachControl(canvas, true);
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("animation") });
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-  const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-  light.intensity = 0.7;
+// Create a hollow cube geometry
+const geometry = new THREE.BoxGeometry();
+const edges = new THREE.EdgesGeometry(geometry);
+const line = new THREE.LineSegments(
+  edges,
+  new THREE.LineBasicMaterial({ color: 0xffffff })
+);
 
-  const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 50}, scene);
+scene.add(line);
 
-  scene.registerBeforeRender(function () {
-      sphere.rotation.x += 0.01;
-      sphere.rotation.y += 0.01;
-  });
+// Position the camera
+camera.position.z = 5;
 
-  return scene;
+// Animation loop
+const animate = function () {
+  requestAnimationFrame(animate);
+
+  // Rotate the cube
+  line.rotation.x += 0.01;
+  line.rotation.y += 0.01;
+
+  renderer.render(scene, camera);
 };
 
-const canvas = document.getElementById("animation-container");
-const engine = new BABYLON.Engine(canvas, true);
-
-const scene = createScene();
-engine.runRenderLoop(function () {
-  scene.render();
-});
-
-window.addEventListener('DOMContentLoaded', function() {
-  const animationCanvas = document.getElementById('animationCanvas');
-  if (animationCanvas) {
-      const engine = new BABYLON.Engine(animationCanvas, true);
-      // Rest of your Babylon.js implementation
-  } else {
-      console.error('Animation canvas not found');
-  }
-});
+animate();

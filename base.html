@@ -3,80 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Spinning Cube</title>
+    <title>New Animation</title>
+    <link rel="stylesheet" href="./assets/css/animation_control.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
-    <style>
-      body {
-        margin: 0;
-        position: relative;
-      }
-      canvas {
-        display: block;
-      }
-      #goBack {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 20px;
-        font-size: 18px;
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        border: 1px solid white;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 1;
-      }
-      #goBack:hover {
-        background-color: rgba(0, 0, 0, 0.7);
-      }
-    </style>
   </head>
   <body>
+    <div class="animation-container">
+      <canvas id="animation"></canvas>
+    </div>
     <button id="goBack">Go Back</button>
-    <script>
-      // Set up the scene, camera, and renderer
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-      );
-
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      // Create a hollow cube geometry
-      const geometry = new THREE.BoxGeometry();
-      const edges = new THREE.EdgesGeometry(geometry);
-      const line = new THREE.LineSegments(
-        edges,
-        new THREE.LineBasicMaterial({ color: 0xffffff })
-      );
-
-      scene.add(line);
-
-      // Position the camera
-      camera.position.z = 5;
-
-      // Animation loop
-      const animate = function () {
-        requestAnimationFrame(animate);
-
-        // Rotate the cube
-        line.rotation.x += 0.01;
-        line.rotation.y += 0.01;
-
-        renderer.render(scene, camera);
-      };
-
-      animate();
-
-      // Go Back button
-      document.getElementById("goBack").addEventListener("click", () => {
-        window.history.back();
-      });
-    </script>
+    <script src="./assets/js/test_animation_step_1.js"></script>
   </body>
 </html>
