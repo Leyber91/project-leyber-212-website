@@ -1,0 +1,142 @@
+/* Base styles */
+#controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+#controls label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#controls input[type="color"],
+#controls input[type="range"],
+#controls button,
+#controls input[type="checkbox"] {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    outline: none;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#controls input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+#controls input[type="color"]::-webkit-color-swatch {
+    border: none;
+}
+
+#controls input[type="range"] {
+    width: 100%;
+    height: 20px;
+    margin-bottom: 10px;
+    -webkit-appearance: none;
+}
+
+#controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#controls button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#controls input[type="checkbox"] + label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 0;
+    color: #fff;
+}
+
+#controls input[type="checkbox"] + label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    left: 0;
+    top: 3px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#controls input[type="checkbox"]:checked + label:before {
+    content: "\2713";
+    text-align: center;
+    line-height: 20px;
+    font-size: 14px;
+}
+
+/* 3D effect */
+#controls {
+    perspective: 1000px;
+}
+
+#controls > * {
+    transform: translateZ(100px);
+}
+
+#controls label {
+    transform: rotateX(-10deg);
+}
+
+#controls input[type="range"],
+#controls button,
+#controls input[type="checkbox"] + label:before {
+    transform: translateZ(50px);
+}
+
+#controls input[type="color"],
+#controls input[type="range"],
+#controls button {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5), 0 0 80px rgba(255, 255, 255, 0.5), 0 0 160px rgba(255, 255, 255, 0.5);
+}
+
+#controls input[type="range"]::-webkit-slider-thumb {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
+}
+
+#controls button {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
+}
+
+#controls input[type="checkbox"] + label:before {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.5);
+}
+
+/* Other styles */
+body {
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #fff;
+}
