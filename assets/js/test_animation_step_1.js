@@ -6,7 +6,6 @@ let rangeRotationX;
 let rangeRotationY;
 let rangeRotationZ;
 let isAnimating = true;
-window.sphereDetail = p5.prototype.sphereDetail
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
@@ -58,13 +57,13 @@ function draw() {
   }
   scale(size / 50);
   fill(colorPicker.color());
+  detail(32);
   sphere();
   pop();
 }
 
 function createSphere(radius) {
   const sphere = () => {
-    sphereDetail(32);
     ellipsoid(radius, radius, radius);
   };
   return sphere;
