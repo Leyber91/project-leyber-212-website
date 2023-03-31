@@ -15,8 +15,8 @@ const geometry = new THREE.BoxGeometry();
 const edges = new THREE.EdgesGeometry(geometry);
 const line = new THREE.LineSegments(
   edges,
-  new THREE.LineBasicMaterial({ color: 0xffffff })
-);
+  new THREE.LineBasicMaterial({ color: 0x00aaff })
+  );
 
 scene.add(line);
 
