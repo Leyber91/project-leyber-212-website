@@ -9,6 +9,8 @@ html, body {
 .animation-screen {
     display: flex;
     height: 100%;
+    position: relative; /* Add this line */
+
 }
 
 .control-room {
@@ -23,6 +25,8 @@ html, body {
                 0 0 40px rgba(0, 255, 255, 0.5),
                 0 0 80px rgba(0, 255, 255, 0.5),
                 0 0 160px rgba(0, 255, 255, 0.5);
+    z-index: 1; /* Add this line */
+
 }
 
 .control-board {
