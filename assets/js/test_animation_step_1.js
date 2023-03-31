@@ -26,6 +26,12 @@ engine.runRenderLoop(function () {
   scene.render();
 });
 
-window.addEventListener("resize", function () {
-  engine.resize();
+window.addEventListener('DOMContentLoaded', function() {
+  const animationCanvas = document.getElementById('animationCanvas');
+  if (animationCanvas) {
+      const engine = new BABYLON.Engine(animationCanvas, true);
+      // Rest of your Babylon.js implementation
+  } else {
+      console.error('Animation canvas not found');
+  }
 });
