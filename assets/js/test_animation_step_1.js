@@ -64,7 +64,7 @@ const sketch = (p) => {
     return sphere;
   }
 }
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
   const animationContainer = document.querySelector('.animation-container');
   if (animationContainer) {
       new p5(sketch, animationContainer);
