@@ -67,6 +67,9 @@ window.onload = function() {
 
   }
 
-  window.onload = function() {
-    new p5(initialize);
+
+};
+
+window.onload = function() {
+  new p5(initialize);
 };
