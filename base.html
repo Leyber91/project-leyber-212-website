@@ -3,35 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Hole Animation</title>
+    <title>Animation</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/animation_control.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
-
-
 </head>
 <body>
-  <div class="animation-screen">
-    <canvas id="glCanvas"></canvas>
-    <div class="control-room">
-        <div class="control-board">
-            <div class="control-group">
-                <label for="colorPicker">Color</label>
-                <input type="color" id="colorPicker">
+    <div class="animation-screen">
+        <div class="control-room">
+            <div class="control-board">
+                <div class="control-group">
+                  <label for="toggleAnimation">Toggle Animation</label>
+                  <button id="toggleAnimation">Start / Stop</button>
+                </div>
+                <div class="control-group">
+                    <label for="colorPicker">Color</label>
+                    <input type="color" id="colorPicker">
+                </div>
+                <div class="control-group">
+                    <label for="rangeSpeed">Speed</label>
+                    <input type="range" id="rangeSpeed" min="1" max="10" value="5">
+                </div>
+                <div class="control-group">
+                    <label for="rangeSize">Size</label>
+                    <input type="range" id="rangeSize" min="10" max="200" value="50">
+                </div>
+                <div class="control-group">
+                    <label for="rangeRotationX">Rotation X</label>
+                    <input type="range" id="rangeRotationX" min="-180" max="180" value="0">
+                </div>
+                <div class="control-group">
+                    <label for="rangeRotationY">Rotation Y</label>
+                    <input type="range" id="rangeRotationY" min="-180" max="180" value="0">
+                </div>
+                <div class="control-group">
+                    <label for="rangeRotationZ">Rotation Z</label>
+                    <input type="range" id="rangeRotationZ" min="-180" max="180" value="0">
+                </div>
             </div>
-            <div class="control-group">
-                <label for="rangeSpeed">Speed</label>
-                <input type="range" id="rangeSpeed" min="1" max="10" value="5">
-            </div>
-            <div class="control-group">
-              <label for="rangeSize">Size</label>
-              <input type="range" id="rangeSize" min="10" max="200" value="50">
-            </div>
+            <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
         </div>
-        <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
     </div>
-  </div>
-    <!-- Include the WebGL script -->
-    <script src="assets/js/test_animation_step_1.js" type="module"></script>
+    <!-- Include the p5.js script -->
+    <script src="assets/js/animation_p5.js"></script>
 </body>
 </html>

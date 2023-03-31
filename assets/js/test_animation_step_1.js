@@ -5,53 +5,66 @@ let rangeSize;
 let rangeRotationX;
 let rangeRotationY;
 let rangeRotationZ;
+let isAnimating = true;
 
 function setup() {
-    createCanvas(window.innerWidth, window.innerHeight, WEBGL);
-    sphere = createSphere(50);
+  createCanvas(windowWidth, windowHeight, WEBGL);
 
-    colorPicker = createColorPicker('#ff0000');
-    colorPicker.position(10, 10);
+  sphere = createSphere(50);
 
-    rangeSpeed = createSlider(1, 10, 5);
-    rangeSpeed.position(10, 40);
+  colorPicker = createColorPicker('#ff0000');
+  colorPicker.position(10, 10);
 
-    rangeSize = createSlider(10, 200, 50);
-    rangeSize.position(10, 70);
+  rangeSpeed = createSlider(1, 10, 5);
+  rangeSpeed.position(10, 40);
 
-    rangeRotationX = createSlider(-180, 180, 0);
-    rangeRotationX.position(10, 100);
+  rangeSize = createSlider(10, 200, 50);
+  rangeSize.position(10, 70);
 
-    rangeRotationY = createSlider(-180, 180, 0);
-    rangeRotationY.position(10, 130);
+  rangeRotationX = createSlider(-180, 180, 0);
+  rangeRotationX.position(10, 100);
 
-    rangeRotationZ = createSlider(-180, 180, 0);
-    rangeRotationZ.position(10, 160);
+  rangeRotationY = createSlider(-180, 180, 0);
+  rangeRotationY.position(10, 130);
+
+  rangeRotationZ = createSlider(-180, 180, 0);
+  rangeRotationZ.position(10, 160);
+
+  const toggleAnimationButton = document.getElementById('toggleAnimation');
+  toggleAnimationButton.addEventListener('click', function (event) {
+    isAnimating = !isAnimating;
+  });
 }
 
 function draw() {
-    background(50);
+  background(50);
 
-    let size = rangeSize.value();
-    let angleX = radians(rangeRotationX.value());
-    let angleY = radians(rangeRotationY.value());
-    let angleZ = radians(rangeRotationZ.value());
-    let speed = rangeSpeed.value();
+  let size = rangeSize.value();
+  let angleX = radians(rangeRotationX.value());
+  let angleY = radians(rangeRotationY.value());
+  let angleZ = radians(rangeRotationZ.value());
+  let speed = rangeSpeed.value();
 
-    push();
+  push();
+  if (isAnimating) {
     rotateX(angleX + frameCount * speed * 0.01);
     rotateY(angleY + frameCount * speed * 0.01);
     rotateZ(angleZ + frameCount * speed * 0.01);
-    scale(size / 50);
-    fill(colorPicker.color());
-    sphere();
-    pop();
+  } else {
+    rotateX(angleX);
+    rotateY(angleY);
+    rotateZ(angleZ);
+  }
+  scale(size / 50);
+  fill(colorPicker.color());
+  sphere();
+  pop();
 }
 
 function createSphere(radius) {
-    const sphere = () => {
-        sphereDetail(32);
-        ellipsoid(radius, radius, radius);
-    };
-    return sphere;
+  const sphere = () => {
+    sphereDetail(32);
+    ellipsoid(radius, radius, radius);
+  };
+  return sphere;
 }
