@@ -9,6 +9,8 @@ let velocityY = 1;
 let color = 'rgba(255, 0, 0, 1)';
 let isLooping = true;
 let animationId;
+let size = 50;
+
 
 // Function to update and draw the rectangle
 function updateAndDrawRectangle() {
@@ -28,10 +30,15 @@ function updateAndDrawRectangle() {
         posY -= velocityY;
         velocityY = -velocityY; // Reverse direction
     }
+      // Calculate the size based on the position (simulate the Z-direction)
+        size = 50 + (posX + posY) * 0.1;
+
+        // Draw the rectangle with the calculated size
+        ctx.fillRect(posX, posY, size, size);
 
     // Draw the rectangle
     ctx.fillStyle = color;
-    ctx.fillRect(posX, posY, 50, 50);
+    ctx.fillRect(posX, posY, size, size);
 
     // Request the next frame if looping is enabled
     if (isLooping) {
@@ -60,13 +67,12 @@ document.getElementById('colorPicker').addEventListener('input', function(event)
     color = event.target.value;
 });
 
-document.getElementById('velocityXSlider').addEventListener('input', function(event) {
-    velocityX = event.target.valueAsNumber;
+document.getElementById('rangeSpeed').addEventListener('input', function(event) {
+    let speed = event.target.valueAsNumber;
+    velocityX = speed * Math.cos(Math.PI * 0.25);
+    velocityY = speed * Math.sin(Math.PI * 0.25);
 });
 
-document.getElementById('velocityYSlider').addEventListener('input', function(event) {
-    velocityY = event.target.valueAsNumber;
-});
 
 document.getElementById('directionButton').addEventListener('click', function() {
     velocityX = -velocityX;
@@ -79,3 +85,8 @@ document.getElementById('loopCheckbox').addEventListener('change', function(even
         updateAndDrawRectangle();
     }
 });
+
+// Add an event listener for controlling the size
+document.getElementById('rangeSize').addEventListener('input', function (event) {
+    size = event.target.valueAsNumber;
+  });
