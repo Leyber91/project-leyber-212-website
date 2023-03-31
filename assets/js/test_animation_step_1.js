@@ -3,7 +3,9 @@ const canvasTest = document.getElementById('glCanvas');
 const gl = canvasTest.getContext('webgl2');
 if (!gl) {
   alert('Your browser does not support WebGL 2');
-}class Mat4 {
+}
+
+class Mat4 {
     static create() {
       let mat = new Float32Array(16);
       mat[0] = mat[5] = mat[10] = mat[15] = 1;
@@ -92,6 +94,36 @@ if (!gl) {
       }
       return out;
     }
+
+    static rotateX(out, a, rad) {
+        const s = Math.sin(rad);
+        const c = Math.cos(rad);
+        const a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
+        const a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11];
+      
+        out[4] = c * a10 + s * a20;
+        out[5] = c * a11 + s * a21;
+        out[6] = c * a12 + s * a22;
+        out[7] = c * a13 + s * a23;
+        out[8] = c * a20 - s * a10;
+        out[9] = c * a21 - s * a11;
+        out[10] = c * a22 - s * a12;
+        out[11] = c * a23 - s * a13;
+      
+        if (a !== out) {
+          out[0] = a[0];
+          out[1] = a[1];
+          out[2] = a[2];
+          out[3] = a[3];
+          out[12] = a[12];
+          out[13] = a[13];
+          out[14] = a[14];
+          out[15] = a[15];
+        }
+        return out;
+      }
+      
+
   }
     
 
