@@ -1,4 +1,4 @@
-function initialize() {
+const sketch = (p) => {
   let sphere;
   let colorPicker;
   let rangeSpeed;
@@ -8,63 +8,63 @@ function initialize() {
   let rangeRotationZ;
   let isAnimating = true;
 
-  function setup() {
-    let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+  p.setup = () => {
+    let canvas = p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL);
     canvas.parent('animation-container');
 
     sphere = createSphere(50);
 
-    colorPicker = select('#colorPicker');
+    colorPicker = p.select('#colorPicker');
 
-    rangeSpeed = select('#rangeSpeed');
+    rangeSpeed = p.select('#rangeSpeed');
 
-    rangeSize = select('#rangeSize');
+    rangeSize = p.select('#rangeSize');
 
-    rangeRotationX = select('#rangeRotationX');
+    rangeRotationX = p.select('#rangeRotationX');
 
-    rangeRotationY = select('#rangeRotationY');
+    rangeRotationY = p.select('#rangeRotationY');
 
-    rangeRotationZ = select('#rangeRotationZ');
+    rangeRotationZ = p.select('#rangeRotationZ');
 
-    const toggleAnimationButton = select('#toggleAnimation');
+    const toggleAnimationButton = p.select('#toggleAnimation');
     toggleAnimationButton.mousePressed(function (event) {
       isAnimating = !isAnimating;
     });
-  }
+  };
 
-  function draw() {
-    background(50);
+  p.draw = () => {
+    p.background(50);
 
     let size = rangeSize.value();
-    let angleX = radians(rangeRotationX.value());
-    let angleY = radians(rangeRotationY.value());
-    let angleZ = radians(rangeRotationZ.value());
+    let angleX = p.radians(rangeRotationX.value());
+    let angleY = p.radians(rangeRotationY.value());
+    let angleZ = p.radians(rangeRotationZ.value());
     let speed = rangeSpeed.value();
 
-    push();
+    p.push();
     if (isAnimating) {
-      rotateX(angleX + frameCount * speed * 0.01);
-      rotateY(angleY + frameCount * speed * 0.01);
-      rotateZ(angleZ + frameCount * speed * 0.01);
+      p.rotateX(angleX + p.frameCount * speed * 0.01);
+      p.rotateY(angleY + p.frameCount * speed * 0.01);
+      p.rotateZ(angleZ + p.frameCount * speed * 0.01);
     } else {
-      rotateX(angleX);
-      rotateY(angleY);
-      rotateZ(angleZ);
+      p.rotateX(angleX);
+      p.rotateY(angleY);
+      p.rotateZ(angleZ);
     }
-    scale(size / 50);
-    fill(colorPicker.color());
+    p.scale(size / 50);
+    p.fill(colorPicker.color());
     sphere();
-    pop();
-  }
+    p.pop();
+  };
 
   function createSphere(radius) {
     const sphere = () => {
-      ellipsoid(radius, radius, radius);
+      p.ellipsoid(radius, radius, radius);
     };
     return sphere;
   }
 }
 
 window.onload = function() {
-  new p5(initialize);
+  new p5(sketch);
 };
