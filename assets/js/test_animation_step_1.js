@@ -64,7 +64,11 @@ const sketch = (p) => {
     return sphere;
   }
 }
-
-window.onload = function() {
-  new p5(sketch);
-};
+document.addEventListener('DOMContentLoaded', function() {
+  const animationContainer = document.querySelector('.animation-container');
+  if (animationContainer) {
+      new p5(sketch, animationContainer);
+  } else {
+      console.error('Animation container not found');
+  }
+});
