@@ -30,8 +30,9 @@ function setup() {
   rangeRotationZ = createSlider(-180, 180, 0);
   rangeRotationZ.position(10, 160);
 
-  const toggleAnimationButton = document.getElementById('toggleAnimation');
-  toggleAnimationButton.addEventListener('click', function (event) {
+  const toggleAnimationButton = createButton('Start / Stop');
+  toggleAnimationButton.position(10, 190);
+  toggleAnimationButton.mousePressed(function (event) {
     isAnimating = !isAnimating;
   });
 }
@@ -57,7 +58,6 @@ function draw() {
   }
   scale(size / 50);
   fill(colorPicker.color());
-  detail(32);
   sphere();
   pop();
 }
