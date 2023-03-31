@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation</title>
     <link rel="stylesheet" href="assets/css/animation_control.css">
-    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-    
-
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <script type="text/javascript" src="assets/js/test_animation_step_1.js" defer></script>
 </head>
 <body>
-    <div class="animation-container" id="animation-container"></div>
-    <canvas></canvas>
+    <div class="animation-container" id="animation-container">
+        <canvas></canvas>
+    </div>
     <div class="animation-screen">
-      <div class="control-room">
-
-
         <div class="control-room">
             <div class="control-board">
                 <div class="control-group">
-                  <label>Toggle Animation</label>
-                  <button id="toggleAnimation">Start / Stop</button>
+                    <label>Toggle Animation</label>
+                    <button id="toggleAnimation">Start / Stop</button>
                 </div>
                 <div class="control-group">
                     <label>Color</label>
@@ -50,8 +48,6 @@
             </div>
             <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
         </div>
-      </div>
     </div>
-    <!-- Include the p5.js script -->
 </body>
 </html>
