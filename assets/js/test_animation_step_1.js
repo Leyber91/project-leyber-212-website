@@ -1,3 +1,8 @@
+window.addEventListener('DOMContentLoaded', (event) => {
+  initialize();
+});
+
+
 function initialize() {
   let sphere;
   let colorPicker;

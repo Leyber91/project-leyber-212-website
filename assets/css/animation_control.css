@@ -4,22 +4,10 @@ canvas {
     left: 0;
     z-index: -1;
   }
-  .animation-screen {
-    position: relative;
-    height: 100%;
-  }
-  
-  .animation-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
+
     
 
-html, body {
+  html, body {
     margin: 0;
     height: 100%;
     overflow: hidden;
@@ -27,12 +15,27 @@ html, body {
     background-color: #08273a;
 }
 
+.animation-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
 .animation-screen {
     display: flex;
     height: 100%;
-    position: relative; /* Add this line */
-
+    justify-content: center;
+    align-items: center;
 }
+
+.controls {
+    position: relative;
+    z-index: 1;
+}
+
 
 .control-room {
     display: flex;
