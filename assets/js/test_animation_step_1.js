@@ -65,8 +65,8 @@ window.onload = function() {
       return sphere;
     }
 
-    new p5(setup, draw);
   }
 
-  initialize();
+  window.onload = function() {
+    new p5(initialize);
 };
