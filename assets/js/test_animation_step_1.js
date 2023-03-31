@@ -1,74 +1,31 @@
-const sketch = (p) => {
-  let sphere;
-  let colorPicker;
-  let rangeSpeed;
-  let rangeSize;
-  let rangeRotationX;
-  let rangeRotationY;
-  let rangeRotationZ;
-  let isAnimating = true;
+const createScene = function () {
+  const scene = new BABYLON.Scene(engine);
 
-  p.setup = () => {
-    let canvas = p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL);
-    canvas.parent('animation-container');
+  const camera = new BABYLON.ArcRotateCamera("camera1", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+  camera.setPosition(new BABYLON.Vector3(0, 0, -100));
+  camera.attachControl(canvas, true);
 
-    sphere = createSphere(50);
+  const light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+  light.intensity = 0.7;
 
-    colorPicker = p.select('#colorPicker');
+  const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 50}, scene);
 
-    rangeSpeed = p.select('#rangeSpeed');
+  scene.registerBeforeRender(function () {
+      sphere.rotation.x += 0.01;
+      sphere.rotation.y += 0.01;
+  });
 
-    rangeSize = p.select('#rangeSize');
+  return scene;
+};
 
-    rangeRotationX = p.select('#rangeRotationX');
+const canvas = document.getElementById("animation-container");
+const engine = new BABYLON.Engine(canvas, true);
 
-    rangeRotationY = p.select('#rangeRotationY');
+const scene = createScene();
+engine.runRenderLoop(function () {
+  scene.render();
+});
 
-    rangeRotationZ = p.select('#rangeRotationZ');
-
-    const toggleAnimationButton = p.select('#toggleAnimation');
-    toggleAnimationButton.mousePressed(function (event) {
-      isAnimating = !isAnimating;
-    });
-  };
-
-  p.draw = () => {
-    p.background(50);
-
-    let size = rangeSize.value();
-    let angleX = p.radians(rangeRotationX.value());
-    let angleY = p.radians(rangeRotationY.value());
-    let angleZ = p.radians(rangeRotationZ.value());
-    let speed = rangeSpeed.value();
-
-    p.push();
-    if (isAnimating) {
-      p.rotateX(angleX + p.frameCount * speed * 0.01);
-      p.rotateY(angleY + p.frameCount * speed * 0.01);
-      p.rotateZ(angleZ + p.frameCount * speed * 0.01);
-    } else {
-      p.rotateX(angleX);
-      p.rotateY(angleY);
-      p.rotateZ(angleZ);
-    }
-    p.scale(size / 50);
-    p.fill(colorPicker.color());
-    sphere();
-    p.pop();
-  };
-
-  function createSphere(radius) {
-    const sphere = () => {
-      p.ellipsoid(radius, radius, radius);
-    };
-    return sphere;
-  }
-}
-window.addEventListener('load', function() {
-  const animationContainer = document.querySelector('.animation-container');
-  if (animationContainer) {
-      new p5(sketch, animationContainer);
-  } else {
-      console.error('Animation container not found');
-  }
+window.addEventListener("resize", function () {
+  engine.resize();
 });
