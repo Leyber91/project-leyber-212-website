@@ -3,7 +3,7 @@
       background-position: 0 0;
     }
     100% {
-      background-position: -10000px 0;
+        background-position: -625em 0;
     }
   }
   
@@ -21,101 +21,126 @@ body {
 }
 
 .animation-container {
-    background-color: rgba(8, 39, 58, 0.8);
+    background-color: rgba(8, 39, 58, 0.6);
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    border: 3px solid rgba(0, 255, 255, 0.5);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
-    margin: 30px;
-}
+    border: 0.188em solid rgba(0, 255, 255, 0.5);
+    border-radius: 0.625em;
+    box-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5), inset 0 0 0.625em rgba(0, 255, 255, 0.5);
+    margin: 1.875em auto;
+    max-width: 90%;
+    max-height: 90%;
+  }
 
 #animation {
   position: absolute;
 }
 
 .controls {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  bottom: 10%;
-  background-color: rgba(10, 10, 10, 0.7);
-  border: 1px solid rgba(0, 255, 255, 0.5);
-  border-radius: 5px;
-  z-index: 2;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-}
-
-.controls label,
-.controls button {
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-}
-
-.controls button {
-  background-color: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(0, 255, 255, 0.5);
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-@keyframes glowing {
-    0% {
-      box-shadow: 0 0 5px #00ffff;
-    }
-    50% {
-      box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff;
-    }
-    100% {
-      box-shadow: 0 0 5px #00ffff;
-    }
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.625em;
+    padding: 0.625em;
+    bottom: 10%;
+    background-color: rgba(10, 10, 10, 0.7);
+    border: 0.063em solid rgba(0, 255, 255, 0.5);
+    border-radius: 0.313em;
+    z-index: 2;
+    box-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
   }
   
+
+  .controls label,
+  .controls button {
+    color: #00ffff;
+    text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+  }
+
+
+  .controls button {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 0.063em solid rgba(0, 255, 255, 0.5);
+    border-radius: 0.313em;
+    padding: 0.313em 0.625em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  @keyframes glowing {
+    0% {
+      box-shadow: 0 0 0.313em #00ffff;
+    }
+    50% {
+      box-shadow: 0 0 1.25em #00ffff, 0 0 1.875em #00ffff;
+    }
+    100% {
+      box-shadow: 0 0 0.313em #00ffff;
+    }
+  }
   .controls button:hover,
   #goBack:hover {
     animation: glowing 1.5s infinite;
   }
   
 
-.controls input[type="range"]:hover {
+  .controls input[type="range"]:hover {
     cursor: pointer;
     background: linear-gradient(90deg, rgba(0, 255, 255, 0.7) 0%, rgba(0, 255, 255, 0) 100%);
   }
   
   .controls input[type="range"] {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 0.625em;
     background: linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0) 100%);
-    transition: background 0.3s ease; /* Add this line for smooth transition */
+    transition: background 0.3s ease;
   }
   
 
-#goBack {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  transition: transform 0.2s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-  border: 1px solid rgba(0, 255, 255, 0.5);
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 2;
-}
+  #goBack {
+    position: absolute;
+    right: 1.25em;
+    bottom: 5em; /* Adjust this value to avoid overlapping with the animation controls */
+    padding: 0.625em 1.25em;
+    border-radius: 1.25em;
+    transition: transform 0.2s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #00ffff;
+    text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+    border: 0.063em solid rgba(0, 255, 255, 0.5);
+    font-size: 1.125em;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  #goBack:hover {
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 
-#goBack:hover {
-  transform: scale(1.1);
-  background-color: rgba(0, 0, 0, 0.4);
-}
+  @media only screen and (max-width: 480px) {
+    .animation-container {
+      margin: 1em auto;
+    }
+  
+    .controls {
+      flex-direction: column;
+      bottom: 5em;
+      left: 1em;
+      gap: 0.5em;
+    }
+  
+    .controls input[type="range"] {
+      width: 80%;
+    }
+  
+    #goBack {
+      bottom: 2em;
+    }
+  }
+  
