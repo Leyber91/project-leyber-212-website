@@ -8,9 +8,11 @@ let rangeRotationZ;
 let isAnimating = true;
 
 function setup() {
+  
   console.log('Setting up the sketch');
   console.log('p5.js version:', p5.prototype.VERSION);
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+  canvas.parent('animation-container');
 
   sphere = createSphere(50);
 
