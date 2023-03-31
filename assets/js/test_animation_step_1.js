@@ -122,6 +122,136 @@ class Mat4 {
         }
         return out;
       }
+
+      static translate(out, a, v) {
+        const x = v[0], y = v[1], z = v[2];
+        let i;
+        if (out === a) {
+          out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
+          out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
+          out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
+          out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
+        } else {
+          for (i = 0; i < 4; i++) {
+            const a0 = a[i], a1 = a[i + 4], a2 = a[i + 8], a3 = a[i + 12];
+            out[i] = a0;
+            out[i + 4] = a1;
+            out[i + 8] = a2;
+            out[i + 12] = a0 * x + a1 * y + a2 * z + a3;
+          }
+        }
+        return out;
+      }
+    
+      static scale(out, a, v) {
+        const x = v[0], y = v[1], z = v[2];
+    
+        out[0] = a[0] * x;
+        out[1] = a[1] * x;
+        out[2] = a[2] * x;
+        out[3] = a[3] * x;
+    
+        out[4] = a[4] * y;
+        out[5] = a[5] * y;
+        out[6] = a[6] * y;
+        out[7] = a[7] * y;
+    
+        out[8] = a[8] * z;
+        out[9] = a[9] * z;
+        out[10] = a[10] * z;
+        out[11] = a[11] * z;
+    
+        out[12] = a[12];
+        out[13] = a[13];
+        out[14] = a[14];
+        out[15] = a[15];
+    
+        return out;
+      }
+
+      static rotateZ(out, a, rad) {
+        const s = Math.sin(rad);
+        const c = Math.cos(rad);
+        const a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3];
+        const a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
+    
+        if (a !== out) {
+          out[8] = a[8];
+          out[9] = a[9];
+          out[10] = a[10];
+          out[11] = a[11];
+          out[12] = a[12];
+          out[13] = a[13];
+          out[14] = a[14];
+          out[15] = a[15];
+        }
+    
+        out[0] = c * a00 + s * a10;
+        out[1] = c * a01 + s * a11;
+        out[2] = c * a02 + s * a12;
+        out[3] = c * a03 + s * a13;
+    
+        out[4] = c * a10 - s * a00;
+        out[5] = c * a11 - s * a01;
+        out[6] = c * a12 - s * a02;
+        out[7] = c * a13 - s * a03;
+    
+        return out;
+      }
+      
+      static lookAt(out, eye, center, up) {
+        const x0 = center[0] - eye[0];
+        const x1 = center[1] - eye[1];
+        const x2 = center[2] - eye[2];
+    
+        let length = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
+    
+        if (Math.abs(length) < Number.EPSILON) {
+          return null;
+        }
+    
+        const invLength = 1 / length;
+        const xaxis = [(x0 * invLength), (x1 * invLength), (x2 * invLength)];
+    
+        const y0 = up[1] * xaxis[2] - up[2] * xaxis[1];
+        const y1 = up[2] * xaxis[0] - up[0] * xaxis[2];
+        const y2 = up[0] * xaxis[1] - up[1] * xaxis[0];
+    
+        length = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
+    
+        if (Math.abs(length) < Number.EPSILON) {
+          return null;
+        }
+    
+        const invLengthY = 1 / length;
+        const yaxis = [(y0 * invLengthY), (y1 * invLengthY), (y2 * invLengthY)];
+    
+        const zaxis = [
+          xaxis[1] * yaxis[2] - xaxis[2] * yaxis[1],
+          xaxis[2] * yaxis[0] - xaxis[0] * yaxis[2],
+          xaxis[0] * yaxis[1] - xaxis[1] * yaxis[0]
+        ];
+    
+        out[0] = xaxis[0];
+        out[1] = yaxis[0];
+        out[2] = zaxis[0];
+        out[3] = 0;
+        out[4] = xaxis[1];
+        out[5] = yaxis[1];
+        out[6] = zaxis[1];
+        out[7] = 0;
+        out[8] = xaxis[2];
+        out[9] = yaxis[2];
+        out[10] = zaxis[2];
+        out[11] = 0;
+        out[12] = -(xaxis[0] * eye[0] + xaxis[1] * eye[1] + xaxis[2] * eye[2]);
+        out[13] = -(yaxis[0] * eye[0] + yaxis[1] * eye[1] + yaxis[2] * eye[2]);
+        out[14] = -(zaxis[0] * eye[0] + zaxis[1] * eye[1] + zaxis[2] * eye[2]);
+        out[15] = 1;
+    
+        return out;
+      }
+    
       
 
   }
@@ -326,14 +456,72 @@ function drawScene() {
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
   }
   
+  function createShader(gl, type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+  
+  function createProgram(gl, vertexShader, fragmentShader) {
+    const program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Unable to initialize the shader program: ' + gl.getProgramInfoLog(program));
+      return null;
+    }
+    return program;
+  }
+  
+  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+  const program = createProgram(gl, vertexShader, fragmentShader);
+  
+  gl.useProgram(program);
+  
+  const positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  
+  const positions = [
+    -0.5, -0.5, 0,
+    0.5, -0.5, 0,
+    0, 0.5, 0
+  ];
+  
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+  
+  const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+  gl.enableVertexAttribArray(positionAttributeLocation);
+  gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+  
+  function drawScene() {
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+  
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  
+  function renderLoop() {
+    drawScene();
+    requestAnimationFrame(renderLoop);
+  }
+  
 
+  
   
   // Start the animation loop
 // ...
 let animationId = null;
 // Animation loop function
 function animate() {
-    drawScene();
+    renderLoop();
     animationId = requestAnimationFrame(animate);
   }
   
