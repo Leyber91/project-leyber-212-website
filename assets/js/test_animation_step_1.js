@@ -1,551 +1,280 @@
-// Set up WebGL context
-const canvasTest = document.getElementById('glCanvas');
-const gl = canvasTest.getContext('webgl2');
-if (!gl) {
-  alert('Your browser does not support WebGL 2');
+    // Initialize WebGL context
+    const canvas = document.getElementById("glCanvas");
+    const gl = canvas.getContext("webgl");
+
+    // Set canvas dimensions
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Set up Mat4 transformation matrices
+    const modelMatrix = mat4.create();
+    const viewMatrix = mat4.create();
+    const projectionMatrix = mat4.create();
+
+    // Set up transformation parameters
+    let angle = 0;
+    let scale = 1;
+
+    // Set up shader program
+    const vertexShaderSource = `
+        attribute vec3 a_position;
+
+        uniform mat4 u_model;
+        uniform mat4 u_view;
+        uniform mat4 u_projection;
+
+        void main() {
+            gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0);
+        }
+    `;
+    const fragmentShaderSource = `
+        precision mediump float;
+
+        void main() {
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+    `;
+    const shaderProgram = createShaderProgram(gl, vertexShaderSource, fragmentShaderSource);
+
+    // Set up buffer data
+    const positions = [
+        -0.5, -0.5, 0.0,
+        0.5, -0.5, 0.0,
+        0.5, 0.5, 0.0,
+        -0.5, 0.5, 0.0,
+    ];
+    const indices = [
+        0, 1, 2,
+        0, 2, 3,
+    ];
+    const positionBuffer = createBuffer(gl, positions);
+    const indexBuffer = createIndexBuffer(gl, indices);
+
+    // Set up render loop
+    let animationId = null;
+    const render = () => {
+        // Clear canvas
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // Update transformation matrices
+        mat4.rotate(modelMatrix, modelMatrix, angle, [0, 0, 1]);
+        mat4.scale(modelMatrix, modelMatrix, [scale, scale, scale]);
+
+        // Bind buffers and set uniforms
+        gl.useProgram(shaderProgram);
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+        setAttribute(gl, shaderProgram, "a_position", 3, gl.FLOAT, false, 0, 0);
+        setUniformMat4(gl, shaderProgram, "u_model", modelMatrix);
+        setUniformMat4(gl, shaderProgram, "u_view", viewMatrix);
+        setUniformMat4(gl, shaderProgram, "u_projection", projectionMatrix);
+
+      // Draw the rectangle
+        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+        // Update the rotation for the next draw
+        angle += deltaAngle;
+
+        // Request the next frame
+        requestAnimationFrame(drawScene);
+        }
+
+        // Set up the canvas and WebGL context
+        const canvas = document.getElementById("glCanvas");
+        const gl = canvas.getContext("webgl");
+
+        if (!gl) {
+        alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+        }
+
+        // Set the clear color and enable depth testing and blending
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        // Set up the shaders, buffers, and attributes
+        const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+        const programInfo = {
+        program: shaderProgram,
+        attribLocations: {
+        vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+        vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor"),
+        },
+        uniformLocations: {
+        projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+        modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+        },
+        };
+        const buffers = initBuffers(gl);
+        const indices = buffers.indices;
+
+        // Set up the initial rotation angle and delta angle
+        let angle = 0.0;
+        const deltaAngle = Math.PI / 60.0;
+
+        // Draw the scene continuously
+        requestAnimationFrame(drawScene);
+
+        // Define the vertex shader
+const vsSource = `
+  attribute vec4 aVertexPosition;
+  attribute vec2 aTextureCoord;
+
+  uniform mat4 uModelViewMatrix;
+  uniform mat4 uProjectionMatrix;
+
+  varying highp vec2 vTextureCoord;
+
+  void main() {
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+    vTextureCoord = aTextureCoord;
+  }
+`;
+
+// Define the fragment shader
+const fsSource = `
+  varying highp vec2 vTextureCoord;
+
+  uniform sampler2D uSampler;
+
+  void main() {
+    gl_FragColor = texture2D(uSampler, vTextureCoord);
+  }
+`;
+
+function initShaderProgram(gl, vsSource, fsSource) {
+  const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+  const shaderProgram = gl.createProgram();
+  gl.attachShader(shaderProgram, vertexShader);
+  gl.attachShader(shaderProgram, fragmentShader);
+  gl.linkProgram(shaderProgram);
+
+  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+    console.error(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`);
+    return null;
+  }
+
+  return shaderProgram;
 }
 
-class Mat4 {
-    static create() {
-      let mat = new Float32Array(16);
-      mat[0] = mat[5] = mat[10] = mat[15] = 1;
-      return mat;
-    }
-  
-    static perspective(out, fov, aspect, near, far) {
-      const f = 1.0 / Math.tan(fov / 2);
-      const nf = 1 / (near - far);
-      out[0] = f / aspect;
-      out[1] = 0;
-      out[2] = 0;
-      out[3] = 0;
-      out[4] = 0;
-      out[5] = f;
-      out[6] = 0;
-      out[7] = 0;
-      out[8] = 0;
-      out[9] = 0;
-      out[10] = (far + near) * nf;
-      out[11] = -1;
-      out[12] = 0;
-      out[13] = 0;
-      out[14] = 2 * far * near * nf;
-      out[15] = 0;
-      return out;
-    }
-  
-    static multiply(out, a, b) {
-      let a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3];
-      let a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
-      let a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11];
-      let a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15];
-  
-      let b0  = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
-      out[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-      out[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-      out[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-      out[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-  
-      b0 = b[4]; b1 = b[5]; b2 = b[6]; b3 = b[7];
-      out[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-      out[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-      out[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-      out[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-  
-      b0 = b[8];
-      b1 = b[9]; b2 = b[10]; b3 = b[11];
-      out[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-      out[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-      out[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-      out[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-  
-      b0 = b[12]; b1 = b[13]; b2 = b[14]; b3 = b[15];
-      out[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
-      out[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
-      out[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
-      out[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
-      return out;
-    }
-  
-    static rotateY(out, a, rad) {
-      const s = Math.sin(rad);
-      const c = Math.cos(rad);
-      const a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3];
-      const a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11];
-  
-      out[0] = c * a00 - s * a20;
-      out[1] = c * a01 - s * a21;
-      out[2] = c * a02 - s * a22;
-      out[3] = c * a03 - s * a23;
-      out[8] = s * a00 + c * a20;
-      out[9] = s * a01 + c * a21;
-      out[10] = s * a02 + c * a22;
-      out[11] = s * a03 + c * a23;
-  
-      if (a !== out) {
-        out[4] = a[4];
-        out[5] = a[5];
-        out[6] = a[6];
-        out[7] = a[7];
-        out[12] = a[12];
-        out[13] = a[13];
-        out[14] = a[14];
-        out[15] = a[15];
-      }
-      return out;
-    }
+function loadShader(gl, type, source) {
+  const shader = gl.createShader(type);
 
-    static rotateX(out, a, rad) {
-        const s = Math.sin(rad);
-        const c = Math.cos(rad);
-        const a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
-        const a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11];
-      
-        out[4] = c * a10 + s * a20;
-        out[5] = c * a11 + s * a21;
-        out[6] = c * a12 + s * a22;
-        out[7] = c * a13 + s * a23;
-        out[8] = c * a20 - s * a10;
-        out[9] = c * a21 - s * a11;
-        out[10] = c * a22 - s * a12;
-        out[11] = c * a23 - s * a13;
-      
-        if (a !== out) {
-          out[0] = a[0];
-          out[1] = a[1];
-          out[2] = a[2];
-          out[3] = a[3];
-          out[12] = a[12];
-          out[13] = a[13];
-          out[14] = a[14];
-          out[15] = a[15];
-        }
-        return out;
-      }
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
 
-      static translate(out, a, v) {
-        const x = v[0], y = v[1], z = v[2];
-        let i;
-        if (out === a) {
-          out[12] = a[0] * x + a[4] * y + a[8] * z + a[12];
-          out[13] = a[1] * x + a[5] * y + a[9] * z + a[13];
-          out[14] = a[2] * x + a[6] * y + a[10] * z + a[14];
-          out[15] = a[3] * x + a[7] * y + a[11] * z + a[15];
-        } else {
-          for (i = 0; i < 4; i++) {
-            const a0 = a[i], a1 = a[i + 4], a2 = a[i + 8], a3 = a[i + 12];
-            out[i] = a0;
-            out[i + 4] = a1;
-            out[i + 8] = a2;
-            out[i + 12] = a0 * x + a1 * y + a2 * z + a3;
-          }
-        }
-        return out;
-      }
-    
-      static scale(out, a, v) {
-        const x = v[0], y = v[1], z = v[2];
-    
-        out[0] = a[0] * x;
-        out[1] = a[1] * x;
-        out[2] = a[2] * x;
-        out[3] = a[3] * x;
-    
-        out[4] = a[4] * y;
-        out[5] = a[5] * y;
-        out[6] = a[6] * y;
-        out[7] = a[7] * y;
-    
-        out[8] = a[8] * z;
-        out[9] = a[9] * z;
-        out[10] = a[10] * z;
-        out[11] = a[11] * z;
-    
-        out[12] = a[12];
-        out[13] = a[13];
-        out[14] = a[14];
-        out[15] = a[15];
-    
-        return out;
-      }
-
-      static rotateZ(out, a, rad) {
-        const s = Math.sin(rad);
-        const c = Math.cos(rad);
-        const a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3];
-        const a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7];
-    
-        if (a !== out) {
-          out[8] = a[8];
-          out[9] = a[9];
-          out[10] = a[10];
-          out[11] = a[11];
-          out[12] = a[12];
-          out[13] = a[13];
-          out[14] = a[14];
-          out[15] = a[15];
-        }
-    
-        out[0] = c * a00 + s * a10;
-        out[1] = c * a01 + s * a11;
-        out[2] = c * a02 + s * a12;
-        out[3] = c * a03 + s * a13;
-    
-        out[4] = c * a10 - s * a00;
-        out[5] = c * a11 - s * a01;
-        out[6] = c * a12 - s * a02;
-        out[7] = c * a13 - s * a03;
-    
-        return out;
-      }
-      
-      static lookAt(out, eye, center, up) {
-        const x0 = center[0] - eye[0];
-        const x1 = center[1] - eye[1];
-        const x2 = center[2] - eye[2];
-    
-        let length = Math.sqrt(x0 * x0 + x1 * x1 + x2 * x2);
-    
-        if (Math.abs(length) < Number.EPSILON) {
-          return null;
-        }
-    
-        const invLength = 1 / length;
-        const xaxis = [(x0 * invLength), (x1 * invLength), (x2 * invLength)];
-    
-        const y0 = up[1] * xaxis[2] - up[2] * xaxis[1];
-        const y1 = up[2] * xaxis[0] - up[0] * xaxis[2];
-        const y2 = up[0] * xaxis[1] - up[1] * xaxis[0];
-    
-        length = Math.sqrt(y0 * y0 + y1 * y1 + y2 * y2);
-    
-        if (Math.abs(length) < Number.EPSILON) {
-          return null;
-        }
-    
-        const invLengthY = 1 / length;
-        const yaxis = [(y0 * invLengthY), (y1 * invLengthY), (y2 * invLengthY)];
-    
-        const zaxis = [
-          xaxis[1] * yaxis[2] - xaxis[2] * yaxis[1],
-          xaxis[2] * yaxis[0] - xaxis[0] * yaxis[2],
-          xaxis[0] * yaxis[1] - xaxis[1] * yaxis[0]
-        ];
-    
-        out[0] = xaxis[0];
-        out[1] = yaxis[0];
-        out[2] = zaxis[0];
-        out[3] = 0;
-        out[4] = xaxis[1];
-        out[5] = yaxis[1];
-        out[6] = zaxis[1];
-        out[7] = 0;
-        out[8] = xaxis[2];
-        out[9] = yaxis[2];
-        out[10] = zaxis[2];
-        out[11] = 0;
-        out[12] = -(xaxis[0] * eye[0] + xaxis[1] * eye[1] + xaxis[2] * eye[2]);
-        out[13] = -(yaxis[0] * eye[0] + yaxis[1] * eye[1] + yaxis[2] * eye[2]);
-        out[14] = -(zaxis[0] * eye[0] + zaxis[1] * eye[1] + zaxis[2] * eye[2]);
-        out[15] = 1;
-    
-        return out;
-      }
-    
-      
-
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`);
+    gl.deleteShader(shader);
+    return null;
   }
-    
 
+  return shader;
+}
 
-
-// Vertex shader
-const vertexShaderSource = `
-  attribute vec4 a_position;
-  uniform mat4 u_projectionMatrix;
-  uniform mat4 u_modelViewMatrix;
-  void main() {
-    gl_Position = u_projectionMatrix * u_modelViewMatrix * a_position;
-  }
-`;
-
-// Fragment shader
-const fragmentShaderSource = `
-  precision mediump float;
-  void main() {
-    gl_FragColor = vec4(1, 0, 0, 1);
-  }
-`;
-
-// Set up WebGL context
-
-
-
-// Set up WebGL shader program
-const shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
-gl.useProgram(shaderProgram);
-
-// Set up vertex data for cube
-const vertices = [
-  // Front face
-  -1.0, -1.0,  1.0,
-   1.0, -1.0,  1.0,
-   1.0,  1.0,  1.0,
-  -1.0,  1.0,  1.0,
-  
-  // Back face
-  -1.0, -1.0, -1.0,
-  -1.0,  1.0, -1.0,
-   1.0,  1.0, -1.0,
-   1.0, -1.0, -1.0,
-  
-  // Top face
-  -1.0,  1.0, -1.0,
-  -1.0,  1.0,  1.0,
-   1.0,  1.0,  1.0,
-   1.0,  1.0, -1.0,
-  
-  // Bottom face
-  -1.0, -1.0, -1.0,
-   1.0, -1.0, -1.0,
-   1.0, -1.0,  1.0,
-  -1.0, -1.0,  1.0,
-  
-  // Right face
-   1.0, -1.0, -1.0,
-   1.0,  1.0, -1.0,
-   1.0,  1.0,  1.0,
-   1.0, -1.0,  1.0,
-  
-  // Left face
-  -1.0, -1.0, -1.0,
-  -1.0, -1.0,  1.0,
-  -1.0,  1.0,  1.0,
-  -1.0,  1.0, -1.0
-];
-const indices = [
-    0, 1, 2, 0, 2, 3, // front
-    4, 5, 6, 4, 6, 7, // back
-    8, 9, 10, 8, 10, 11, // top
-    12, 13, 14, 12, 14, 15, // bottom
-    16, 17, 18, 16, 18, 19, // right
-    20, 21, 22, 20, 22, 23 // left
-  ];
-  
-  // Create and bind VAO
-  const vao = gl.createVertexArray();
-  gl.bindVertexArray(vao);
-  
-  // Create and bind VBO
-  const vbo = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-  
-  // Set up vertex attributes
-  const aPosition = gl.getAttribLocation(shaderProgram, 'a_position');
-  gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(aPosition);
-  
-  // Create and bind EBO
-  const ebo = gl.createBuffer();
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-  
-  // Set up uniforms
-  const uProjectionMatrix = gl.getUniformLocation(shaderProgram, 'u_projectionMatrix');
-  const uModelViewMatrix = gl.getUniformLocation(shaderProgram, 'u_modelViewMatrix');
-  
-  // Set up the view and projection matrices
-  const viewMatrix = Mat4.create();
-  const projectionMatrix = Mat4.create();
-  Mat4.perspective(projectionMatrix, (45 * Math.PI) / 180, canvasTest.width / canvasTest.height, 0.1, 100);
-  
-  // Set the initial model matrix
-  const modelMatrix = Mat4.create();
-  
-  // Main render loop
-  function render() {
-    // Clear the canvas
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  
-    // Enable depth testing
-    gl.enable(gl.DEPTH_TEST);
-  
-    // Rotate the model matrix
-    Mat4.rotateY(modelMatrix, modelMatrix, 0.01);
-  
-    // Update the model-view matrix
-    const modelViewMatrix = Mat4.create();
-    Mat4.multiply(modelViewMatrix, viewMatrix, modelMatrix);
-  
-    // Set uniform values
-    gl.uniformMatrix4fv(uProjectionMatrix, false, projectionMatrix);
-    gl.uniformMatrix4fv(uModelViewMatrix, false, modelViewMatrix);
-  
-    // Draw the cube
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-  
-    // Request the next frame
-    requestAnimationFrame(render);
-  }
-  
-  // Start the render loop
-  requestAnimationFrame(render);
-  
-  // Helper function to create a shader
-  function createShader(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-  
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error('An error occurred compiling the shaders:', gl.getShaderInfoLog(shader));
-      gl.deleteShader(shader);
-      return null;
-    }
-  
-    return shader;
-  }
-  
-// Helper function to create a shader program
-function createShaderProgram(vertexSource, fragmentSource) {
-    const vertexShader = createShader(gl.VERTEX_SHADER, vertexSource);
-    const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentSource);
-  
-    const program = gl.createProgram();
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-  
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error('An error occurred linking the shader program:', gl.getProgramInfoLog(program));
-      return null;
-    }
-  
-    return program;
-  }
-  
-  // Function to resize the canvas when the window is resized
-  function onWindowResize() {
-    canvasTest.width = window.innerWidth;
-    canvasTest.height = window.innerHeight;
-    gl.viewport(0, 0, canvasTest.width, canvasTest.height);
-    Mat4.perspective(projectionMatrix, (45 * Math.PI) / 180, canvasTest.width / canvasTest.height, 0.1, 100);
-  }
-  
-  // Add the event listener for window resizing
-  window.addEventListener('resize', onWindowResize, false);
-
-  // ...
-
-// Function to draw the scene
-function drawScene() {
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  
-    Mat4.rotateX(modelMatrix, modelMatrix, 0.01);
-    Mat4.rotateY(modelMatrix, modelMatrix, 0.01);
-  
-    gl.useProgram(shaderProgram);
-    gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uModel"), false, modelMatrix);
-    gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uView"), false, viewMatrix);
-    gl.uniformMatrix4fv(gl.getUniformLocation(shaderProgram, "uProjection"), false, projectionMatrix);
-  
-    gl.bindVertexArray(vao);
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-  }
-  
-  function createShader(gl, type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
-      gl.deleteShader(shader);
-      return null;
-    }
-    return shader;
-  }
-  
-  function createProgram(gl, vertexShader, fragmentShader) {
-    const program = gl.createProgram();
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error('Unable to initialize the shader program: ' + gl.getProgramInfoLog(program));
-      return null;
-    }
-    return program;
-  }
-  
-  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-  const program = createProgram(gl, vertexShader, fragmentShader);
-  
-  gl.useProgram(program);
-  
+function initBuffers(gl) {
   const positionBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  
-  const positions = [
-    -0.5, -0.5, 0,
-    0.5, -0.5, 0,
-    0, 0.5, 0
-  ];
-  
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-  
-  const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-  gl.enableVertexAttribArray(positionAttributeLocation);
-  gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
-  
-  function drawScene() {
-    gl.clearColor(0, 0, 0, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-  
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  }
-  
-  function renderLoop() {
-    drawScene();
-    requestAnimationFrame(renderLoop);
-  }
-  
 
-  
-  
-  // Start the animation loop
-// ...
-let animationId = null;
-// Animation loop function
-function animate() {
-    renderLoop();
-    animationId = requestAnimationFrame(animate);
-  }
-  
-  // Function to start the animation
-  function startAnimation() {
-    if (!animationId) {
-      animate();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  const positions = [    -1.0,  1.0,     1.0,  1.0,    -1.0, -1.0,     1.0, -1.0,  ];
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+  const textureCoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+
+  const textureCoordinates = [    0.0, 0.0,    1.0, 0.0,    0.0, 1.0,    1.0, 1.0,  ];
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
+
+  return {
+    position: positionBuffer,
+    textureCoord: textureCoordBuffer,
+  };
+}
+
+function loadTexture(gl, url) {
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const width = 1;
+  const height = 1;
+  const border = 0;
+  const srcFormat = gl.RGBA;
+  const srcType = gl.UNSIGNED_BYTE;
+  const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border, srcFormat, srcType, pixel);
+
+  const image = new Image();
+  image.onload = function() {
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D),
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, vertices.length / 3);
+
+// Cleanup
+gl.bindBuffer(gl.ARRAY_BUFFER, null);
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+gl.bindVertexArray(null);
+
+// Request another animation frame
+requestAnimationFrame(render);
+}
+
+// Call the render function to start the animation
+render();
+
+// Add event listeners to start and stop the animation
+const startButton = document.getElementById('startAnimation');
+const stopButton = document.getElementById('stopAnimation');
+startButton.addEventListener('click', startAnimation);
+stopButton.addEventListener('click', stopAnimation);
+
+function startAnimation() {
+// Set the animation state to true
+animationState.isPlaying = true;
+}
+
+function stopAnimation() {
+// Set the animation state to false
+animationState.isPlaying = false;
+}
+
+// Define a function to handle mouse events
+function handleMouse(event) {
+const x = event.clientX;
+const y = event.clientY;
+
+// Update the rotation matrix based on the mouse movement
+if (event.type === 'mousedown') {
+    rotationState.isDragging = true;
+    rotationState.mouseStart = {x, y};
+} else if (event.type === 'mouseup') {
+    rotationState.isDragging = false;
+} else if (event.type === 'mousemove') {
+    if (rotationState.isDragging) {
+        const dx = x - rotationState.mouseStart.x;
+        const dy = y - rotationState.mouseStart.y;
+
+        rotationState.angleY += dx / 100;
+        rotationState.angleX += dy / 100;
+
+        rotationState.mouseStart = {x, y};
     }
-  }
-  
-  // Function to stop the animation
-  function stopAnimation() {
-    if (animationId) {
-      cancelAnimationFrame(animationId);
-      animationId = null;
-    }
-  }
-  
-  // Add event listeners for the buttons
-  document.getElementById('startAnimation').addEventListener('click', startAnimation);
-  document.getElementById('stopAnimation').addEventListener('click', stopAnimation);
-  
-  // ...
-  
-  
-  // ...
-  
+}
+}
+
+// Add event listeners to the canvas element for mouse events
+glCanvas.addEventListener('mousedown', handleMouse);
+glCanvas.addEventListener('mouseup', handleMouse);
+glCanvas.addEventListener('mousemove', handleMouse);
+
+
+
+
