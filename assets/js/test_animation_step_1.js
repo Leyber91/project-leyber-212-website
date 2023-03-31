@@ -6,6 +6,7 @@ let rangeRotationX;
 let rangeRotationY;
 let rangeRotationZ;
 let isAnimating = true;
+window.sphereDetail = p5.prototype.sphereDetail
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
