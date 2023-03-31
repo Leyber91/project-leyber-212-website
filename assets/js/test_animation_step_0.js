@@ -22,22 +22,22 @@ function updateAndDrawRectangle() {
     posY += velocityY;
 
     // Check for collisions with the canvas edges and reverse the velocity
-    if (posX < 0 || posX + 50 > canvasTest.width) {
+    if (posX < 0 || posX + size > canvasTest.width) {
         posX -= velocityX;
         velocityX = -velocityX; // Reverse direction
     }
-    if (posY < 0 || posY + 50 > canvasTest.height) {
+    if (posY < 0 || posY + size > canvasTest.height) {
         posY -= velocityY;
         velocityY = -velocityY; // Reverse direction
     }
-      // Calculate the size based on the position (simulate the Z-direction)
-        size = 50 + (posX + posY) * 0.1;
 
-        // Draw the rectangle with the calculated size
-        ctx.fillRect(posX, posY, size, size);
+    // Calculate the size based on the position (simulate the Z-direction)
+    size = 50 + (posX + posY) * 0.1;
 
-    // Draw the rectangle
+    // Set the fill color
     ctx.fillStyle = color;
+
+    // Draw the rectangle with the calculated size
     ctx.fillRect(posX, posY, size, size);
 
     // Request the next frame if looping is enabled
@@ -45,6 +45,7 @@ function updateAndDrawRectangle() {
         animationId = requestAnimationFrame(updateAndDrawRectangle);
     }
 }
+
 
 function startAnimation() {
     // Start the animation loop
