@@ -1,82 +1,72 @@
-window.addEventListener('DOMContentLoaded', (event) => {
-  initialize();
-});
+window.onload = function() {
+  function initialize() {
+    let sphere;
+    let colorPicker;
+    let rangeSpeed;
+    let rangeSize;
+    let rangeRotationX;
+    let rangeRotationY;
+    let rangeRotationZ;
+    let isAnimating = true;
 
+    function setup() {
+      let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+      canvas.parent('animation-container');
 
-function initialize() {
-  let sphere;
-  let colorPicker;
-  let rangeSpeed;
-  let rangeSize;
-  let rangeRotationX;
-  let rangeRotationY;
-  let rangeRotationZ;
-  let isAnimating = true;
+      sphere = createSphere(50);
 
-  function setup() {
-    
-    console.log('Setting up the sketch');
-    console.log('p5.js version:', p5.prototype.VERSION);
-    let canvas = createCanvas(windowWidth, windowHeight, WEBGL);
-    canvas.parent('animation-container');
+      colorPicker = select('#colorPicker');
 
-    sphere = createSphere(50);
+      rangeSpeed = select('#rangeSpeed');
 
-    colorPicker = select('#colorPicker');
-    console.log('Color picker:', colorPicker);
+      rangeSize = select('#rangeSize');
 
-    rangeSpeed = select('#rangeSpeed');
-    console.log('Speed slider:', rangeSpeed);
+      rangeRotationX = select('#rangeRotationX');
 
-    rangeSize = select('#rangeSize');
-    console.log('Size slider:', rangeSize);
+      rangeRotationY = select('#rangeRotationY');
 
-    rangeRotationX = select('#rangeRotationX');
-    console.log('Rotation X slider:', rangeRotationX);
+      rangeRotationZ = select('#rangeRotationZ');
 
-    rangeRotationY = select('#rangeRotationY');
-    console.log('Rotation Y slider:', rangeRotationY);
-
-    rangeRotationZ = select('#rangeRotationZ');
-    console.log('Rotation Z slider:', rangeRotationZ);
-
-    const toggleAnimationButton = select('#toggleAnimation');
-    console.log('Toggle animation button:', toggleAnimationButton);
-    toggleAnimationButton.mousePressed(function (event) {
-      isAnimating = !isAnimating;
-      console.log('Toggle animation button pressed, isAnimating:', isAnimating);
-    });
-  }
-
-  function draw() {
-    background(50);
-
-    let size = rangeSize.value();
-    let angleX = radians(rangeRotationX.value());
-    let angleY = radians(rangeRotationY.value());
-    let angleZ = radians(rangeRotationZ.value());
-    let speed = rangeSpeed.value();
-
-    push();
-    if (isAnimating) {
-      rotateX(angleX + frameCount * speed * 0.01);
-      rotateY(angleY + frameCount * speed * 0.01);
-      rotateZ(angleZ + frameCount * speed * 0.01);
-    } else {
-      rotateX(angleX);
-      rotateY(angleY);
-      rotateZ(angleZ);
+      const toggleAnimationButton = select('#toggleAnimation');
+      toggleAnimationButton.mousePressed(function (event) {
+        isAnimating = !isAnimating;
+      });
     }
-    scale(size / 50);
-    fill(colorPicker.color());
-    sphere();
-    pop();
+
+    function draw() {
+      background(50);
+
+      let size = rangeSize.value();
+      let angleX = radians(rangeRotationX.value());
+      let angleY = radians(rangeRotationY.value());
+      let angleZ = radians(rangeRotationZ.value());
+      let speed = rangeSpeed.value();
+
+      push();
+      if (isAnimating) {
+        rotateX(angleX + frameCount * speed * 0.01);
+        rotateY(angleY + frameCount * speed * 0.01);
+        rotateZ(angleZ + frameCount * speed * 0.01);
+      } else {
+        rotateX(angleX);
+        rotateY(angleY);
+        rotateZ(angleZ);
+      }
+      scale(size / 50);
+      fill(colorPicker.color());
+      sphere();
+      pop();
+    }
+
+    function createSphere(radius) {
+      const sphere = () => {
+        ellipsoid(radius, radius, radius);
+      };
+      return sphere;
+    }
+
+    new p5(setup, draw);
   }
 
-  function createSphere(radius) {
-    const sphere = () => {
-      ellipsoid(radius, radius, radius);
-    };
-    return sphere;
-  }
-}
+  initialize();
+};
