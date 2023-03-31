@@ -9,36 +9,37 @@
 
 </head>
 <body>
-  <div class="control-board">
-    <div class="control-group">
-        <label for="colorPicker">Color:</label>
-        <input type="color" id="colorPicker" value="#ff0000">
-    </div>
-    <div class="control-group">
-        <label for="velocityXSlider">Speed X:</label>
-        <input type="range" id="velocityXSlider" min="-10" max="10" value="2">
-    </div>
-    <div class="control-group">
-        <label for="velocityYSlider">Speed Y:</label>
-        <input type="range" id="velocityYSlider" min="-10" max="10" value="1">
-    </div>
-    <div class="control-group">
-        <button id="directionButton">Reverse Direction</button>
-    </div>
-    <div class="control-group">
-        <input type="checkbox" id="loopCheckbox" checked>
-        <label for="loopCheckbox">Loop</label>
-    </div>
-    <div class="control-group">
-        <button id="startAnimation">Start Animation</button>
-        <button id="stopAnimation">Stop Animation</button>
-    </div>
-</div>
-<canvas id="glCanvas"></canvas>
-    
-    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
-
-    <!-- Include the JavaScript file -->
-    <script src="assets/js/test_animation_step_0.js"></script>
+  <div class="animation-screen">
+      <canvas id="glCanvas"></canvas>
+      <div class="control-room">
+          <div class="control-board">
+              <div class="control-group">
+                  <label for="colorPicker">Color</label>
+                  <input type="color" id="colorPicker">
+              </div>
+              <div class="control-group">
+                  <label for="rangeSpeed">Speed</label>
+                  <input type="range" id="rangeSpeed" min="1" max="10" value="5">
+              </div>
+              <div class="control-group">
+                  <label for="rangeDirection">Direction</label>
+                  <input type="range" id="rangeDirection" min="1" max="10" value="5">
+              </div>
+              <div class="control-group">
+                  <label for="chkLoop">Loop</label>
+                  <input type="checkbox" id="chkLoop">
+                  <label for="chkLoop" class="checkmark"></label>
+              </div>
+              <div class="control-group">
+                  <button id="startAnimation">Start</button>
+                  <button id="stopAnimation">Stop</button>
+              </div>
+          </div>
+          <button id="goHome">Go Home</button>
+      </div>
+  </div>
+  
+  <!-- Include the WebGL script -->
+  <script src="assets/js/test_animation_step_0.js"></script>
 </body>
 </html>
