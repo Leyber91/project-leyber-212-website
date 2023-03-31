@@ -61,3 +61,7 @@ function createSphere(radius) {
   };
   return sphere;
 }
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  new p5();
+});
