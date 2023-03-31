@@ -12,26 +12,19 @@ function setup() {
 
   sphere = createSphere(50);
 
-  colorPicker = createColorPicker('#ff0000');
-  colorPicker.position(10, 10);
+  colorPicker = select('#colorPicker');
 
-  rangeSpeed = createSlider(1, 10, 5);
-  rangeSpeed.position(10, 40);
+  rangeSpeed = select('#rangeSpeed');
 
-  rangeSize = createSlider(10, 200, 50);
-  rangeSize.position(10, 70);
+  rangeSize = select('#rangeSize');
 
-  rangeRotationX = createSlider(-180, 180, 0);
-  rangeRotationX.position(10, 100);
+  rangeRotationX = select('#rangeRotationX');
 
-  rangeRotationY = createSlider(-180, 180, 0);
-  rangeRotationY.position(10, 130);
+  rangeRotationY = select('#rangeRotationY');
 
-  rangeRotationZ = createSlider(-180, 180, 0);
-  rangeRotationZ.position(10, 160);
+  rangeRotationZ = select('#rangeRotationZ');
 
-  const toggleAnimationButton = createButton('Start / Stop');
-  toggleAnimationButton.position(10, 190);
+  const toggleAnimationButton = select('#toggleAnimation');
   toggleAnimationButton.mousePressed(function (event) {
     isAnimating = !isAnimating;
   });
