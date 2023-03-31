@@ -1,10 +1,23 @@
+@keyframes movingStars {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -10000px 5000px;
+    }
+  }
+  
 html,
 body {
   margin: 0;
   height: 100%;
   overflow: hidden;
   font-family: Arial, sans-serif;
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
   background-color: #08273a;
+  background-repeat: repeat;
+  background-size: auto;
+  animation: movingStars 300s linear infinite;
 }
 
 .animation-container {
@@ -50,15 +63,36 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.controls button:hover {
-  background-color: rgba(0, 0, 0, 0.6);
-}
+@keyframes glowing {
+    0% {
+      box-shadow: 0 0 5px #00ffff;
+    }
+    50% {
+      box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff;
+    }
+    100% {
+      box-shadow: 0 0 5px #00ffff;
+    }
+  }
+  
+  .controls button:hover,
+  #goBack:hover {
+    animation: glowing 1.5s infinite;
+  }
+  
 
-.controls input[type="range"] {
-  width: 100%;
-  margin-bottom: 10px;
-  background: linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0) 100%);
-}
+.controls input[type="range"]:hover {
+    cursor: pointer;
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.7) 0%, rgba(0, 255, 255, 0) 100%);
+  }
+  
+  .controls input[type="range"] {
+    width: 100%;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0) 100%);
+    transition: background 0.3s ease; /* Add this line for smooth transition */
+  }
+  
 
 #goBack {
   position: absolute;

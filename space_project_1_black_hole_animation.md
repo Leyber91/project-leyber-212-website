@@ -43,54 +43,27 @@ This project aims to create a complex and engaging black hole animation using We
    - Implement fallback solutions for devices or browsers that do not support WebGL or specific features.
    - Consider using a Progressive Web App (PWA) approach to improve the user experience on mobile devices.
 
-I understand that you want a list of small steps to gradually transform your current project into the black hole animation project. Here's a breakdown of smaller steps to help you transition from your current rectangle animation to the final black hole project:
-
-Set up a basic HTML template with a canvas element, and include the necessary Three.js and WebGL libraries.
-
-Initialize a new Three.js scene with a camera, renderer, and orbit controls.
-
-Replace the 2D rectangle with a 3D cube in the Three.js scene to test the 3D environment.
-
-Make the canvas element and the Three.js scene responsive to different screen sizes and orientations.
-
-Replace the 3D cube with a black sphere to represent the event horizon.
-
-Create a simple 3D model of the accretion disk using a custom geometry.
-
-Add an animated swirl or vortex effect to the accretion disk texture.
-
-Add ambient, point, and spotlights to the scene to create realistic lighting.
-
-Enable shadows for the objects and configure shadow properties.
-
-Apply appropriate materials to the black hole and accretion disk models.
-
-Create and apply a star field background to the scene.
-
-Research the math behind gravitational lensing and create custom vertex and fragment shaders to simulate the lensing effect.
-
-Apply the custom shaders to the black hole model.
-
-Implement post-processing effects to enhance the visual appearance of the scene.
-
-Create a particle system to represent the matter within the accretion disk.
-
-Develop a function to apply forces to the particles and update the particle system in the animation loop.
-
-Add relativistic jets to the black hole model using particle systems and custom shaders.
-
-Implement a user interface (UI) with controls to adjust the parameters of the black hole, accretion disk, lighting, and shaders.
-
-Add interactive features, such as zooming, panning, and rotating the camera view.
-
-Implement tooltips or help messages to guide users through the features and controls.
-
-Analyze and optimize the performance of the WebGL application using techniques such as level of detail (LOD), frustum culling, and texture compression.
-
-Test the animation on various devices and browsers to ensure smooth rendering.
-
-Implement fallback solutions for devices or browsers that do not support WebGL or specific features.
-
-Consider using a Progressive Web App (PWA) approach to improve the user experience on mobile devices.
-
-This list breaks down the original list into smaller steps to help you incrementally develop your project. You can further divide each step into even smaller tasks if necessary. The idea is to create a working prototype at each step, allowing you to see the progress and easily troubleshoot any issues that may arise.
+- [x] 1. Set up a basic HTML template with a canvas element and include the necessary Three.js and WebGL libraries.
+- [x] 2. Initialize a new Three.js scene with a camera and renderer.
+- [x] 3. Replace the 2D rectangle with a 3D cube to test the 3D environment.
+- [ ] 4. Make the canvas element and the Three.js scene responsive to different screen sizes and orientations.
+- [ ] 5. Replace the 3D cube with a black sphere to represent the event horizon.
+- [ ] 6. Create a simple 3D model of the accretion disk using custom geometry.
+- [ ] 7. Add an animated swirl or vortex effect to the accretion disk texture.
+- [ ] 8. Add ambient, point, and spotlights to the scene for realistic lighting.
+- [ ] 9. Enable shadows for objects and configure shadow properties.
+- [ ] 10. Apply appropriate materials to the black hole and accretion disk models.
+- [ ] 11. Create and apply a star field background to the scene.
+- [ ] 12. Research gravitational lensing math and create custom vertex and fragment shaders to simulate the lensing effect.
+- [ ] 13. Apply the custom shaders to the black hole model.
+- [ ] 14. Implement post-processing effects to enhance the visual appearance of the scene.
+- [ ] 15. Create a particle system to represent the matter within the accretion disk.
+- [ ] 16. Develop a function to apply forces to particles and update the particle system in the animation loop.
+- [ ] 17. Add relativistic jets to the black hole model using particle systems and custom shaders.
+- [ ] 18. Implement a UI with controls to adjust black hole, accretion disk, lighting, and shader parameters.
+- [ ] 19. Add interactive features, such as zooming, panning, and rotating the camera view.
+- [ ] 20. Implement tooltips or help messages to guide users through features and controls.
+- [ ] 21. Analyze and optimize the WebGL application performance using LOD, frustum culling, and texture compression techniques.
+- [ ] 22. Test the animation on various devices and browsers to ensure smooth rendering.
+- [ ] 23. Implement fallback solutions for devices or browsers that do not support WebGL or specific features.
+- [ ] 24. Consider using a PWA approach to improve the user experience on mobile devices.
