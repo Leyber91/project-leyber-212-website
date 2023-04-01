@@ -7,7 +7,7 @@ renderer.setClearColor(0x000000, 0.8);
 
 const parentObject = new THREE.Object3D();
 
-const cubeGeometry = new THREE.BoxGeometry();
+const cubeGeometry = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
 
 const cube = new THREE.LineSegments(
   new THREE.EdgesGeometry(cubeGeometry),
@@ -54,45 +54,48 @@ document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
 const dimensionSelector = document.getElementById("dimensionSelector");
 
 function resetCubeGeometry() {
-  const geometry = new THREE.BoxGeometry();
+  const geometry = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
   cube.geometry.dispose();
   cube.geometry = new THREE.EdgesGeometry(geometry);
 }
 
+// Creating the tesseract:
+function projectToHigherDimension(geometry, dimension) {
+  const angle = 0.01;
+  const rotationMatrix = rotateMatrix(dimension, angle);
+  const rotationMatrix3D = new THREE.Matrix4();
+  rotationMatrix3D.fromArray(rotationMatrix);
 
+  const vertices = geometry.getAttribute('position').array;
+  const newVertices = new Float32Array(vertices.length);
 
-//Ceating the teseract:
-function projectToHigherDimension(vertices, dimension) {
-    const angle = 0.01;
-    const rotationMatrix = rotateMatrix(dimension, angle);
-    const rotationMatrix3D = new THREE.Matrix4();
-    rotationMatrix3D.fromArray(rotationMatrix);
-  
-    const newVertices = [];
-    for (let i = 0; i < vertices.length; i++) {
-      const vertex = vertices[i];
-      const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
-      const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
-      newVertices.push(new THREE.Vector3(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z));
-    }
-    return newVertices;
+  for (let i = 0; i < vertices.length; i += 3) {
+    const vertex = new THREE.Vector3(vertices[i], vertices[i + 1], vertices[i + 2]);
+    const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
+    const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
+    newVertices[i] = rotatedVertex.x;
+    newVertices[i + 1] = rotatedVertex.y;
+    newVertices[i + 2] = rotatedVertex.z;
   }
-  
-  function createTesseract() {
-    const innerCube = new THREE.BoxGeometry();
-    const outerCube = new THREE.BoxGeometry();
-    outerCube.scale(1.5, 1.5, 1.5);
-    
-    const tesseractGeometry = new THREE.Geometry();
-    tesseractGeometry.merge(innerCube);
-    tesseractGeometry.merge(outerCube);
-  
-    const edges = new THREE.EdgesGeometry(tesseractGeometry);
-    const lineSegments = new THREE.LineSegments(
-      edges,
-      new THREE.LineBasicMaterial({ color: 0xffffff })
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(newVertices, 3));
+}
+
+function createTesseract() {
+  const innerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+  const outerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+  outerCube.scale(1.5, 1.5, 1.5);
+
+  const tesseractGeometry = new THREE.BufferGeometry();
+  tesseractGeometry.merge(innerCube);
+  tesseractGeometry.merge(outerCube);
+
+  const edges = new THREE.EdgesGeometry(tesseractGeometry);
+  const lineSegments = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({ color: 0xffffff })
     );
-  
+
     return lineSegments;
   }
   
@@ -103,7 +106,7 @@ function projectToHigherDimension(vertices, dimension) {
     cube.edgesGeometry.dispose();
     cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
   }
-
+  
   dimensionSelector.addEventListener("change", (e) => {
     resetCubeGeometry();
     const selectedDimension = parseInt(e.target.value);
@@ -122,16 +125,15 @@ function projectToHigherDimension(vertices, dimension) {
       cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
     }
   });
-
+  
   const animate = function () {
     requestAnimationFrame(animate);
   
     if (isAnimating) {
       const selectedDimension = parseInt(dimensionSelector.value);
       if (selectedDimension > 3) {
-        const newVertices = projectToHigherDimension(cube.geometry.vertices, selectedDimension);
-        cube.geometry.vertices = newVertices;
-        cube.geometry.verticesNeedUpdate = true;
+        projectToHigherDimension(cube.geometry, selectedDimension);
+        cube.geometry.attributes.position.needsUpdate = true; // Update vertices
         cube.geometry.computeBoundingSphere();
       }
       parentObject.rotation.x += speed * directionX;
@@ -143,7 +145,6 @@ function projectToHigherDimension(vertices, dimension) {
   
     renderer.render(scene, camera);
   };
-  
   
   animate();
   
@@ -180,4 +181,3 @@ function projectToHigherDimension(vertices, dimension) {
     return matrix;
   }
   
-        
