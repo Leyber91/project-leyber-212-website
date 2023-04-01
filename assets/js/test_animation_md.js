@@ -1,3 +1,7 @@
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
+import { BufferGeometryUtils } from './assets/js/libraries/BufferGeometryUtils.js';
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -7,7 +11,7 @@ renderer.setClearColor(0x000000, 0.8);
 
 const parentObject = new THREE.Object3D();
 
-const cubeGeometry = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+const cubeGeometry = new THREE.BoxGeometry(); // Use BoxGeometry
 
 const cube = new THREE.LineSegments(
   new THREE.EdgesGeometry(cubeGeometry),
@@ -54,7 +58,7 @@ document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
 const dimensionSelector = document.getElementById("dimensionSelector");
 
 function resetCubeGeometry() {
-  const geometry = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+  const geometry = new THREE.BoxGeometry(); // Use BoxGeometry
   cube.geometry.dispose();
   cube.geometry = new THREE.EdgesGeometry(geometry);
 }
@@ -82,8 +86,8 @@ function projectToHigherDimension(geometry, dimension) {
 }
 
 function createTesseract() {
-    const innerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
-    const outerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+    const innerCube = new THREE.BoxGeometry(); // Use BoxGeometry
+    const outerCube = new THREE.BoxGeometry(); // Use BoxGeometry
     outerCube.scale(1.5, 1.5, 1.5);
   
     const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries([innerCube, outerCube]);
