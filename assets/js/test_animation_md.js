@@ -1,3 +1,38 @@
+function identityMatrix(dimension) {
+    const matrix = [];
+    for (let i = 0; i < dimension; i++) {
+      matrix[i] = [];
+      for (let j = 0; j < dimension; j++) {
+        matrix[i][j] = i === j ? 1 : 0;
+      }
+    }
+    return matrix;
+  }
+  
+
+  function rotateMatrix(dimension, angle) {
+    const c = Math.cos(angle);
+    const s = Math.sin(angle);
+    const matrix = identityMatrix(dimension);
+    matrix[0][0] = c;
+    matrix[0][dimension - 1] = -s;
+    matrix[dimension - 1][0] = s;
+    matrix[dimension - 1][dimension - 1] = c;
+    return matrix;
+  }
+
+    const rotationMatrix = new THREE.Matrix4(); // Declare outside the function for reusability
+
+    function projectTo3D(cube, dimension) {
+    const matrix = cube.geometry.clone();
+    const rotationAngle = 0.01;
+    rotationMatrix.fromArray(rotateMatrix(dimension, rotationAngle));
+    matrix.applyMatrix4(rotationMatrix);
+    cube.geometry = matrix;
+}
+  
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -56,23 +91,34 @@ document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
 });
 
 const dimensionSelector = document.getElementById("dimensionSelector");
-dimensionSelector.addEventListener("change", (e) => {
-  const selectedDimension = parseInt(e.target.value);
-  const matrix = new THREE.Matrix4();
-  matrix.set(
-    1, 0, 0, 0,
-    0, selectedDimension > 1 ? 1 : 0, 0, 0,
-    0, 0, selectedDimension > 2 ? 1 : 0, 0,
-    0, 0, 0, 1
-  );
-  cubeGeometry.applyMatrix4(matrix);
-  cube.geometry = new THREE.EdgesGeometry(cubeGeometry);
-});
+function resetCubeGeometry() {
+    const geometry = new THREE.BoxGeometry();
+    cube.geometry.dispose();
+    cube.geometry = new THREE.EdgesGeometry(geometry);
+  }
+  
+  dimensionSelector.addEventListener("change", (e) => {
+    resetCubeGeometry();
+    const selectedDimension = parseInt(e.target.value);
+    const matrix = new THREE.Matrix4();
+    matrix.set(
+      1, 0, 0, 0,
+      0, selectedDimension > 1 ? 1 : 0, 0, 0,
+      0, 0, selectedDimension > 2 ? 1 : 0, 0,
+      0, 0, 0, 1
+    );
+    cubeGeometry.applyMatrix4(matrix);
+    cube.geometry = new THREE.EdgesGeometry(cubeGeometry);
+  });
 
 const animate = function () {
   requestAnimationFrame(animate);
 
   if (isAnimating) {
+    const selectedDimension = parseInt(dimensionSelector.value);
+    if (selectedDimension > 3) {
+      projectTo3D(cube, selectedDimension);
+    }
     parentObject.rotation.x += speed * directionX;
     parentObject.rotation.y += speed * directionY;
     parentObject.rotation.z += speed * directionZ;
