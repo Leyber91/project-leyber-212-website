@@ -94,12 +94,11 @@ function identityMatrix(dimension) {
   
   const dimensionSelector = document.getElementById("dimensionSelector");
   function resetCubeGeometry() {
-    const geometry = new THREE.Geometry().fromBufferGeometry(new THREE.BoxGeometry());
+    const geometry = new THREE.BoxGeometry();
     cube.geometry.dispose();
-    cube.geometry = geometry;
-    cube.edgesGeometry.dispose();
-    cube.edgesGeometry = new THREE.EdgesGeometry(geometry);
+    cube.geometry = new THREE.EdgesGeometry(geometry);
   }
+  
   
   dimensionSelector.addEventListener("change", (e) => {
     resetCubeGeometry();
