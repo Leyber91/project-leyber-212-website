@@ -46,7 +46,7 @@ This project aims to create a complex and engaging black hole animation using We
 - [x] 1. Set up a basic HTML template with a canvas element and include the necessary Three.js and WebGL libraries.
 - [x] 2. Initialize a new Three.js scene with a camera and renderer.
 - [x] 3. Replace the 2D rectangle with a 3D cube to test the 3D environment.
-- [ ] 4. Make the canvas element and the Three.js scene responsive to different screen sizes and orientations.
+- [x] 4. Make the canvas element and the Three.js scene responsive to different screen sizes and orientations.
 - [ ] 5. Replace the 3D cube with a black sphere to represent the event horizon.
 - [ ] 6. Create a simple 3D model of the accretion disk using custom geometry.
 - [ ] 7. Add an animated swirl or vortex effect to the accretion disk texture.
