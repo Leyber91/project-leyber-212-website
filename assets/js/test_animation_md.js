@@ -1,5 +1,5 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
-import { BufferGeometryUtils } from './assets/js/libraries/BufferGeometryUtils.js';
+import { mergeBufferGeometries} from './assets/js/libraries/BufferGeometryUtils.js';
 
 
 const scene = new THREE.Scene();
@@ -90,7 +90,7 @@ function createTesseract() {
     const outerCube = new THREE.BoxGeometry(); // Use BoxGeometry
     outerCube.scale(1.5, 1.5, 1.5);
   
-    const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries([innerCube, outerCube]);
+    const mergedGeometry = mergeBufferGeometries([innerCube, outerCube]);
     const tesseractGeometry = new THREE.BufferGeometry().copy(mergedGeometry);
     
     const lineSegments = new THREE.LineSegments(new THREE.EdgesGeometry(tesseractGeometry), new THREE.LineBasicMaterial({ color: 0xffffff }));
