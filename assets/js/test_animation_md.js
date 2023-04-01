@@ -82,22 +82,18 @@ function projectToHigherDimension(geometry, dimension) {
 }
 
 function createTesseract() {
-  const innerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
-  const outerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
-  outerCube.scale(1.5, 1.5, 1.5);
-
-  const tesseractGeometry = new THREE.BufferGeometry();
-  tesseractGeometry.merge(innerCube);
-  tesseractGeometry.merge(outerCube);
-
-  const edges = new THREE.EdgesGeometry(tesseractGeometry);
-  const lineSegments = new THREE.LineSegments(
-    edges,
-    new THREE.LineBasicMaterial({ color: 0xffffff })
-    );
-
+    const innerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+    const outerCube = new THREE.BoxBufferGeometry(); // Use BoxBufferGeometry
+    outerCube.scale(1.5, 1.5, 1.5);
+  
+    const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries([innerCube, outerCube]);
+    const tesseractGeometry = new THREE.BufferGeometry().copy(mergedGeometry);
+    
+    const lineSegments = new THREE.LineSegments(new THREE.EdgesGeometry(tesseractGeometry), new THREE.LineBasicMaterial({ color: 0xffffff }));
+  
     return lineSegments;
   }
+  
   
   function updateGeometryForTesseract() {
     const tesseract = createTesseract();
