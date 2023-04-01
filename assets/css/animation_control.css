@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+
 @keyframes movingStars {
     0% {
       background-position: 0 0;
@@ -7,12 +10,12 @@
     }
   }
   
-html,
-body {
+  html,
+  body {
     margin: 0;
     height: 100%;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-image: url('https://www.transparenttextures.com/patterns/tiny-grid.png');
     background-color: #08273a;
     background-repeat: repeat;
@@ -33,20 +36,22 @@ body {
     width: 94%;
     height: 91%;
     border: 3px solid rgba(0, 255, 255, 0.5);
-    border-radius: 10px;
+    border-radius: 1rem;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
+    padding: 1rem;
   }
   #animation {
     position: absolute;
     width: 97%; /* Set the width and height to 95% to create a small margin around the canvas */
     height: 97%;
     border-radius: 10px; /* Add border-radius to the canvas */
+    display: block;
   }
 
 .controls {
     position: absolute;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     gap: 0.625em;
     padding: 0.625em;
@@ -56,6 +61,8 @@ body {
     border-radius: 0.313em;
     z-index: 2;
     box-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+    gap: 8px;
+    color: white;
   }
   
 
@@ -63,16 +70,19 @@ body {
   .controls button {
     color: #00ffff;
     text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
 
   .controls button {
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 0.063em solid rgba(0, 255, 255, 0.5);
-    border-radius: 0.313em;
-    padding: 0.313em 0.625em;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    padding: 4px 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
   }
 
   @keyframes glowing {
@@ -107,18 +117,16 @@ body {
 
   #goBack {
     position: absolute;
-    right: 1.25em;
-    bottom: 5em; /* Adjust this value to avoid overlapping with the animation controls */
-    padding: 0.625em 1.25em;
-    border-radius: 1.25em;
-    transition: transform 0.2s ease-in-out;
-    background-color: rgba(0, 0, 0, 0.2);
-    color: #00ffff;
-    text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
-    border: 0.063em solid rgba(0, 255, 255, 0.5);
-    font-size: 1.125em;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    padding: 4px 8px;
     cursor: pointer;
-    z-index: 2;
+    color: #08273a;
+    font-weight: bold;
   }
   
   #goBack:hover {
