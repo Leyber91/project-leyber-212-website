@@ -51,11 +51,14 @@ const animate = function () {
 
 animate();
 
+const container = document.querySelector('.animation-container');
+
+
 function onWindowResize() {
   // Update the camera aspect ratio and the renderer size
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth * 0.95, container.clientHeight * 0.95);
 }
 
 // Add the event listener to call the function when the window is resized
