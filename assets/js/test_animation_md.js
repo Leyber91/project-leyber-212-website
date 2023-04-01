@@ -59,48 +59,80 @@ function resetCubeGeometry() {
   cube.geometry = new THREE.EdgesGeometry(geometry);
 }
 
-dimensionSelector.addEventListener("change", (e) => {
-  resetCubeGeometry();
-  const selectedDimension = parseInt(e.target.value);
-  const matrix = new THREE.Matrix4();
-  matrix.set(
-    1, 0, 0, 0,
-    0, selectedDimension > 1 ? 1 : 0, 0, 0,
-    0, 0, selectedDimension > 2 ? 1 : 0, 0,
-    0, 0, 0, 1
-  );
-  cube.geometry.applyMatrix4(matrix);
-  cube.edgesGeometry.dispose();
-  cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
-});
 
+
+//Ceating the teseract:
 function projectToHigherDimension(vertices, dimension) {
-  const angle = 0.01;
-  const rotationMatrix = rotateMatrix(dimension, angle);
-  const rotationMatrix3D = new THREE.Matrix4();
-  rotationMatrix3D.fromArray(rotationMatrix);
-
-  const newVertices = [];
-  for (let i = 0; i < vertices.length; i++) {
-    const vertex = vertices[i];
-    const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
-    const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
-    newVertices.push(new THREE.Vector3(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z));
+    const angle = 0.01;
+    const rotationMatrix = rotateMatrix(dimension, angle);
+    const rotationMatrix3D = new THREE.Matrix4();
+    rotationMatrix3D.fromArray(rotationMatrix);
+  
+    const newVertices = [];
+    for (let i = 0; i < vertices.length; i++) {
+      const vertex = vertices[i];
+      const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
+      const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
+      newVertices.push(new THREE.Vector3(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z));
+    }
+    return newVertices;
   }
-  return newVertices;
-}
+  
+  function createTesseract() {
+    const innerCube = new THREE.BoxGeometry();
+    const outerCube = new THREE.BoxGeometry();
+    outerCube.scale(1.5, 1.5, 1.5);
+    
+    const tesseractGeometry = new THREE.Geometry();
+    tesseractGeometry.merge(innerCube);
+    tesseractGeometry.merge(outerCube);
+  
+    const edges = new THREE.EdgesGeometry(tesseractGeometry);
+    const lineSegments = new THREE.LineSegments(
+      edges,
+      new THREE.LineBasicMaterial({ color: 0xffffff })
+    );
+  
+    return lineSegments;
+  }
+  
+  function updateGeometryForTesseract() {
+    const tesseract = createTesseract();
+    cube.geometry.dispose();
+    cube.geometry = tesseract.geometry;
+    cube.edgesGeometry.dispose();
+    cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
+  }
 
-const animate = function () {
-  requestAnimationFrame(animate);
+  dimensionSelector.addEventListener("change", (e) => {
+    resetCubeGeometry();
+    const selectedDimension = parseInt(e.target.value);
+    if (selectedDimension === 4) {
+      updateGeometryForTesseract();
+    } else {
+      const matrix = new THREE.Matrix4();
+      matrix.set(
+        1, 0, 0, 0,
+        0, selectedDimension > 1 ? 1 : 0, 0, 0,
+        0, 0, selectedDimension > 2 ? 1 : 0, 0,
+        0, 0, 0, 1
+      );
+      cube.geometry.applyMatrix4(matrix);
+      cube.edgesGeometry.dispose();
+      cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
+    }
+  });
 
-  if (isAnimating) {
-    const selectedDimension = parseInt(dimensionSelector.value);
-    if (selectedDimension > 3) {
+  const animate = function () {
+    requestAnimationFrame(animate);
+  
+    if (isAnimating) {
+      const selectedDimension = parseInt(dimensionSelector.value);
+      if (selectedDimension > 3) {
         const newVertices = projectToHigherDimension(cube.geometry.vertices, selectedDimension);
         cube.geometry.vertices = newVertices;
         cube.geometry.verticesNeedUpdate = true;
         cube.geometry.computeBoundingSphere();
-        
       }
       parentObject.rotation.x += speed * directionX;
       parentObject.rotation.y += speed * directionY;
@@ -111,6 +143,7 @@ const animate = function () {
   
     renderer.render(scene, camera);
   };
+  
   
   animate();
   
