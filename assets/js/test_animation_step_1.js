@@ -8,6 +8,9 @@ const camera = new THREE.PerspectiveCamera(
 
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("animation") });
 renderer.setSize(window.innerWidth, window.innerHeight);
+const canvas = document.getElementById("animation");
+canvas.removeAttribute("width");
+canvas.removeAttribute("height");
 
 const geometry = new THREE.BoxGeometry();
 const edges = new THREE.EdgesGeometry(geometry);
@@ -59,6 +62,8 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth * 0.95, container.clientHeight * 0.95);
+
+
 }
 
 // Add the event listener to call the function when the window is resized
