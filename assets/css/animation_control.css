@@ -38,8 +38,9 @@ body {
   }
   #animation {
     position: absolute;
-    width: 95%; /* Set the width and height to 95% to create a small margin around the canvas */
-    height: 95%;
+    width: 97%; /* Set the width and height to 95% to create a small margin around the canvas */
+    height: 97%;
+    border-radius: 10px; /* Add border-radius to the canvas */
   }
 
 .controls {

@@ -61,7 +61,7 @@ function onWindowResize() {
   // Update the camera aspect ratio and the renderer size
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth * 0.95, container.clientHeight * 0.95);
+  renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
 
 
 }
