@@ -56,7 +56,7 @@ cone.visible = false;
 
 
 // Initially hide the sphere
-sphere.visible = false;
+cube.visible = false;
 
 scene.add(parentObject);
 
