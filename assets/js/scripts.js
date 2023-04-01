@@ -192,28 +192,53 @@ function createRandomCrystalClips() {
 
 function addRandomCrystalClipPath() {
     const clipPath = document.getElementById('crystal-clip');
-    const points = getRandomPoints();
+    const points = animatePoints();
     const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
     polygon.setAttribute('points', points);
     clipPath.appendChild(polygon);
 }
 
-function getRandomPoints() {
-    const startPoint = '0,0';
-    const endPoint = '1,1';
-    const pointCount = 4;
-    const randomPoints = [];
-
+function animatePoints() {
+    const path = document.querySelector('.fractal-clip-path path');
+    const pathLength = path.getTotalLength();
+    const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+    const pointCount = 8;
+    const delay = 0.5;
+    const duration = 6;
+  
     for (let i = 0; i < pointCount; i++) {
-        const x = Math.random();
-        const y = Math.random() * 0.2;
-        randomPoints.push(`${x},${y}`);
+      const color = colors[i % colors.length];
+      const startPoint = path.getPointAtLength(pathLength * (i / pointCount));
+      const endPoint = path.getPointAtLength(pathLength * ((i + 1) / pointCount));
+      const randomPoints = animatePoints(startPoint, endPoint, pointCount);
+  
+      const timeline = gsap.timeline({ repeat: -1, delay });
+      for (let j = 0; j < randomPoints.length; j++) {
+        const point = randomPoints[j].split(',');
+        const x = parseFloat(point[0]);
+        const y = parseFloat(point[1]);
+  
+        const speed = (j + 1) / (randomPoints.length + 1) * duration;
+        const direction = j % 2 === 0 ? 1 : -1;
+        const distance = 0.05 * (j + 1);
+        const ease = 'power4.inOut';
+  
+        timeline.to(`#${i}-${j}`, speed, {
+          x: direction * distance,
+          y: y,
+          ease: ease,
+          repeat: -1,
+          yoyo: true
+        }, 0);
+  
+        timeline.to(`#${i}-${j} .point`, speed / 4, {
+          backgroundColor: color,
+          ease: ease
+        }, 0);
+      }
     }
-
-    randomPoints.sort((a, b) => parseFloat(a.split(',')[0]) - parseFloat(b.split(',')[0]));
-
-    return [startPoint, ...randomPoints, endPoint].join(' ');
-}
+  }
+  
 function createBlackHoleEffect() {
     const canvas = document.getElementById("blackHole");
     const ctx = canvas.getContext("2d");
