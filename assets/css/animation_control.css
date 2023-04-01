@@ -36,8 +36,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
   }
-
   #animation {
+    position: absolute;
     width: 95%; /* Set the width and height to 95% to create a small margin around the canvas */
     height: 95%;
   }
