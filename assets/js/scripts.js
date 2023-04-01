@@ -52,13 +52,14 @@ window.addEventListener('scroll', function () {
 }
 
 function initializeGSAPAnimations() {
-    const tl = gsap.timeline({ defaults: { duration: 1, ease: 'power2.out' } });
+    const tl = gsap.timeline({ defaults: { duration: 1, ease: 'power3.out' } });
 
     tl.from('.logo, .nav-links li a', { opacity: 0, y: '-100%', stagger: 0.2 });
     tl.from('#sidebar', { x: '-100%', duration: 0.5 });
     tl.from('.sidebar-block', { opacity: 0, y: '-50%', stagger: 0.2, duration: 0.5 });
     tl.from('main', { opacity: 0, x: '100%', duration: 0.5 });
 }
+
 
 function addSidebarBlockHoverEffects() {
     const sidebarBlocks = document.querySelectorAll('.sidebar-block');
@@ -112,9 +113,10 @@ function addTouchSwipeFunctionality() {
         }
 
         const targetLeft = sidebarIsOpen ? 0 : -sidebar.clientWidth;
-        sidebar.style.left = `${targetLeft}px`;
+        gsap.to(sidebar, { left: `${targetLeft}px`, duration: 0.5, ease: 'power2.out' });
     });
 }
+
 
 
 function addIntersectionObserver() {
@@ -124,7 +126,7 @@ function addIntersectionObserver() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.remove('hidden');
-          gsap.from(entry.target, { opacity: 0, y: '30px', duration: 1, ease: 'power2.out' });
+          gsap.from(entry.target, { opacity: 0, y: '30px', scale: 0.9, duration: 1, ease: 'power2.out' });
         } else {
           gsap.to(entry.target, { opacity: 1, duration: 1, ease: 'power2.out' });
         }
@@ -136,6 +138,7 @@ function addIntersectionObserver() {
       observer.observe(section);
     });
 }
+
   
 
 function addSidebarToggle() {

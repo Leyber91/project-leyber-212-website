@@ -301,11 +301,7 @@ main section {
     transform: translateX(-50%);
 }
 .logo:hover {
-    text-shadow: 0 0 10px #FFFFFF, /* Outer white glow */
-                0 0 15px rgb(37, 237, 252), /* Blue glow */
-                0 0 25px rgb(56, 240, 253), /* Blue glow */
-                0 0 35px rgb(144, 245, 252), /* Blue glow */
-                0 0 45px rgb(37, 237, 252); /* Blue glow */
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px rgba(173, 216, 230, 0.6);
     transform: scale(1.1);
 }
 
@@ -394,6 +390,8 @@ footer p {
     padding-left: calc(var(--toggle-size) / 2 - var(--bar-width) / 2); /* Center the icon horizontally */
     padding-right: calc(var(--toggle-size) / 2 - var(--bar-width) / 2); /* Center the icon horizontally */
     box-sizing: border-box; /* Make sure padding is included in the total width */
+    width: 2.5em;  /* Change the value to the desired width in em units */
+    height: 2.5em; /* Make the height equal to the width to create a square */
 }
 
 
