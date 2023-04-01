@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dimensional Cubes</title>
+    <link rel="stylesheet" href="./assets/css/animation_control.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
+  </head>
+  <body>
+    <div class="animation-container">
+      <canvas id="animation"></canvas>
+      <div class="controls">
+        <label>
+          Dimension:
+          <select id="dimensionSelector">
+            <option value="1">1D</option>
+            <option value="2">2D</option>
+            <option value="3">3D</option>
+            <option value="4">4D</option>
+            <option value="5">5D</option>
+            <option value="6">6D</option>
+            <option value="7">7D</option>
+            <option value="8">8D</option>
+            <option value="9">9D</option>
+            <option value="10">10D</option>
+          </select>
+        </label>
+        <button id="toggleAnimation">Start / Stop</button>
+        <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="5"></label>
+        <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
+        <label>Direction X: <input type="range" id="rangeDirectionX" min="-100" max="100" value="0"></label>
+        <label>Direction Y: <input type="range" id="rangeDirectionY" min="-100" max="100" value="0"></label>
+        <label>Direction Z: <input type="range" id="rangeDirectionZ" min="-100" max="100" value="0"></label>
+      </div>
+    </div>
+    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+    <script src="./assets/js/dimensional_cubes.js"></script>
+  </body>
+</html>
