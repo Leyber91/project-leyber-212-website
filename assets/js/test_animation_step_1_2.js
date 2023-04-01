@@ -89,6 +89,8 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
+  renderer.setClearColor(0x000000, 0.8); // Add this line
+
 }
 
 // Add the event listener to call the function when the window is resized
