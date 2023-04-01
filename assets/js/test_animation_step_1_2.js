@@ -1,104 +1,137 @@
-import * as THREE from 'three';
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
-let camera, scene, renderer, geometry, material, mesh, parent, size, speed;
-let animationId;
-let animating = true;
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("animation") });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0.8); // Add this line
+const canvas = document.getElementById("animation");
+canvas.removeAttribute("width");
+canvas.removeAttribute("height");
 
-init();
-animate();
+const parentObject = new THREE.Object3D();
 
-function init() {
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
-  camera.position.z = 1;
+// Create cube
+const cubeGeometry = new THREE.BoxGeometry();
+const edges = new THREE.EdgesGeometry(cubeGeometry);
+const cube = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
 
-  scene = new THREE.Scene();
+// Create sphere
+const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
-  // Add geometry for each shape
-  const cubeGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-  const cylinderGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32);
-  const torusGeometry = new THREE.TorusGeometry(0.1, 0.03, 16, 100);
-  const octahedronGeometry = new THREE.OctahedronGeometry(0.1, 0);
+// Create torus
+const torusGeometry = new THREE.TorusGeometry(1, 0.4, 16, 100);
+const torusMaterial = new THREE.MeshBasicMaterial({ color: 0xffa500 });
+const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
-  material = new THREE.MeshNormalMaterial();
+// Create octahedron
+const octahedronGeometry = new THREE.OctahedronGeometry(1);
+const octahedronMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const octahedron = new THREE.Mesh(octahedronGeometry, octahedronMaterial);
 
-  parent = new THREE.Object3D();
-  scene.add(parent);
+// Create cone
+const coneGeometry = new THREE.ConeGeometry(1, 2, 32);
+const coneMaterial = new THREE.MeshBasicMaterial({ color: 0x800080 });
+const cone = new THREE.Mesh(coneGeometry, coneMaterial);
 
-  // Create meshes for each shape
-  const cubeMesh = new THREE.Mesh(cubeGeometry, material);
-  const sphereMesh = new THREE.Mesh(sphereGeometry, material);
-  const cylinderMesh = new THREE.Mesh(cylinderGeometry, material);
-  const torusMesh = new THREE.Mesh(torusGeometry, material);
-  const octahedronMesh = new THREE.Mesh(octahedronGeometry, material);
 
-  parent.add(cubeMesh);
-  mesh = cubeMesh;
+// Add both cube and sphere to the parent object
+parentObject.add(cube);
+parentObject.add(sphere);
+// Add the torus, octahedron, and cone to the parent object
+parentObject.add(torus);
+parentObject.add(octahedron);
+parentObject.add(cone);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, canvas: document.getElementById('animation') });
-  // Set the initial renderer size and add the clearColor
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0x000000, 0.8);
+// Initially hide the new shapes
+torus.visible = false;
+octahedron.visible = false;
+cone.visible = false;
 
-  // Remove the canvas attributes
-  const canvas = document.getElementById("animation");
-  canvas.removeAttribute("width");
-  canvas.removeAttribute("height");
-  document.body.appendChild(renderer.domElement);
 
-  // Controls
-  document.getElementById('shapeSelector').addEventListener('change', (e) => {
-    const shape = e.target.value;
-    parent.remove(mesh);
+// Initially hide the sphere
+sphere.visible = false;
 
-    if (shape === 'cube') {
-      mesh = cubeMesh;
-    } else if (shape === 'sphere') {
-      mesh = sphereMesh;
-    } else if (shape === 'cylinder') {
-      mesh = cylinderMesh;
-    } else if (shape === 'torus') {
-      mesh = torusMesh;
-    } else if (shape === 'octahedron') {
-      mesh = octahedronMesh;
-    }
+scene.add(parentObject);
 
-    parent.add(mesh);
-  });
+camera.position.z = 5;
 
-  document.getElementById('toggleAnimation').addEventListener('click', () => {
-    animating = !animating;
-    document.querySelector('#toggleAnimation .fas.fa-play').style.display = animating ? 'none' : 'inline-block';
-    document.querySelector('#toggleAnimation .fas.fa-pause').style.display = animating ? 'inline-block' : 'none';
-  });
+let isAnimating = true;
+let scale = 1;
+let speed = 0.01;
 
-  document.getElementById('rangeSize').addEventListener('input', (e) => {
-    size = parseFloat(e.target.value);
-    mesh.scale.set(size / 10, size / 10, size / 10);
-  });
+document.getElementById("toggleAnimation").addEventListener("click", () => {
+  isAnimating = !isAnimating;
+});
 
-  document.getElementById('rangeSpeed').addEventListener('input', (e) => {
-    speed = parseFloat(e.target.value);
-  });
+document.getElementById("rangeSize").addEventListener("input", (e) => {
+  scale = e.target.value / 50;
+});
 
-  window.addEventListener('resize', onWindowResize);
-}
+document.getElementById("rangeSpeed").addEventListener("input", (e) => {
+  speed = e.target.value * 0.01;
+});
 
-function animate() {
-  animationId = requestAnimationFrame(animate);
+const animate = function () {
+  requestAnimationFrame(animate);
 
-  if (animating) {
-    mesh.rotation.x += (speed || 5) / 1000;
-    mesh.rotation.y += (speed || 5) / 1000;
+  if (isAnimating) {
+    parentObject.rotation.x += speed;
+    parentObject.rotation.y += speed;
   }
 
+  parentObject.scale.set(scale, scale, scale);
+
   renderer.render(scene, camera);
-}
+};
+
+animate();
+
+const container = document.querySelector('.animation-container');
+
+// Get the shape selector element
+const shapeSelector = document.getElementById("shapeSelector");
+
+// Add event listener to handle shape changes
+shapeSelector.addEventListener("change", (e) => {
+  const selectedShape = e.target.value;
+
+  // Hide all shapes
+  cube.visible = false;
+  sphere.visible = false;
+  cylinder.visible = false;
+  torus.visible = false;
+  octahedron.visible = false;
+  cone.visible = false;
+
+
+  if (selectedShape === "cube") {
+    cube.visible = true;
+  } else if (selectedShape === "sphere") {
+    sphere.visible = true;
+  } else if (selectedShape === "cylinder") {
+    cylinder.visible = true;
+  } else if (selectedShape === "torus") {
+    torus.visible = true;
+  } else if (selectedShape === "octahedron") {
+    octahedron.visible = true;
+  } else if (selectedShape === "cone") {
+    cone.visible = true;
+  }
+});
 
 function onWindowResize() {
+  // Update the camera aspect ratio and the renderer size
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
+
 }
 
 // Add the event listener to call the function when the window is resized

@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pre-Blackhole</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl7/1L_dstPt3HV5HzsplDe9fiQwhku3Dk/6eg9mR9" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/animation_control.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
   </head>
@@ -20,14 +19,15 @@
             <option value="cylinder">Cylinder</option>
             <option value="torus">Torus</option>
             <option value="octahedron">Octahedron</option>
+            <option value="cone">Cone</option>
           </select>
         </label>
-        <button id="toggleAnimation"><i class="fas fa-play"></i><i class="fas fa-pause" style="display: none;"></i></button>
-        <label><i class="fas fa-expand-arrows-alt"></i> <input type="range" id="rangeSize" min="1" max="100" value="5"></label>
-        <label><i class="fas fa-tachometer-alt"></i> <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
+        <button id="toggleAnimation">Start / Stop</button>
+        <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="5"></label>
+        <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
       </div>
     </div>
-    <button id="goBack" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Go Back</button>
+    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
     <script src="./assets/js/test_animation_step_1_2.js"></script>
   </body>
 </html>
