@@ -105,7 +105,6 @@ shapeSelector.addEventListener("change", (e) => {
   // Hide all shapes
   cube.visible = false;
   sphere.visible = false;
-  cylinder.visible = false;
   torus.visible = false;
   octahedron.visible = false;
   cone.visible = false;
@@ -115,8 +114,6 @@ shapeSelector.addEventListener("change", (e) => {
     cube.visible = true;
   } else if (selectedShape === "sphere") {
     sphere.visible = true;
-  } else if (selectedShape === "cylinder") {
-    cylinder.visible = true;
   } else if (selectedShape === "torus") {
     torus.visible = true;
   } else if (selectedShape === "octahedron") {
