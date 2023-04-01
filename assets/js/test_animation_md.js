@@ -1,5 +1,5 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
-import { mergeBufferGeometries} from './assets/js/libraries/BufferGeometryUtils.js';
+import * as THREE from './libraries/Three.js';
+import { mergeBufferGeometries} from './libraries/BufferGeometryUtils.js';
 
 
 const scene = new THREE.Scene();
