@@ -8,6 +8,7 @@ const camera = new THREE.PerspectiveCamera(
 
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("animation") });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0.8); // Add this line
 const canvas = document.getElementById("animation");
 canvas.removeAttribute("width");
 canvas.removeAttribute("height");
@@ -89,7 +90,6 @@ function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
-  renderer.setClearColor(0x000000, 0.8); // Add this line
 
 }
 
