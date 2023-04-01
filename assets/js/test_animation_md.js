@@ -1,4 +1,5 @@
-function identityMatrix(dimension) {
+// Utility functions for matrix operations
+function createIdentityMatrix(dimension) {
     const matrix = [];
     for (let i = 0; i < dimension; i++) {
       matrix[i] = [];
@@ -9,28 +10,44 @@ function identityMatrix(dimension) {
     return matrix;
   }
   
-  function rotateMatrix(dimension, angle) {
+  function applyMatrix(vec, matrix) {
+    const result = new THREE.Vector3();
+    result.x = vec.x * matrix[0][0] + vec.y * matrix[0][1] + vec.z * matrix[0][2];
+    result.y = vec.x * matrix[1][0] + vec.y * matrix[1][1] + vec.z * matrix[1][2];
+    result.z = vec.x * matrix[2][0] + vec.y * matrix[2][1] + vec.z * matrix[2][2];
+    return result;
+  }
+  
+  function rotateAroundAxis(axis, angle) {
     const c = Math.cos(angle);
     const s = Math.sin(angle);
-    const matrix = identityMatrix(dimension);
-    matrix[0][0] = c;
-    matrix[0][dimension - 1] = -s;
-    matrix[dimension - 1][0] = s;
-    matrix[dimension - 1][dimension - 1] = c;
-    return matrix;
+    const t = 1 - c;
+    const x = axis.x;
+    const y = axis.y;
+    const z = axis.z;
+  
+    return [
+      [t * x * x + c, t * x * y - z * s, t * x * z + y * s],
+      [t * x * y + z * s, t * y * y + c, t * y * z - x * s],
+      [t * x * z - y * s, t * y * z + x * s, t * z * z + c],
+    ];
   }
   
-  const rotationMatrix = new THREE.Matrix4();
-  
-  function projectTo3D(cube, dimension) {
+  function projectToHigherDimension(vertices, dimension) {
     const rotationAngle = 0.01;
-    rotationMatrix.fromArray(rotateMatrix(dimension, rotationAngle));
-    cube.geometry.applyMatrix(rotationMatrix);
-    cube.edgesGeometry.dispose();
-    cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
-    cube.geometry.computeBoundingSphere();
+    const rotationAxis = new THREE.Vector3(1, 1, 1).normalize();
+    const rotationMatrix = rotateAroundAxis(rotationAxis, rotationAngle);
+  
+    return vertices.map(vertex => {
+      let projectedVertex = vertex.clone();
+      for (let i = 0; i < dimension - 3; i++) {
+        projectedVertex = applyMatrix(projectedVertex, rotationMatrix);
+      }
+      return projectedVertex;
+    });
   }
   
+  // Scene setup
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -48,13 +65,9 @@ function identityMatrix(dimension) {
   
   const parentObject = new THREE.Object3D();
   
-  const cubeGeometry = new THREE.Geometry().fromBufferGeometry(new THREE.BoxGeometry());
-  
-  const cube = new THREE.LineSegments(
-    new THREE.EdgesGeometry(cubeGeometry),
-    new THREE.LineBasicMaterial({ color: 0xffffff })
-  );
-  cube.edgesGeometry = cube.geometry;
+  const cubeGeometry = new THREE.BoxGeometry();
+  const cubeEdges = new THREE.EdgesGeometry(cubeGeometry);
+  const cube = new THREE.LineSegments(cubeEdges, new THREE.LineBasicMaterial({ color: 0xffffff }));
   parentObject.add(cube);
   
   scene.add(parentObject);
@@ -93,26 +106,10 @@ function identityMatrix(dimension) {
   });
   
   const dimensionSelector = document.getElementById("dimensionSelector");
-  function resetCubeGeometry() {
-    const geometry = new THREE.BoxGeometry();
-    cube.geometry.dispose();
-    cube.geometry = new THREE.EdgesGeometry(geometry);
-  }
   
-  
-  dimensionSelector.addEventListener("change", (e) => {
-    resetCubeGeometry();
-    const selectedDimension = parseInt(e.target.value);
-    const matrix = new THREE.Matrix4();
-    matrix.set(
-      1, 0, 0, 0,
-      0, selectedDimension > 1 ? 1 : 0, 0, 0,
-      0, 0, selectedDimension > 2 ? 1 : 0, 0,
-      0, 0, 0, 1
-    );
-    cube.geometry.applyMatrix(matrix);
-    cube.edgesGeometry.dispose();
-    cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
+  dimensionSelector.addEventListener("change", () => {
+    cube.geometry = new THREE.BoxGeometry();
+    cube.geometry.computeBoundingSphere();
   });
   
   const animate = function () {
@@ -121,7 +118,12 @@ function identityMatrix(dimension) {
     if (isAnimating) {
       const selectedDimension = parseInt(dimensionSelector.value);
       if (selectedDimension > 3) {
-        projectTo3D(cube, selectedDimension);
+        const projectedVertices = projectToHigherDimension(cube.geometry.vertices, selectedDimension);
+        for (let i = 0; i < cube.geometry.vertices.length; i++) {
+          cube.geometry.vertices[i].copy(projectedVertices[i]);
+        }
+        cube.geometry.verticesNeedUpdate = true;
+        cube.geometry.computeBoundingSphere();
       }
       parentObject.rotation.x += speed * directionX;
       parentObject.rotation.y += speed * directionY;
@@ -145,4 +147,5 @@ function identityMatrix(dimension) {
   
   window.addEventListener("resize", onWindowResize, false);
   onWindowResize();
+  
   
