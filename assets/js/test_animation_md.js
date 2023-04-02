@@ -141,8 +141,8 @@ dimensionSelector.addEventListener("change", (e) => {
 
     const geometry = new THREE.BufferGeometry().setFromPoints(lines);
     cube.geometry.dispose();
-    cube.geometry = new THREE.EdgesGeometry(geometry);
-    cube.material.needsUpdate = true;
+    cube.geometry = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color: 0xffffff }));
+
   }
 });
 
