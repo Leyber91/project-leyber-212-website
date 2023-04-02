@@ -42,19 +42,18 @@ function generateTesseractVertices() {
 
 function project4DTo3D(vertices4D) {
   const vertices3D = [];
-  const w = 2; // You can adjust this value to change the separation between the inner and outer cubes
+  const w = 2; // You can adjust this value to change the size of the inner cube
 
   for (const vertex of vertices4D) {
     const projectedVertex = new THREE.Vector3(
-      vertex.x + vertex.w * w,
-      vertex.y + vertex.w * w,
-      vertex.z + vertex.w * w
+      vertex.x / (vertex.w + w),
+      vertex.y / (vertex.w + w),
+      vertex.z / (vertex.w + w)
     );
     vertices3D.push(projectedVertex);
   }
   return vertices3D;
 }
-
 
 document.getElementById("toggleAnimation").addEventListener("click", () => {
   isAnimating = !isAnimating;
@@ -131,22 +130,13 @@ dimensionSelector.addEventListener("change", (e) => {
     const tesseractVertices = generateTesseractVertices();
     const projectedVertices = project4DTo3D(tesseractVertices);
     const lines = [];
-
-    // Create a Set to store unique line pairs
-    const uniqueLinePairs = new Set();
-
-    for (let i = 0; i < tesseractAdjacencyMatrix.length; i++) {
-      for (let j = i + 1; j < tesseractAdjacencyMatrix[i].length; j++) {
-        if (tesseractAdjacencyMatrix[i][j] === 1) {
-          uniqueLinePairs.add(JSON.stringify([i, j])); // Add the line pair as a string
+    
+    for (let i = 0; i < 16; i++) {
+      for (let j = i + 1; j < 16; j++) {
+        if (hammingDistance(i, j) === 1) {
+          lines.push(projectedVertices[i], projectedVertices[j]);
         }
       }
-    }
-
-    // Iterate over the unique line pairs and create lines
-    for (const pairStr of uniqueLinePairs) {
-      const [i, j] = JSON.parse(pairStr);
-      lines.push(projectedVertices[i], projectedVertices[j]);
     }
 
     const geometry = new THREE.BufferGeometry().setFromPoints(lines);
