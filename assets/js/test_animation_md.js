@@ -42,7 +42,7 @@ function generateTesseractVertices() {
 
 function project4DTo3D(vertices4D) {
   const vertices3D = [];
-  const w = 2; // You can adjust this value to change the size of the inner cube
+  const w = 1; // You can adjust this value to change the size of the inner cube
 
   for (const vertex of vertices4D) {
     const projectedVertex = new THREE.Vector3(
