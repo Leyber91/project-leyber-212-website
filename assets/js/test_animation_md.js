@@ -125,10 +125,7 @@ const geometry = new THREE.BufferGeometry().setFromPoints(lines);
 cube.geometry.dispose();
 cube.geometry = new THREE.EdgesGeometry(geometry);
 
-    geometry.setIndex(indices);
-    cube.geometry.dispose();
-    cube.geometry = new THREE.EdgesGeometry(geometry);
-  }
+      }
 });
 
 const animate = function () {
