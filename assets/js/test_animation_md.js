@@ -172,5 +172,3 @@ function onWindowResize() {
 
 window.addEventListener("resize", onWindowResize, false);
 onWindowResize();
-
-     
