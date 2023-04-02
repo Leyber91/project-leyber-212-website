@@ -16,150 +16,45 @@ const cube = new THREE.LineSegments(
 cube.edgesGeometry = cube.geometry;
 parentObject.add(cube);
 
+const innerCube = new THREE.LineSegments(
+  new THREE.EdgesGeometry(cubeGeometry),
+  new THREE.LineBasicMaterial({ color: 0xffffff })
+);
+innerCube.edgesGeometry = innerCube.geometry;
+innerCube.scale.set(0.5, 0.5, 0.5);
+parentObject.add(innerCube);
+
+// Connect the vertices of the outer and inner cubes
+const connectingLinesGeometry = new THREE.Geometry();
+for (let i = 0; i < cube.geometry.vertices.length; i++) {
+  connectingLinesGeometry.vertices.push(cube.geometry.vertices[i]);
+  connectingLinesGeometry.vertices.push(innerCube.geometry.vertices[i]);
+}
+const connectingLines = new THREE.LineSegments(connectingLinesGeometry, new THREE.LineBasicMaterial({ color: 0xffffff }));
+parentObject.add(connectingLines);
+
 scene.add(parentObject);
 
 camera.position.z = 5;
 
-let isAnimating = true;
-let scale = 1;
-let speed = 0.01;
-let directionX = 0;
-let directionY = 0;
-let directionZ = 0;
+const animate = function () {
+  requestAnimationFrame(animate);
 
-function generateTesseractVertices() {
-  const vertices = [];
-  for (let i = 0; i < 16; i++) {
-    vertices.push(new THREE.Vector4(
-      (i & 1) * 2 - 1,
-      ((i >> 1) & 1) * 2 - 1,
-      ((i >> 2) & 1) * 2 - 1,
-      ((i >> 3) & 1) * 2 - 1
-    ));
-  }
-  return vertices;
+  parentObject.rotation.x += 0.01;
+  parentObject.rotation.y += 0.01;
+
+  renderer.render(scene, camera);
+};
+
+animate();
+
+const container = document.querySelector('.animation-container');
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
 }
 
-function project4DTo3D(vertices4D) {
-  const projectionMatrix = new THREE.Matrix4();
-  const w = 1.5;
-
-  projectionMatrix.set(
-    w, 0, 0, 0,
-    0, w, 0, 0,
-    0, 0, w, 0,
-    0, 0, 0, w
-  );
-
-  const vertices3D = [];
-
-  for (const vertex of vertices4D) {
-    const projectedVertex = vertex.clone().applyMatrix4(projectionMatrix);
-    vertices3D.push(new THREE.Vector3(
-      projectedVertex.x / projectedVertex.w,
-      projectedVertex.y / projectedVertex.w,
-      projectedVertex.z / projectedVertex.w
-    ));
-  }
-
-  return vertices3D;
-}
-
-document.getElementById("toggleAnimation").addEventListener("click", () => {
-  isAnimating = !isAnimating;
-});
-
-document.getElementById("rangeSize").addEventListener("input", (e) => {
-  scale = e.target.value / 50;
-});
-
-document.getElementById("rangeSpeed").addEventListener("input", (e) => {
-  speed = e.target.value * 0.01;
-});
-
-document.getElementById("rangeDirectionX").addEventListener("input", (e) => {
-  directionX = e.target.value * 0.01;
-});
-
-document.getElementById("rangeDirectionY").addEventListener("input", (e) => {
-  directionY = e.target.value * 0.01;
-});
-
-document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
-  directionZ = e.target.value * 0.01;
-});
-
-const dimensionSelector = document.getElementById("dimensionSelector");
-
-function resetCubeGeometry() {
-  const geometry = new THREE.BoxGeometry();
-  cube.geometry.dispose();
-  cube.geometry = new THREE.EdgesGeometry(geometry);
-}
-
-function hammingDistance(a, b) {
-  let distance = 0;
-  let xor = a ^ b;
-  while (xor) {
-    distance += xor & 1;
-    xor >>= 1;
-  }
-  return distance;
-}
-
-dimensionSelector.addEventListener("change", (e) => {
-    resetCubeGeometry();
-    const selectedDimension = parseInt(e.target.value);
-    if (selectedDimension <= 3) {
-        const matrix = new THREE.Matrix4();
-        matrix.set(
-            1, 0, 0, 0,
-            0, selectedDimension > 1 ? 1 : 0, 0, 0,
-            0, 0, selectedDimension > 2 ? 1 : 0, 0,
-            0, 0, 0, 1
-        );
-        cube.geometry.applyMatrix4(matrix);
-    } else {
-        const tesseractVertices = generateTesseractVertices();
-        const projectedVertices = project4DTo3D(tesseractVertices);
-        const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
-        const indices = [];
-        for (let i = 0; i < 16; i++) {
-            for (let j = i + 1; j < 16; j++) {
-                if (hammingDistance(i, j) === 1) {
-                    indices.push(i, j);
-                }
-            }
-        }
-        geometry.setIndex(indices);
-        cube.geometry.dispose();
-        cube.geometry = new THREE.EdgesGeometry(geometry);
-    }
-    });
-    
-    const animate = function () {
-    requestAnimationFrame(animate);
-    
-    if (isAnimating) {
-        parentObject.rotation.x += speed * directionX;
-        parentObject.rotation.y += speed * directionY;
-        parentObject.rotation.z += speed * directionZ;
-        }
-    
-    parentObject.scale.set(scale, scale, scale);
-    
-    renderer.render(scene, camera);
-    };
-    
-    animate();
-    
-    const container = document.querySelector('.animation-container');
-    
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
-    }
-    
-    window.addEventListener("resize", onWindowResize, false);
-    onWindowResize();
+window.addEventListener("resize", onWindowResize, false);
+onWindowResize();
