@@ -1,3 +1,14 @@
+class Vector5 {
+  constructor(x, y, z, w, u) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+    this.u = u;
+  }
+}
+
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -119,7 +130,7 @@ const tesseractAdjacencyMatrix = generateTesseractAdjacencyMatrix();
 function generatePenteractVertices() {
   const vertices = [];
   for (let i = 0; i < 32; i++) {
-    vertices.push(new THREE.Vector5(
+    vertices.push(new Vector5(
       (i & 1) * 2 - 1,
       ((i >> 1) & 1) * 2 - 1,
       ((i >> 2) & 1) * 2 - 1,
@@ -129,6 +140,7 @@ function generatePenteractVertices() {
   }
   return vertices;
 }
+
 
 // 2. Update the project4DTo3D function to project 5D vertices to 3D and rename it to project5DTo3D
 function project5DTo3D(vertices5D) {
