@@ -154,6 +154,9 @@ const animate = function () {
         const projectedVertices = project4DTo3D(newVertices);
         cube.geometry.setFromPoints(projectedVertices);
         cube.geometry.computeBoundingSphere();
+        cube.edgesGeometry.dispose();
+        cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
+        cube.geometry = cube.edgesGeometry;
         
       }
       parentObject.rotation.x += speed * directionX;
