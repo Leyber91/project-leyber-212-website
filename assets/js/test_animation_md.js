@@ -87,6 +87,15 @@ function resetCubeGeometry() {
   cube.geometry = new THREE.EdgesGeometry(geometry);
 }
 
+function hammingDistance(a, b) {
+  let distance = 0;
+  let xor = a ^ b;
+  while (xor) {
+    distance += xor & 1;
+    xor >>= 1;
+  }
+  return distance;
+}
 // Generate the adjacency matrix for the tesseract
 function generateTesseractAdjacencyMatrix() {
   const matrix = new Array(16).fill(null).map(() => new Array(16).fill(0));
