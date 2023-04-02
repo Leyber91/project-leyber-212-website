@@ -27,24 +27,18 @@ let directionX = 0;
 let directionY = 0;
 let directionZ = 0;
 
-function generateTesseractVertices(dimension) {
-  const vertexCount = 2 ** dimension;
+function generateTesseractVertices() {
   const vertices = [];
-  for (let i = 0; i < vertexCount; i++) {
-    const vertex = new THREE.Vector4(
+  for (let i = 0; i < 16; i++) {
+    vertices.push(new THREE.Vector4(
       (i & 1) * 2 - 1,
       ((i >> 1) & 1) * 2 - 1,
       ((i >> 2) & 1) * 2 - 1,
       ((i >> 3) & 1) * 2 - 1
-    );
-    if (dimension === 5) {
-      vertex.setW(((i >> 4) & 1) * 2 - 1);
-    }
-    vertices.push(vertex);
+    ));
   }
   return vertices;
 }
-
 
 function project4DTo3D(vertices4D) {
   const vertices3D = [];
@@ -104,12 +98,11 @@ function hammingDistance(a, b) {
   return distance;
 }
 // Generate the adjacency matrix for the tesseract
-function generateTesseractAdjacencyMatrix(dimension) {
-  const vertexCount = 2 ** dimension;
-  const matrix = new Array(vertexCount).fill(null).map(() => new Array(vertexCount).fill(0));
+function generateTesseractAdjacencyMatrix() {
+  const matrix = new Array(16).fill(null).map(() => new Array(16).fill(0));
 
-  for (let i = 0; i < vertexCount; i++) {
-    for (let j = i + 1; j < vertexCount; j++) {
+  for (let i = 0; i < 16; i++) {
+    for (let j = i + 1; j < 16; j++) {
       if (hammingDistance(i, j) === 1) {
         matrix[i][j] = 1;
         matrix[j][i] = 1;
@@ -119,6 +112,8 @@ function generateTesseractAdjacencyMatrix(dimension) {
 
   return matrix;
 }
+
+const tesseractAdjacencyMatrix = generateTesseractAdjacencyMatrix();
 
 
 dimensionSelector.addEventListener("change", (e) => {
@@ -133,14 +128,13 @@ dimensionSelector.addEventListener("change", (e) => {
       0, 0, 0, 1
     );
     cube.geometry.applyMatrix4(matrix);
-  } else if (selectedDimension === 5) {
-    const penteractVertices = generateTesseractVertices(5);
-    const projectedVertices = project4DTo3D(penteractVertices);
-    const penteractAdjacencyMatrix = generateTesseractAdjacencyMatrix(5);
+  } else {
+    const tesseractVertices = generateTesseractVertices();
+    const projectedVertices = project4DTo3D(tesseractVertices);
     const lines = [];
-    for (let i = 0; i < 32; i++) {
-      for (let j = i + 1; j < 32; j++) {
-        if (penteractAdjacencyMatrix[i][j] === 1) {
+    for (let i = 0; i < 16; i++) {
+      for (let j = i + 1; j < 16; j++) {
+        if (hammingDistance(i, j) === 1) {
           lines.push(projectedVertices[i], projectedVertices[j]);
         }
       }
@@ -149,24 +143,7 @@ dimensionSelector.addEventListener("change", (e) => {
     const edgesGeometry = new THREE.EdgesGeometry(geometry);
     cube.geometry.dispose();
     cube.geometry = edgesGeometry;
-}else {
-  const tesseractVertices = generateTesseractVertices(4);
-  const projectedVertices = project4DTo3D(tesseractVertices);
-  const tesseractAdjacencyMatrix = generateTesseractAdjacencyMatrix(4);
-  const lines = [];
-  for (let i = 0; i < 16; i++) {
-    for (let j = i + 1; j < 16; j++) {
-      if (tesseractAdjacencyMatrix[i][j] === 1) {
-        lines.push(projectedVertices[i], projectedVertices[j]);
-      }
-    }
   }
-  const geometry = new THREE.BufferGeometry().setFromPoints(lines);
-  const edgesGeometry = new THREE.EdgesGeometry(geometry);
-  cube.geometry.dispose();
-  cube.geometry = edgesGeometry;
-}
-
 });
 
 const animate = function () {
