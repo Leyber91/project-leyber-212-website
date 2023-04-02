@@ -27,23 +27,6 @@ let directionX = 0;
 let directionY = 0;
 let directionZ = 0;
 
-function project4DTo3D(vertices) {
-    const newVertices = [];
-    const w = 2; // Change this value to zoom in/out in the 4D space
-  
-    for (let i = 0; i < vertices.length; i++) {
-      const vertex = vertices[i];
-      const projectedVertex = new THREE.Vector3(
-        vertex.x * (w / (w - vertex.w)),
-        vertex.y * (w / (w - vertex.w)),
-        vertex.z * (w / (w - vertex.w))
-      );
-      newVertices.push(projectedVertex);
-    }
-    return newVertices;
-  }
-  
-
 function generateTesseractVertices() {
     const vertices = [];
     for (let i = 0; i < 16; i++) {
@@ -136,14 +119,15 @@ dimensionSelector.addEventListener("change", (e) => {
   
     const newVertices = [];
     for (let i = 0; i < vertices.length; i += 3) {
-      const vertex = new THREE.Vector4(vertices[i], vertices[i + 1], vertices[i + 2], 0);
-      const rotatedVertex = vertex.applyMatrix4(rotationMatrix3D);
-      newVertices.push(rotatedVertex);
+      const vertex = new THREE.Vector3(vertices[i], vertices[i + 1], vertices[i + 2]);
+      const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
+      const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
+      newVertices.push(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z);
     }
     return newVertices;
   }
   
-  
+
 const animate = function () {
   requestAnimationFrame(animate);
 
@@ -151,13 +135,10 @@ const animate = function () {
     const selectedDimension = parseInt(dimensionSelector.value);
     if (selectedDimension > 3) {
         const newVertices = projectToHigherDimension(cube.geometry.attributes.position.array, selectedDimension);
-        const projectedVertices = project4DTo3D(newVertices);
-        cube.geometry.setFromPoints(projectedVertices);
+        cube.geometry.vertices = newVertices;
+        cube.geometry.verticesNeedUpdate = true;
         cube.geometry.computeBoundingSphere();
-  
-        // Update edgesGeometry
-        cube.edgesGeometry.dispose();
-        cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
+        
       }
       parentObject.rotation.x += speed * directionX;
       parentObject.rotation.y += speed * directionY;
