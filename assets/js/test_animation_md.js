@@ -112,18 +112,17 @@ dimensionSelector.addEventListener("change", (e) => {
   } else {
     const tesseractVertices = generateTesseractVertices();
     const projectedVertices = project4DTo3D(tesseractVertices);
-    const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
     const lines = [];
-for (let i = 0; i < 16; i++) {
-  for (let j = i + 1; j < 16; j++) {
-    if (hammingDistance(i, j) === 1) {
-      lines.push(projectedVertices[i], projectedVertices[j]);
+    for (let i = 0; i < 16; i++) {
+      for (let j = i + 1; j < 16; j++) {
+        if (hammingDistance(i, j) === 1) {
+          lines.push(projectedVertices[i], projectedVertices[j]);
+        }
+      }
     }
-  }
-}
-const geometry = new THREE.BufferGeometry().setFromPoints(lines);
-cube.geometry.dispose();
-cube.geometry = new THREE.EdgesGeometry(geometry);
+  const geometry = new THREE.BufferGeometry().setFromPoints(lines);
+  cube.geometry.dispose();
+  cube.geometry = new THREE.EdgesGeometry(geometry);
 
       }
 });
