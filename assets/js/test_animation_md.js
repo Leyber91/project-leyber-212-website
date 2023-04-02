@@ -115,9 +115,9 @@ function generateTesseractAdjacencyMatrix() {
 const tesseractAdjacencyMatrix = generateTesseractAdjacencyMatrix();
 
 dimensionSelector.addEventListener("change", (e) => {
+  resetCubeGeometry();
   const selectedDimension = parseInt(e.target.value);
   if (selectedDimension <= 3) {
-    resetCubeGeometry();
     const matrix = new THREE.Matrix4();
     matrix.set(
       1, 0, 0, 0,
@@ -130,7 +130,6 @@ dimensionSelector.addEventListener("change", (e) => {
     const tesseractVertices = generateTesseractVertices();
     const projectedVertices = project4DTo3D(tesseractVertices);
     const lines = [];
-    
     for (let i = 0; i < 16; i++) {
       for (let j = i + 1; j < 16; j++) {
         if (hammingDistance(i, j) === 1) {
@@ -138,13 +137,12 @@ dimensionSelector.addEventListener("change", (e) => {
         }
       }
     }
-
     const geometry = new THREE.BufferGeometry().setFromPoints(lines);
     cube.geometry.dispose();
-    cube.geometry = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ color: 0xffffff }));
-
+    cube.geometry = geometry;
   }
 });
+
 
 
 
