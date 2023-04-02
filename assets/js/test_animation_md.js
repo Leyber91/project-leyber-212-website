@@ -131,27 +131,21 @@ dimensionSelector.addEventListener("change", (e) => {
     const projectedVertices = project4DTo3D(tesseractVertices);
     const lines = [];
 
-    // Connect the vertices of the outer cube
-    for (let i = 0; i < 8; i++) {
-      for (let j = i + 1; j < 8; j++) {
-        if (hammingDistance(i, j) === 1) {
-          lines.push(projectedVertices[i], projectedVertices[j]);
+    // Create a Set to store unique line pairs
+    const uniqueLinePairs = new Set();
+
+    for (let i = 0; i < tesseractAdjacencyMatrix.length; i++) {
+      for (let j = i + 1; j < tesseractAdjacencyMatrix[i].length; j++) {
+        if (tesseractAdjacencyMatrix[i][j] === 1) {
+          uniqueLinePairs.add(JSON.stringify([i, j])); // Add the line pair as a string
         }
       }
     }
 
-    // Connect the vertices of the inner cube
-    for (let i = 8; i < 16; i++) {
-      for (let j = i + 1; j < 16; j++) {
-        if (hammingDistance(i, j) === 1) {
-          lines.push(projectedVertices[i], projectedVertices[j]);
-        }
-      }
-    }
-
-    // Connect the vertices between the inner and outer cubes
-    for (let i = 0; i < 8; i++) {
-      lines.push(projectedVertices[i], projectedVertices[i + 8]);
+    // Iterate over the unique line pairs and create lines
+    for (const pairStr of uniqueLinePairs) {
+      const [i, j] = JSON.parse(pairStr);
+      lines.push(projectedVertices[i], projectedVertices[j]);
     }
 
     const geometry = new THREE.BufferGeometry().setFromPoints(lines);
