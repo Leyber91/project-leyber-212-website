@@ -97,36 +97,35 @@ function hammingDistance(a, b) {
   return distance;
 }
 
-
-
-function createTesseractGeometry() {
+dimensionSelector.addEventListener("change", (e) => {
+  resetCubeGeometry();
+  const selectedDimension = parseInt(e.target.value);
+  if (selectedDimension <= 3) {
+    const matrix = new THREE.Matrix4();
+    matrix.set(
+      1, 0, 0, 0,
+      0, selectedDimension > 1 ? 1 : 0, 0, 0,
+      0, 0, selectedDimension > 2 ? 1 : 0, 0,
+      0, 0, 0, 1
+    );
+    cube.geometry.applyMatrix4(matrix);
+  } else {
     const tesseractVertices = generateTesseractVertices();
     const projectedVertices = project4DTo3D(tesseractVertices);
     const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
     const indices = [];
-  
     for (let i = 0; i < 16; i++) {
       for (let j = i + 1; j < 16; j++) {
-        if (hammingDistance(i, j) === 2) { // Modify this line
+        if (hammingDistance(i, j) === 1) {
           indices.push(i, j);
         }
       }
     }
-  
     geometry.setIndex(indices);
-    return geometry;
+    cube.geometry.dispose();
+    cube.geometry = new THREE.EdgesGeometry(geometry);
   }
-
-dimensionSelector.addEventListener("change", (e) => {
-    resetCubeGeometry();
-    const selectedDimension = parseInt(e.target.value);
-  
-    if (selectedDimension === 4) {
-      const tesseractGeometry = createTesseractGeometry();
-      cube.geometry.dispose();
-      cube.geometry = new THREE.EdgesGeometry(tesseractGeometry);
-    }
-  });
+});
 
 const animate = function () {
   requestAnimationFrame(animate);
