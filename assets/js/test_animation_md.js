@@ -87,20 +87,28 @@ function resetCubeGeometry() {
   cube.geometry = new THREE.EdgesGeometry(geometry);
 }
 
-function hammingDistance(a, b) {
-  let distance = 0;
-  let xor = a ^ b;
-  while (xor) {
-    distance += xor & 1;
-    xor >>= 1;
+// Generate the adjacency matrix for the tesseract
+function generateTesseractAdjacencyMatrix() {
+  const matrix = new Array(16).fill(null).map(() => new Array(16).fill(0));
+
+  for (let i = 0; i < 16; i++) {
+    for (let j = i + 1; j < 16; j++) {
+      if (hammingDistance(i, j) === 1) {
+        matrix[i][j] = 1;
+        matrix[j][i] = 1;
+      }
+    }
   }
-  return distance;
+
+  return matrix;
 }
 
+const tesseractAdjacencyMatrix = generateTesseractAdjacencyMatrix();
+
 dimensionSelector.addEventListener("change", (e) => {
-  resetCubeGeometry();
   const selectedDimension = parseInt(e.target.value);
   if (selectedDimension <= 3) {
+    resetCubeGeometry();
     const matrix = new THREE.Matrix4();
     matrix.set(
       1, 0, 0, 0,
@@ -113,19 +121,22 @@ dimensionSelector.addEventListener("change", (e) => {
     const tesseractVertices = generateTesseractVertices();
     const projectedVertices = project4DTo3D(tesseractVertices);
     const lines = [];
+
     for (let i = 0; i < 16; i++) {
       for (let j = i + 1; j < 16; j++) {
-        if (hammingDistance(i, j) === 1) {
+        if (tesseractAdjacencyMatrix[i][j] === 1) {
           lines.push(projectedVertices[i], projectedVertices[j]);
         }
       }
     }
-  const geometry = new THREE.BufferGeometry().setFromPoints(lines);
-  cube.geometry.dispose();
-  cube.geometry = new THREE.EdgesGeometry(geometry);
 
-      }
+    const geometry = new THREE.BufferGeometry().setFromPoints(lines);
+    cube.geometry.dispose();
+    cube.geometry = new THREE.EdgesGeometry(geometry);
+    cube.material.needsUpdate = true;
+  }
 });
+
 
 const animate = function () {
   requestAnimationFrame(animate);
