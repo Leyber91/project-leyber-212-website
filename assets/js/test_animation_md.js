@@ -1,4 +1,4 @@
-import * as THREE from './library_modules/three.module';
+import { THREE }  from './library_modules/three.module';
 import { mergeBufferGeometries } from './library_modules/BufferGeometryUtils.module';
 
 
