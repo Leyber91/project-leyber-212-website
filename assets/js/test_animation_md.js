@@ -41,19 +41,30 @@ function generateTesseractVertices() {
 }
 
 function project4DTo3D(vertices4D) {
-    const vertices3D = [];
-    const w = 1.5; // You can adjust this value to change the size of the inner cube
-  
-    for (const vertex of vertices4D) {
-      const projectedVertex = new THREE.Vector3(
-        vertex.x * (vertex.w + w) / (2 * w),
-        vertex.y * (vertex.w + w) / (2 * w),
-        vertex.z * (vertex.w + w) / (2 * w)
-      );
-      vertices3D.push(projectedVertex);
-    }
-    return vertices3D;
+  const projectionMatrix = new THREE.Matrix4();
+  const w = 1.5;
+
+  projectionMatrix.set(
+    w, 0, 0, 0,
+    0, w, 0, 0,
+    0, 0, w, 0,
+    0, 0, 0, w
+  );
+
+  const vertices3D = [];
+
+  for (const vertex of vertices4D) {
+    const projectedVertex = vertex.clone().applyMatrix4(projectionMatrix);
+    vertices3D.push(new THREE.Vector3(
+      projectedVertex.x / projectedVertex.w,
+      projectedVertex.y / projectedVertex.w,
+      projectedVertex.z / projectedVertex.w
+    ));
   }
+
+  return vertices3D;
+}
+
 document.getElementById("toggleAnimation").addEventListener("click", () => {
   isAnimating = !isAnimating;
 });
@@ -97,60 +108,58 @@ function hammingDistance(a, b) {
 }
 
 dimensionSelector.addEventListener("change", (e) => {
-  resetCubeGeometry();
-  const selectedDimension = parseInt(e.target.value);
-  if (selectedDimension <= 3) {
-    const matrix = new THREE.Matrix4();
-    matrix.set(
-      1, 0, 0, 0,
-      0, selectedDimension > 1 ? 1 : 0, 0, 0,
-      0, 0, selectedDimension > 2 ? 1 : 0, 0,
-      0, 0, 0, 1
-    );
-    cube.geometry.applyMatrix4(matrix);
-  } else {
-    const tesseractVertices = generateTesseractVertices();
-    const projectedVertices = project4DTo3D(tesseractVertices);
-    const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
-    const indices = [];
-    for (let i = 0; i < 16; i++) {
-      for (let j = i + 1; j < 16; j++) {
-        if (hammingDistance(i, j) === 1) {
-          indices.push(i, j);
+    resetCubeGeometry();
+    const selectedDimension = parseInt(e.target.value);
+    if (selectedDimension <= 3) {
+        const matrix = new THREE.Matrix4();
+        matrix.set(
+            1, 0, 0, 0,
+            0, selectedDimension > 1 ? 1 : 0, 0, 0,
+            0, 0, selectedDimension > 2 ? 1 : 0, 0,
+            0, 0, 0, 1
+        );
+        cube.geometry.applyMatrix4(matrix);
+    } else {
+        const tesseractVertices = generateTesseractVertices();
+        const projectedVertices = project4DTo3D(tesseractVertices);
+        const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
+        const indices = [];
+        for (let i = 0; i < 16; i++) {
+            for (let j = i + 1; j < 16; j++) {
+                if (hammingDistance(i, j) === 1) {
+                    indices.push(i, j);
+                }
+            }
         }
-      }
+        geometry.setIndex(indices);
+        cube.geometry.dispose();
+        cube.geometry = new THREE.EdgesGeometry(geometry);
     }
-    geometry.setIndex(indices);
-    cube.geometry.dispose();
-    cube.geometry = new THREE.EdgesGeometry(geometry);
-  }
-});
-
-const animate = function () {
-  requestAnimationFrame(animate);
-
-  if (isAnimating) {
-    parentObject.rotation.x += speed * directionX;
-    parentObject.rotation.y += speed * directionY;
-    parentObject.rotation.z += speed * directionZ;
-  }
-
-  parentObject.scale.set(scale, scale, scale);
-
-  renderer.render(scene, camera);
-};
-
-animate();
-
-const container = document.querySelector('.animation-container');
-
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
-}
-
-window.addEventListener("resize", onWindowResize, false);
-onWindowResize();
-
-     
+    });
+    
+    const animate = function () {
+    requestAnimationFrame(animate);
+    
+    if (isAnimating) {
+        parentObject.rotation.x += speed * directionX;
+        parentObject.rotation.y += speed * directionY;
+        parentObject.rotation.z += speed * directionZ;
+        }
+    
+    parentObject.scale.set(scale, scale, scale);
+    
+    renderer.render(scene, camera);
+    };
+    
+    animate();
+    
+    const container = document.querySelector('.animation-container');
+    
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
+    }
+    
+    window.addEventListener("resize", onWindowResize, false);
+    onWindowResize();
