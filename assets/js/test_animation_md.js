@@ -118,22 +118,22 @@ dimensionSelector.addEventListener("change", (e) => {
     rotationMatrix3D.fromArray(rotationMatrix);
   
     const newVertices = [];
-    for (let i = 0; i < vertices.length; i++) {
-      const vertex = vertices[i];
+    for (let i = 0; i < vertices.length; i += 3) {
+      const vertex = new THREE.Vector3(vertices[i], vertices[i + 1], vertices[i + 2]);
       const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
       const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
-      newVertices.push(new THREE.Vector3(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z));
+      newVertices.push(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z);
     }
     return newVertices;
   }
-
+  
 const animate = function () {
   requestAnimationFrame(animate);
 
   if (isAnimating) {
     const selectedDimension = parseInt(dimensionSelector.value);
     if (selectedDimension > 3) {
-        const newVertices = projectToHigherDimension(cube.geometry.vertices, selectedDimension);
+        const newVertices = projectToHigherDimension(cube.geometry.attributes.position.array, selectedDimension);
         cube.geometry.vertices = newVertices;
         cube.geometry.verticesNeedUpdate = true;
         cube.geometry.computeBoundingSphere();
