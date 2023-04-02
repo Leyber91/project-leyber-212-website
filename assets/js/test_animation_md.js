@@ -184,7 +184,14 @@ dimensionSelector.addEventListener("change", (e) => {
         }
       }
     }
-});
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(lines);
+    cube.geometry.dispose();
+    cube.geometry = geometry;
+  }
+
+
+  });
 
 const animate = function () {
   requestAnimationFrame(animate);
