@@ -27,6 +27,19 @@ let directionX = 0;
 let directionY = 0;
 let directionZ = 0;
 
+function generateTesseractVertices() {
+    const vertices = [];
+    for (let i = 0; i < 16; i++) {
+      vertices.push(new THREE.Vector4(
+        (i & 1) * 2 - 1,
+        ((i >> 1) & 1) * 2 - 1,
+        ((i >> 2) & 1) * 2 - 1,
+        ((i >> 3) & 1) * 2 - 1
+      ));
+    }
+    return vertices;
+  }
+
 document.getElementById("toggleAnimation").addEventListener("click", () => {
   isAnimating = !isAnimating;
 });
@@ -58,37 +71,61 @@ function resetCubeGeometry() {
   cube.geometry.dispose();
   cube.geometry = new THREE.EdgesGeometry(geometry);
 }
+function hammingDistance(a, b) {
+    let distance = 0;
+    let xor = a ^ b;
+    while (xor) {
+      distance += xor & 1;
+      xor >>= 1;
+    }
+    return distance;
+  }
 
 dimensionSelector.addEventListener("change", (e) => {
-  resetCubeGeometry();
-  const selectedDimension = parseInt(e.target.value);
-  const matrix = new THREE.Matrix4();
-  matrix.set(
-    1, 0, 0, 0,
-    0, selectedDimension > 1 ? 1 : 0, 0, 0,
-    0, 0, selectedDimension > 2 ? 1 : 0, 0,
-    0, 0, 0, 1
-  );
-  cube.geometry.applyMatrix4(matrix);
-  cube.edgesGeometry.dispose();
-  cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
-});
+    resetCubeGeometry();
+    const selectedDimension = parseInt(e.target.value);
+    if (selectedDimension <= 3) {
+      const matrix = new THREE.Matrix4();
+      matrix.set(
+        1, 0, 0, 0,
+        0, selectedDimension > 1 ? 1 : 0, 0, 0,
+        0, 0, selectedDimension > 2 ? 1 : 0, 0,
+        0, 0, 0, 1
+      );
+      cube.geometry.applyMatrix4(matrix);
+    } else {
+      const tesseractVertices = generateTesseractVertices();
+      const geometry = new THREE.BufferGeometry().setFromPoints(tesseractVertices);
+      const indices = [];
+      for (let i = 0; i < 16; i++) {
+        for (let j = i + 1; j < 16; j++) {
+          if (hammingDistance(i, j) === 1) {
+            indices.push(i, j);
+          }
+        }
+      }
+      geometry.setIndex(indices);
+      cube.geometry = new THREE.EdgesGeometry(geometry);
+    }
+    cube.edgesGeometry.dispose();
+    cube.edgesGeometry = new THREE.EdgesGeometry(cube.geometry);
+  });
 
-function projectToHigherDimension(vertices, dimension) {
-  const angle = 0.01;
-  const rotationMatrix = rotateMatrix(dimension, angle);
-  const rotationMatrix3D = new THREE.Matrix4();
-  rotationMatrix3D.fromArray(rotationMatrix);
-
-  const newVertices = [];
-  for (let i = 0; i < vertices.length; i++) {
-    const vertex = vertices[i];
-    const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
-    const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
-    newVertices.push(new THREE.Vector3(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z));
+  function projectToHigherDimension(vertices, dimension) {
+    const angle = 0.01;
+    const rotationMatrix = rotateMatrix(dimension, angle);
+    const rotationMatrix3D = new THREE.Matrix4();
+    rotationMatrix3D.fromArray(rotationMatrix);
+  
+    const newVertices = [];
+    for (let i = 0; i < vertices.length; i++) {
+      const vertex = vertices[i];
+      const vertex4D = new THREE.Vector4(vertex.x, vertex.y, vertex.z, 0);
+      const rotatedVertex = vertex4D.applyMatrix4(rotationMatrix3D);
+      newVertices.push(new THREE.Vector3(rotatedVertex.x, rotatedVertex.y, rotatedVertex.z));
+    }
+    return newVertices;
   }
-  return newVertices;
-}
 
 const animate = function () {
   requestAnimationFrame(animate);
