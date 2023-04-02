@@ -131,12 +131,27 @@ dimensionSelector.addEventListener("change", (e) => {
     const projectedVertices = project4DTo3D(tesseractVertices);
     const lines = [];
 
-    for (let i = 0; i < 16; i++) {
-      for (let j = i + 1; j < 16; j++) {
-        if (tesseractAdjacencyMatrix[i][j] === 1) {
+    // Connect the vertices of the outer cube
+    for (let i = 0; i < 8; i++) {
+      for (let j = i + 1; j < 8; j++) {
+        if (hammingDistance(i, j) === 1) {
           lines.push(projectedVertices[i], projectedVertices[j]);
         }
       }
+    }
+
+    // Connect the vertices of the inner cube
+    for (let i = 8; i < 16; i++) {
+      for (let j = i + 1; j < 16; j++) {
+        if (hammingDistance(i, j) === 1) {
+          lines.push(projectedVertices[i], projectedVertices[j]);
+        }
+      }
+    }
+
+    // Connect the vertices between the inner and outer cubes
+    for (let i = 0; i < 8; i++) {
+      lines.push(projectedVertices[i], projectedVertices[i + 8]);
     }
 
     const geometry = new THREE.BufferGeometry().setFromPoints(lines);
@@ -145,6 +160,7 @@ dimensionSelector.addEventListener("change", (e) => {
     cube.material.needsUpdate = true;
   }
 });
+
 
 
 const animate = function () {
