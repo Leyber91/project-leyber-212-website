@@ -42,18 +42,19 @@ function generateTesseractVertices() {
 
 function project4DTo3D(vertices4D) {
   const vertices3D = [];
-  const w = 4; // You can adjust this value to change the size of the inner cube
+  const w = 2; // You can adjust this value to change the separation between the inner and outer cubes
 
   for (const vertex of vertices4D) {
     const projectedVertex = new THREE.Vector3(
-      vertex.x / (vertex.w + w),
-      vertex.y / (vertex.w + w),
-      vertex.z / (vertex.w + w)
+      vertex.x + vertex.w * w,
+      vertex.y + vertex.w * w,
+      vertex.z + vertex.w * w
     );
     vertices3D.push(projectedVertex);
   }
   return vertices3D;
 }
+
 
 document.getElementById("toggleAnimation").addEventListener("click", () => {
   isAnimating = !isAnimating;
