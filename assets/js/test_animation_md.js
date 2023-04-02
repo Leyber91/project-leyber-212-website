@@ -140,9 +140,8 @@ dimensionSelector.addEventListener("change", (e) => {
       }
     }
     const geometry = new THREE.BufferGeometry().setFromPoints(lines);
-    const edgesGeometry = new THREE.EdgesGeometry(geometry);
     cube.geometry.dispose();
-    cube.geometry = edgesGeometry;
+    cube.geometry = geometry;
   }
 });
 
