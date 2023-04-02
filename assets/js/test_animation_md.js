@@ -105,21 +105,20 @@ dimensionSelector.addEventListener("change", (e) => {
     } else {
       const tesseractVertices = generateTesseractVertices();
       const projectedVertices = project4DTo3D(tesseractVertices);
-  
-      const geometry = new THREE.Geometry();
+      const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
+      const indices = [];
       for (let i = 0; i < 16; i++) {
         for (let j = i + 1; j < 16; j++) {
           if (hammingDistance(i, j) === 1) {
-            geometry.vertices.push(projectedVertices[i], projectedVertices[j]);
+            indices.push(i, j);
           }
         }
       }
-  
+      geometry.setIndex(indices);
       cube.geometry.dispose();
       cube.geometry = new THREE.EdgesGeometry(geometry);
     }
   });
-  
 
 const animate = function () {
   requestAnimationFrame(animate);
