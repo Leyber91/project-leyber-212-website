@@ -1,5 +1,6 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
-import { mergeBufferGeometries } from 'https://threejs.org/examples/jsm/utils/BufferGeometryUtils.js';
+import * as THREE from './library_modules/three.module';
+import { mergeBufferGeometries } from './library_modules/BufferGeometryUtils.module';
+
 
 
 
