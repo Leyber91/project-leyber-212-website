@@ -41,20 +41,19 @@ function generateTesseractVertices() {
 }
 
 function project4DTo3D(vertices4D) {
-    const projectionDistance = 2;
-    const vertices3D = [];
-    vertices4D.forEach((vertex) => {
-      const w = vertex.w + projectionDistance;
-      vertices3D.push(
-        new THREE.Vector3(
-          vertex.x * (projectionDistance / w),
-          vertex.y * (projectionDistance / w),
-          vertex.z * (projectionDistance / w)
-        )
-      );
-    });
-    return vertices3D;
+  const vertices3D = [];
+  const w = 2; // You can adjust this value to change the size of the inner cube
+
+  for (const vertex of vertices4D) {
+    const projectedVertex = new THREE.Vector3(
+      vertex.x / (vertex.w + w),
+      vertex.y / (vertex.w + w),
+      vertex.z / (vertex.w + w)
+    );
+    vertices3D.push(projectedVertex);
   }
+  return vertices3D;
+}
 
 document.getElementById("toggleAnimation").addEventListener("click", () => {
   isAnimating = !isAnimating;
@@ -99,26 +98,34 @@ function hammingDistance(a, b) {
 }
 
 dimensionSelector.addEventListener("change", (e) => {
-    const selectedDimension = parseInt(e.target.value);
-    if (selectedDimension <= 3) {
-      resetCubeGeometry();
-    } else {
-      const tesseractVertices = generateTesseractVertices();
-      const projectedVertices = project4DTo3D(tesseractVertices);
-      const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
-      const indices = [];
-      for (let i = 0; i < 16; i++) {
-        for (let j = i + 1; j < 16; j++) {
-          if (hammingDistance(i, j) === 1) {
-            indices.push(i, j);
-          }
+  resetCubeGeometry();
+  const selectedDimension = parseInt(e.target.value);
+  if (selectedDimension <= 3) {
+    const matrix = new THREE.Matrix4();
+    matrix.set(
+      1, 0, 0, 0,
+      0, selectedDimension > 1 ? 1 : 0, 0, 0,
+      0, 0, selectedDimension > 2 ? 1 : 0, 0,
+      0, 0, 0, 1
+    );
+    cube.geometry.applyMatrix4(matrix);
+  } else {
+    const tesseractVertices = generateTesseractVertices();
+    const projectedVertices = project4DTo3D(tesseractVertices);
+    const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
+    const indices = [];
+    for (let i = 0; i < 16; i++) {
+      for (let j = i + 1; j < 16; j++) {
+        if (hammingDistance(i, j) === 1) {
+          indices.push(i, j);
         }
       }
-      geometry.setIndex(indices);
-      cube.geometry.dispose();
-      cube.geometry = new THREE.EdgesGeometry(geometry);
     }
-  });
+    geometry.setIndex(indices);
+    cube.geometry.dispose();
+    cube.geometry = new THREE.EdgesGeometry(geometry);
+  }
+});
 
 const animate = function () {
   requestAnimationFrame(animate);
