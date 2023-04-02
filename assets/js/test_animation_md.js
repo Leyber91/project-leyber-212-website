@@ -27,53 +27,32 @@ let directionX = 0;
 let directionY = 0;
 let directionZ = 0;
 
-function generateHypercubeVertices(dimension) {
-  const numVertices = Math.pow(2, dimension);
+function generateTesseractVertices() {
   const vertices = [];
-
-  for (let i = 0; i < numVertices; i++) {
-    const vertex = new THREE.Vector10();
-    for (let j = 0; j < dimension; j++) {
-      vertex.setComponent(j, ((i >> j) & 1) * 2 - 1);
-    }
-    vertices.push(vertex);
+  for (let i = 0; i < 16; i++) {
+    vertices.push(new THREE.Vector4(
+      (i & 1) * 2 - 1,
+      ((i >> 1) & 1) * 2 - 1,
+      ((i >> 2) & 1) * 2 - 1,
+      ((i >> 3) & 1) * 2 - 1
+    ));
   }
   return vertices;
 }
 
-function projectHigherDimensionTo3D(verticesHigherDimension, dimension) {
+function project4DTo3D(vertices4D) {
   const vertices3D = [];
-  const w = 2;
+  const w = 2; // You can adjust this value to change the size of the inner cube
 
-  for (const vertex of verticesHigherDimension) {
-    const projectedVertex = new THREE.Vector3();
-    for (let i = 0; i < 3; i++) {
-      let value = vertex.getComponent(i);
-      for (let j = 3; j < dimension; j++) {
-        value *= (vertex.getComponent(j) + w) / (2 * w);
-      }
-      projectedVertex.setComponent(i, value);
-    }
+  for (const vertex of vertices4D) {
+    const projectedVertex = new THREE.Vector3(
+      vertex.x / (vertex.w + w),
+      vertex.y / (vertex.w + w),
+      vertex.z / (vertex.w + w)
+    );
     vertices3D.push(projectedVertex);
   }
   return vertices3D;
-}
-
-function createHigherDimensionEdgesGeometry(vertices3D, dimension) {
-  const geometry = new THREE.BufferGeometry().setFromPoints(vertices3D);
-  const numVertices = vertices3D.length;
-  const indices = [];
-
-  for (let i = 0; i < numVertices; i++) {
-    for (let j = i + 1; j < numVertices; j++) {
-      const bitmask = i ^ j;
-      if (bitmask & (bitmask - 1)) continue;
-      indices.push(i, j);
-    }
-  }
-
-  geometry.setIndex(indices);
-  return new THREE.EdgesGeometry(geometry);
 }
 
 document.getElementById("toggleAnimation").addEventListener("click", () => {
@@ -97,62 +76,82 @@ document.getElementById("rangeDirectionY").addEventListener("input", (e) => {
 });
 
 document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
-    directionZ = e.target.value * 0.01;
-  });
-  
-  const dimensionSelector = document.getElementById("dimensionSelector");
-  
-  function resetCubeGeometry() {
-    const geometry = new THREE.BoxGeometry();
+  directionZ = e.target.value * 0.01;
+});
+
+const dimensionSelector = document.getElementById("dimensionSelector");
+
+function resetCubeGeometry() {
+  const geometry = new THREE.BoxGeometry();
+  cube.geometry.dispose();
+  cube.geometry = new THREE.EdgesGeometry(geometry);
+}
+
+function hammingDistance(a, b) {
+  let distance = 0;
+  let xor = a ^ b;
+  while (xor) {
+    distance += xor & 1;
+    xor >>= 1;
+  }
+  return distance;
+}
+
+dimensionSelector.addEventListener("change", (e) => {
+  resetCubeGeometry();
+  const selectedDimension = parseInt(e.target.value);
+  if (selectedDimension <= 3) {
+    const matrix = new THREE.Matrix4();
+    matrix.set(
+      1, 0, 0, 0,
+      0, selectedDimension > 1 ? 1 : 0, 0, 0,
+      0, 0, selectedDimension > 2 ? 1 : 0, 0,
+      0, 0, 0, 1
+    );
+    cube.geometry.applyMatrix4(matrix);
+  } else {
+    const tesseractVertices = generateTesseractVertices();
+    const projectedVertices = project4DTo3D(tesseractVertices);
+    const geometry = new THREE.BufferGeometry().setFromPoints(projectedVertices);
+    const indices = [];
+    for (let i = 0; i < 16; i++) {
+      for (let j = i + 1; j < 16; j++) {
+        if (hammingDistance(i, j) === 1) {
+          indices.push(i, j);
+        }
+      }
+    }
+    geometry.setIndex(indices);
     cube.geometry.dispose();
     cube.geometry = new THREE.EdgesGeometry(geometry);
   }
-  
-  dimensionSelector.addEventListener("change", (e) => {
-    resetCubeGeometry();
-    const selectedDimension = parseInt(e.target.value);
-    if (selectedDimension <= 3) {
-      const matrix = new THREE.Matrix4();
-      matrix.set(
-        1, 0, 0, 0,
-        0, selectedDimension > 1 ? 1 : 0, 0, 0,
-        0, 0, selectedDimension > 2 ? 1 : 0, 0,
-        0, 0, 0, 1
-      );
-      cube.geometry.applyMatrix4(matrix);
-    } else {
-      const verticesHigherDimension = generateHypercubeVertices(selectedDimension);
-      const projectedVertices = projectHigherDimensionTo3D(verticesHigherDimension, selectedDimension);
-      const geometry = createHigherDimensionEdgesGeometry(projectedVertices, selectedDimension);
-      cube.geometry.dispose();
-      cube.geometry = geometry;
-    }
-  });
-  
-  const animate = function () {
-    requestAnimationFrame(animate);
-  
-    if (isAnimating) {
-      parentObject.rotation.x += speed * directionX;
-      parentObject.rotation.y += speed * directionY;
-      parentObject.rotation.z += speed * directionZ;
-    }
-  
-    parentObject.scale.set(scale, scale, scale);
-  
-    renderer.render(scene, camera);
-  };
-  
-  animate();
-  
-  const container = document.querySelector('.animation-container');
-  
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
+});
+
+const animate = function () {
+  requestAnimationFrame(animate);
+
+  if (isAnimating) {
+    parentObject.rotation.x += speed * directionX;
+    parentObject.rotation.y += speed * directionY;
+    parentObject.rotation.z += speed * directionZ;
   }
-  
-  window.addEventListener("resize", onWindowResize, false);
-  onWindowResize();
-  
+
+  parentObject.scale.set(scale, scale, scale);
+
+  renderer.render(scene, camera);
+};
+
+animate();
+
+const container = document.querySelector('.animation-container');
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
+}
+
+window.addEventListener("resize", onWindowResize, false);
+onWindowResize();
+
+     
