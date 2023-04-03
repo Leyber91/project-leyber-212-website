@@ -1,13 +1,3 @@
-class Vector5 {
-  constructor(x, y, z, w, u) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
-    this.u = u;
-  }
-}
-
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -94,16 +84,6 @@ const dimensionSelector = document.getElementById("dimensionSelector");
 function resetCubeGeometry() {
   cube.geometry.dispose();
   const geometry = new THREE.BoxGeometry();
-  const edgesGeometry = new THREE.EdgesGeometry(geometry);
-  cube.geometry = edgesGeometry;
-}
-
-
-function resetPenteractGeometry() {
-  cube.geometry.dispose();
-  const vertices5D = generatePenteractVertices();
-  const vertices3D = project5DTo3D(vertices5D);
-  const geometry = new THREE.BufferGeometry().setFromPoints(vertices3D);
   const edgesGeometry = new THREE.EdgesGeometry(geometry);
   cube.geometry = edgesGeometry;
 }
@@ -238,35 +218,7 @@ function createPenteractModel() {
 
 let penteractModel = createPenteractModel();
 
-function generatePenteractVertices() {
-  const vertices = [];
-  for (let i = 0; i < 32; i++) {
-    vertices.push(new THREE.Vector5(
-      (i & 1) * 2 - 1,
-      ((i >> 1) & 1) * 2 - 1,
-      ((i >> 2) & 1) * 2 - 1,
-      ((i >> 3) & 1) * 2 - 1,
-      ((i >> 4) & 1) * 2 - 1
-    ));
-  }
-  return vertices;
-}
 
-function project5DTo3D(vertices5D) {
-  const vertices3D = [];
-  const w = 2;
-  const u = 3;
-
-  for (const vertex of vertices5D) {
-    const projectedVertex = new THREE.Vector3(
-      vertex.x / (vertex.w + w) + vertex.u / (vertex.u + u),
-      vertex.y / (vertex.w + w) + vertex.u / (vertex.u + u),
-      vertex.z / (vertex.w + w) + vertex.u / (vertex.u + u)
-    );
-    vertices3D.push(projectedVertex);
-  }
-  return vertices3D;
-}
 
 // 2. Update the project4DTo3D function to project 5D vertices to 3D and rename it to project5DTo3D
 
@@ -297,8 +249,11 @@ dimensionSelector.addEventListener("change", (e) => {
     cube.geometry.dispose();
     cube.geometry = geometry;
   } else if (selectedDimension === 5) {
-    resetPenteractGeometry();
-
+    if (penteractModel) {
+      parentObject.remove(penteractModel);
+    }
+    penteractModel = createPenteractModel();
+    parentObject.add(penteractModel);
   }
   
 
