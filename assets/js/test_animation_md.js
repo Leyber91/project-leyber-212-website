@@ -155,9 +155,8 @@ function createCube(scale, color) {
 
 // Function to create a penteract model with interconnected cubes
 function createPenteractModel() {
-  const penteractModel = new THREE.Object3D();
+  const penteract = new THREE.Object3D();
 
-  // Create the outer cube and the smaller cube inside it
   const outerCube = createCube(1, 0xffffff);
   const innerCube = createCube(0.5, 0xff0000);
   outerCube.add(innerCube);
@@ -175,7 +174,6 @@ function createPenteractModel() {
     outerCube.add(line);
   }
 
-  // Create smaller cubes attached to each face of the outer cube
   const faceCubes = [];
   for (let i = 0; i < 6; i++) {
     const faceCube = createCube(0.25, 0x0000ff);
@@ -210,8 +208,8 @@ function createPenteractModel() {
     outerCube.add(faceCube);
   }
 
-  penteractModel.add(outerCube);
-  return penteractModel;
+  penteract.add(outerCube);
+  return penteract;
 }
 
 // ...
