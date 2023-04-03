@@ -138,6 +138,72 @@ function generatePenteractVertices() {
 }
 
 
+// ...
+
+// Function to create a penteract model with interconnected cubes
+function createPenteractModel() {
+  const penteractModel = new THREE.Object3D();
+
+  // Create the outer cube and the smaller cube inside it
+  const outerCube = createCube(1, 0xffffff);
+  const innerCube = createCube(0.5, 0xff0000);
+  outerCube.add(innerCube);
+
+  // Connect the vertices of the outer cube to the corresponding vertices of the inner cube
+  for (let i = 0; i < 8; i++) {
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+      outerCube.geometry.attributes.position.array.slice(i * 3, i * 3 + 3),
+      innerCube.geometry.attributes.position.array.slice(i * 3, i * 3 + 3),
+    ]);
+    const line = new THREE.Line(
+      lineGeometry,
+      new THREE.LineBasicMaterial({ color: 0x00ff00 })
+    );
+    outerCube.add(line);
+  }
+
+  // Create smaller cubes attached to each face of the outer cube
+  const faceCubes = [];
+  for (let i = 0; i < 6; i++) {
+    const faceCube = createCube(0.25, 0x0000ff);
+    const smallerCube = createCube(0.125, 0xffff00);
+    faceCube.add(smallerCube);
+    faceCubes.push(faceCube);
+  }
+
+  // Position the smaller cubes on the faces of the outer cube and connect their vertices
+  for (let i = 0; i < 6; i++) {
+    const faceCube = faceCubes[i];
+    const axis = Math.floor(i / 2);
+    const direction = (i % 2) * 2 - 1;
+    faceCube.position.set(
+      axis === 0 ? direction * 0.5 : 0,
+      axis === 1 ? direction * 0.5 : 0,
+      axis === 2 ? direction * 0.5 : 0
+    );
+
+    // Connect the vertices of the face cube to the corresponding vertices of the smaller cube inside it
+    for (let j = 0; j < 8; j++) {
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+        faceCube.geometry.attributes.position.array.slice(j * 3, j * 3 + 3),
+        smallerCube.geometry.attributes.position.array.slice(j * 3, j * 3 + 3),
+      ]);
+      const line = new THREE.Line(
+        lineGeometry,
+        new THREE.LineBasicMaterial({ color: 0x00ff00 })
+      );
+      faceCube.add(line);
+    }
+    outerCube.add(faceCube);
+  }
+
+  penteractModel.add(outerCube);
+  return penteractModel;
+}
+
+// ...
+
+let penteractModel = createPenteractModel();
 
 // 2. Update the project4DTo3D function to project 5D vertices to 3D and rename it to project5DTo3D
 
@@ -168,20 +234,8 @@ dimensionSelector.addEventListener("change", (e) => {
     cube.geometry.dispose();
     cube.geometry = geometry;
   } else if (selectedDimension === 5) {
-    const penteractVertices = generatePenteractVertices();
-    const lines = [];
-  
-    for (let i = 0; i < 32; i++) {
-      for (let j = i + 1; j < 32; j++) {
-        if (hammingDistance(i, j) === 1 || hammingDistance(i, j) === 16) {
-          lines.push(penteractVertices[i], penteractVertices[j]);
-        }
-      }
-    }
-  
-    const geometry = new THREE.BufferGeometry().setFromPoints(lines);
-    cube.geometry.dispose();
-    cube.geometry = geometry;
+    penteractModel = createPenteractModel();
+    parentObject.add(penteractModel);
   }
   
 
