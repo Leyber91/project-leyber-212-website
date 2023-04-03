@@ -1,3 +1,13 @@
+class Vector5 {
+  constructor(x, y, z, w, u) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+    this.u = u;
+  }
+}
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
