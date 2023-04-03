@@ -140,6 +140,19 @@ function generatePenteractVertices() {
 
 // ...
 
+
+// Function to create cubes
+function createCube(scale, color) {
+  
+  const cubeGeometry = new THREE.BoxGeometry(scale, scale, scale);
+  const edges = new THREE.EdgesGeometry(cubeGeometry);
+  const line = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({ color: color })
+  );
+  return line;
+}
+
 // Function to create a penteract model with interconnected cubes
 function createPenteractModel() {
   const penteractModel = new THREE.Object3D();
