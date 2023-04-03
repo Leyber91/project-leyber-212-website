@@ -1,14 +1,3 @@
-class Vector5 {
-  constructor(x, y, z, w, u) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.w = w;
-    this.u = u;
-  }
-}
-
-
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
@@ -130,46 +119,27 @@ const tesseractAdjacencyMatrix = generateTesseractAdjacencyMatrix();
 function generatePenteractVertices() {
   const vertices = [];
   for (let i = 0; i < 32; i++) {
-    vertices.push(new Vector5(
-      (i & 1) * 2 - 1,
-      ((i >> 1) & 1) * 2 - 1,
-      ((i >> 2) & 1) * 2 - 1,
-      ((i >> 3) & 1) * 2 - 1,
-      ((i >> 4) & 1) * 2 - 1
-    ));
+    const x = (i & 1) * 2 - 1;
+    const y = ((i >> 1) & 1) * 2 - 1;
+    const z = ((i >> 2) & 1) * 2 - 1;
+    const w = ((i >> 3) & 1) * 2 - 1;
+    const u = ((i >> 4) & 1) * 2 - 1;
+
+    const vw = 2; // Adjust this value to change the size of the inner tesseract
+    const vu = 3; // Adjust this value to change the size of the inner cubes
+
+    const px = x + w / (w + vw) + u / (u + vu);
+    const py = y + w / (w + vw) + u / (u + vu);
+    const pz = z + w / (w + vw) + u / (u + vu);
+
+    vertices.push(new THREE.Vector3(px, py, pz));
   }
   return vertices;
 }
 
 
+
 // 2. Update the project4DTo3D function to project 5D vertices to 3D and rename it to project5DTo3D
-function project5DTo3D(vertices5D) {
-  const vertices3D = [];
-
-  const vw = 2; // Adjust this value to change the size of the inner tesseract
-  const vu = 3; // Adjust this value to change the size of the inner cubes
-
-  for (const vertex of vertices5D) {
-    const vertex4DwMin = new THREE.Vector4(vertex.x, vertex.y, vertex.z, vertex.u - vu);
-    const vertex4DwMax = new THREE.Vector4(vertex.x, vertex.y, vertex.z, vertex.u + vu);
-
-    const projectedVertexWMin = new THREE.Vector3(
-      vertex4DwMin.x / (vertex4DwMin.w + vw),
-      vertex4DwMin.y / (vertex4DwMin.w + vw),
-      vertex4DwMin.z / (vertex4DwMin.w + vw)
-    );
-
-    const projectedVertexWMax = new THREE.Vector3(
-      vertex4DwMax.x / (vertex4DwMax.w + vw),
-      vertex4DwMax.y / (vertex4DwMax.w + vw),
-      vertex4DwMax.z / (vertex4DwMax.w + vw)
-    );
-
-    vertices3D.push(projectedVertexWMin, projectedVertexWMax);
-  }
-
-  return vertices3D;
-}
 
 dimensionSelector.addEventListener("change", (e) => {
   resetCubeGeometry();
@@ -199,18 +169,12 @@ dimensionSelector.addEventListener("change", (e) => {
     cube.geometry = geometry;
   } else if (selectedDimension === 5) {
     const penteractVertices = generatePenteractVertices();
-    const projectedVertices = project5DTo3D(penteractVertices);
     const lines = [];
   
     for (let i = 0; i < 32; i++) {
       for (let j = i + 1; j < 32; j++) {
-        if (hammingDistance(i, j) === 1) {
-          lines.push(projectedVertices[i * 2], projectedVertices[j * 2]);
-          lines.push(projectedVertices[i * 2 + 1], projectedVertices[j * 2 + 1]);
-        }
-        if (hammingDistance(i, j) === 16) {
-          lines.push(projectedVertices[i * 2], projectedVertices[j * 2]);
-          lines.push(projectedVertices[i * 2 + 1], projectedVertices[j * 2 + 1]);
+        if (hammingDistance(i, j) === 1 || hammingDistance(i, j) === 16) {
+          lines.push(penteractVertices[i], penteractVertices[j]);
         }
       }
     }
