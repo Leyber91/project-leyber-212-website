@@ -197,7 +197,7 @@ function createPenteractModel() {
     for (let j = 0; j < 8; j++) {
       const lineGeometry = new THREE.BufferGeometry().setFromPoints([
         faceCube.geometry.attributes.position.array.slice(j * 3, j * 3 + 3),
-        smallerCube.geometry.attributes.position.array.slice(j * 3, j * 3 + 3),
+        faceCube.children[0].geometry.attributes.position.array.slice(j * 3, j * 3 + 3), // Replace smallerCube with faceCube.children[0]
       ]);
       const line = new THREE.Line(
         lineGeometry,
@@ -211,6 +211,7 @@ function createPenteractModel() {
   penteract.add(outerCube);
   return penteract;
 }
+
 
 // ...
 
@@ -245,6 +246,9 @@ dimensionSelector.addEventListener("change", (e) => {
     cube.geometry.dispose();
     cube.geometry = geometry;
   } else if (selectedDimension === 5) {
+    if (penteractModel) {
+      parentObject.remove(penteractModel);
+    }
     penteractModel = createPenteractModel();
     parentObject.add(penteractModel);
   }
