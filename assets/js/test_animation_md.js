@@ -164,8 +164,9 @@ function createPenteractModel() {
   // Connect the vertices of the outer cube to the corresponding vertices of the inner cube
   for (let i = 0; i < 8; i++) {
     const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-      outerCube.geometry.attributes.position.array.slice(i * 3, i * 3 + 3),
-      innerCube.geometry.attributes.position.array.slice(i * 3, i * 3 + 3),
+    new THREE.Vector3().fromArray(outerCube.geometry.attributes.position.array, i * 3),
+    new THREE.Vector3().fromArray(innerCube.geometry.attributes.position.array, i * 3),
+
     ]);
     const line = new THREE.Line(
       lineGeometry,
@@ -196,8 +197,8 @@ function createPenteractModel() {
     // Connect the vertices of the face cube to the corresponding vertices of the smaller cube inside it
     for (let j = 0; j < 8; j++) {
       const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-        faceCube.geometry.attributes.position.array.slice(j * 3, j * 3 + 3),
-        faceCube.children[0].geometry.attributes.position.array.slice(j * 3, j * 3 + 3), // Replace smallerCube with faceCube.children[0]
+        new THREE.Vector3().fromArray(faceCube.geometry.attributes.position.array, j * 3),
+        new THREE.Vector3().fromArray(faceCube.children[0].geometry.attributes.position.array, j * 3),
       ]);
       const line = new THREE.Line(
         lineGeometry,
