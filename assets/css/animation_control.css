@@ -198,9 +198,6 @@ body {
       display: block;
     }
   
-    .controls {
-      display: none;
-    }
   }
   
   
@@ -249,8 +246,8 @@ body {
   @media only screen and (max-width: 480px) {
     .toggle-btn-container {
       position: absolute;
-      left: 0;
-      bottom: 0;
+      left: 1.25em; /* Match the horizontal position of the #goBack button */
+      bottom: 5em; /* Match the vertical position of the #goBack button */
       transform: none;
     }
   
