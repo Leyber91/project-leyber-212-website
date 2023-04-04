@@ -29,12 +29,19 @@ let distortionFactor = 0;
   }*////// ODD version
 
   function createProjectionMatrix(n) {
-    const angle = Math.PI / 4;
     const matrix = [];
+    const angle = Math.PI / 4;
+  
     for (let i = 0; i < 3; i++) {
       const row = [];
       for (let j = 0; j < n; j++) {
-        row.push(i === j ? Math.cos(angle) : (i === j + 1 || (i === 0 && j === n - 1)) ? -Math.sin(angle) : 0);
+        if (i === j) {
+          row.push(Math.cos(angle));
+        } else if (i === (j + 1) % n || (i === 0 && j === n - 1)) {
+          row.push(-Math.sin(angle));
+        } else {
+          row.push(0);
+        }
       }
       matrix.push(row);
     }
