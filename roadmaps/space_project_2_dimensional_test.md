@@ -37,17 +37,17 @@ A hypercube is a geometric figure with multiple dimensions. The most commonly kn
 
 - [x] **4D - Tesseract:** A tesseract can be thought of as a cube within a cube. So, the wireframe representation would show the vertices and edges of two cubes that are nested within each other.
 
-- **5D - Penteract:** A penteract can be thought of as a hypercube with five dimensions. It can be visualized as a cube with a smaller cube attached to each of its vertices. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to it.
+- [x]**5D - Penteract:** A penteract can be thought of as a hypercube with five dimensions. It can be visualized as a cube with a smaller cube attached to each of its vertices. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to it.
 
-- **6D - Hexeract:** A hexeract can be thought of as a hypercube with six dimensions. It can be visualized as a cube with a smaller cube attached to each of its edges. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its edges.
+- [x]**6D - Hexeract:** A hexeract can be thought of as a hypercube with six dimensions. It can be visualized as a cube with a smaller cube attached to each of its edges. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its edges.
 
-- **7D - Hepteract:** A hepteract can be thought of as a hypercube with seven dimensions. It can be visualized as a cube with a smaller cube attached to each of its faces. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its faces.
+- [x]**7D - Hepteract:** A hepteract can be thought of as a hypercube with seven dimensions. It can be visualized as a cube with a smaller cube attached to each of its faces. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its faces.
 
-- **8D - Octeract:** An octeract can be thought of as a hypercube with eight dimensions. It can be visualized as a cube with a smaller cube attached to each of its cubes. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its cubes.
+- [x]**8D - Octeract:** An octeract can be thought of as a hypercube with eight dimensions. It can be visualized as a cube with a smaller cube attached to each of its cubes. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its cubes.
 
-- **9D - Enneract:** An enneract can be thought of as a hypercube with nine dimensions. It can be visualized as a cube with a smaller cube attached to each of its tesseracts. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its tesseracts.
+- [x]**9D - Enneract:** An enneract can be thought of as a hypercube with nine dimensions. It can be visualized as a cube with a smaller cube attached to each of its tesseracts. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its tesseracts.
 
-- **10D - Deceract:** A deceract can be thought of as a hypercube with ten dimensions. It can be visualized as a cube with a smaller cube attached to each of its pentaracts. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its pentaracts.
+- [x]**10D - Deceract:** A deceract can be thought of as a hypercube with ten dimensions. It can be visualized as a cube with a smaller cube attached to each of its pentaracts. The wireframe representation would show the vertices and edges of the larger cube, as well as the vertices and edges of the smaller cubes attached to its pentaracts.
 
 
 ## Visualization of Hypercubes
