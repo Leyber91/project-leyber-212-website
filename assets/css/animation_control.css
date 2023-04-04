@@ -246,8 +246,8 @@ body {
   @media only screen and (max-width: 480px) {
     .toggle-btn-container {
       position: absolute;
-      left: 1.25em; /* Match the horizontal position of the #goBack button */
-      bottom: 5em; /* Match the vertical position of the #goBack button */
+       left: 1.25em; /* Match the horizontal position of the #goBack button */
+      bottom: 5em; /*Match the vertical position of the #goBack button */
       transform: none;
     }
   
@@ -273,6 +273,11 @@ body {
   
     .controls {
       bottom: 14%;
+    }
+    .toogle-btn {
+      position: absolute;
+      left: 1.25em; /* Match the horizontal position of the #goBack button */
+      bottom: 0em; /*Match the vertical position of the #goBack button */
     }
   }
   

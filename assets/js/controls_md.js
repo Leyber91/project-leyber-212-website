@@ -1,3 +1,10 @@
+function toggleControls() {
+    const controls = document.querySelector('.controls');
+    const isVisible = controls.style.display !== 'none';
+    controls.style.display = isVisible ? 'none' : 'block';
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const modeSelector = document.getElementById("modeSelector");
     const rotationSpeedControl = document.getElementById("rangeRotationSpeed");
