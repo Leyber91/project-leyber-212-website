@@ -171,10 +171,11 @@ body {
   .toggle-btn-container {
     position: absolute;
     top: 50%;
-    left: 0;
+    left: 1.25em; /* Match the horizontal position of the #goBack button */
     transform: translateY(-50%);
-    z-index: 2;
+    z-index: 3; /* Increase z-index to display above other elements */
   }
+  
   
   .toggle-btn {
     font-size: 1em;
@@ -186,7 +187,9 @@ body {
     border: 0.063em solid rgba(0, 255, 255, 0.5);
     cursor: pointer;
     position: absolute;
-    bottom: 0;
+    bottom: 5em; /* Match the vertical position of the #goBack button */
+    left: 1.25em; /* Match the horizontal position of the #goBack button */
+    z-index: 3; /* Increase z-index to display above other elements */
   }
   
   .toggle-btn:hover {
@@ -247,9 +250,10 @@ body {
   @media only screen and (max-width: 480px) {
     .toggle-btn-container {
       position: absolute;
-       left: 1.25em; /* Match the horizontal position of the #goBack button */
-      bottom: 5em; /*Match the vertical position of the #goBack button */
+      left: 1.25em; /* Match the horizontal position of the #goBack button */
+      bottom: 0em; /*Match the vertical position of the #goBack button */
       transform: none;
+      z-index: 3; /* Increase z-index to display above other elements */
     }
   
     #goBack {
