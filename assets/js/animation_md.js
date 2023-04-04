@@ -123,32 +123,36 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
   // Interface for selecting dimensions
     const dimensionSelector = document.querySelector('#dimensionSelector');
     
-    dimensionSelector.addEventListener('change', () => {
-        const dimension = parseInt(dimensionSelector.value, 10);
-        scale = 3 / dimension;
-      
-        // Remove existing wireframes from the scene
-        parentObject.remove(...parentObject.children);
-      
-        // Generate the n-dimensional vertices and adjacency matrix
-        const vertices = generateNDimensionalVertices(dimension, 1);
-        const adjacencyMatrix = generateNDimensionalAdjacencyMatrix(vertices, dimension);
-      
-        // Create the projection matrix and project the n-dimensional vertices to 3D
-        const projectionMatrix = createProjectionMatrix(dimension);
-        
-        // Add distortion to the projection matrix based on the distortionFactor (controlled by the range input)
-        const distortedMatrix = distortProjectionMatrix(projectionMatrix, distortionFactor);
-      
-        // Project the n-dimensional vertices to 3D using the distorted projection matrix
-        const projectedVertices = projectNDimensionalTo3D(vertices, distortedMatrix);
-      
-        // Generate the wireframe representation and add it to the scene
-        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-        const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
-      
-        parentObject.add(wireframe);
-      });
+// Move adjacencyMatrix variable to the higher scope
+let adjacencyMatrix;
+
+dimensionSelector.addEventListener('change', () => {
+  const dimension = parseInt(dimensionSelector.value, 10);
+  scale = 3 / dimension;
+
+  // Remove existing wireframes from the scene
+  parentObject.remove(...parentObject.children);
+
+  // Generate the n-dimensional vertices and adjacency matrix
+  const vertices = generateNDimensionalVertices(dimension, 1);
+  adjacencyMatrix = generateNDimensionalAdjacencyMatrix(vertices, dimension);
+
+  // Create the projection matrix and project the n-dimensional vertices to 3D
+  const projectionMatrix = createProjectionMatrix(dimension);
+  
+  // Add distortion to the projection matrix based on the distortionFactor (controlled by the range input)
+  const distortedMatrix = distortProjectionMatrix(projectionMatrix, distortionFactor);
+
+  // Project the n-dimensional vertices to 3D using the distorted projection matrix
+  const projectedVertices = projectNDimensionalTo3D(vertices, distortedMatrix);
+
+  // Generate the wireframe representation and add it to the scene
+  const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+  const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
+
+  parentObject.add(wireframe);
+});
+
       
 // Animation and interaction
 
