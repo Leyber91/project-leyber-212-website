@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     const modeSelector = document.getElementById("modeSelector");
-    const rotationSpeedControl = document.getElementById("rotationSpeedControl");
-    const distortionSpeedControl = document.getElementById("distortionSpeedControl");
-    const distortionControl = document.getElementById("distortionControl");
+    const rotationSpeedControl = document.getElementById("rangeRotationSpeed");
+    const distortionSpeedControl = document.getElementById("rangeDistortionSpeed");
+    const distortionControl = document.getElementById("rangeDistortion");
 
     function toggleControlsByMode() {
     switch (modeSelector.value) {
