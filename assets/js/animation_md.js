@@ -12,6 +12,8 @@ let directionY = 0;
 let directionZ = 0;
 let isAnimating = true;
 let distortionFactor = 0;
+let distortionSpeed = 0.005;
+
 
 
 // Create a projection matrix for n dimensions
@@ -160,7 +162,8 @@ dimensionSelector.addEventListener('change', () => {
   parentObject.add(wireframe);
 });
 
-      
+// Trigger the 'change' event to initialize the dimension and render the shape
+dimensionSelector.dispatchEvent(new Event('change'));
 // Animation and interaction
 
 
@@ -223,6 +226,20 @@ const animate = function () {
       parentObject.rotation.x += speed * directionX;
       parentObject.rotation.y += speed * directionY;
       parentObject.rotation.z += speed * directionZ;
+  
+      // Update distortionFactor and regenerate the wireframe
+      distortionFactor += distortionSpeed;
+      const dimension = parseInt(dimensionSelector.value, 10);
+      const vertices = generateNDimensionalVertices(dimension, 1);
+      const projectionMatrix = createProjectionMatrix(dimension);
+      const distortedMatrix = distortProjectionMatrix(projectionMatrix, distortionFactor);
+      const projectedVertices = projectNDimensionalTo3D(vertices, distortedMatrix);
+  
+      const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+      const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
+  
+      parentObject.remove(...parentObject.children);
+      parentObject.add(wireframe);
     }
   
     parentObject.scale.set(scale, scale, scale);
@@ -231,6 +248,7 @@ const animate = function () {
   };
   
   animate();
+  
   
   const container = document.querySelector('.animation-container');
   
