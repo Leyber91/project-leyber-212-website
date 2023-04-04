@@ -11,9 +11,11 @@ let directionX = 0;
 let directionY = 0;
 let directionZ = 0;
 let isAnimating = true;
+let distortionFactor = 0;
+
 
 // Create a projection matrix for n dimensions
-function createProjectionMatrix(n) {
+/*function createProjectionMatrix(n) {
     // This is a simple example, you can create a more sophisticated projection matrix if needed.
     const matrix = [];
     for (let i = 0; i < 3; i++) {
@@ -24,7 +26,28 @@ function createProjectionMatrix(n) {
       matrix.push(row);
     }
     return matrix;
+  }*////// ODD version
+
+  function createProjectionMatrix(n) {
+    const angle = Math.PI / 4;
+    const matrix = [];
+    for (let i = 0; i < 3; i++) {
+      const row = [];
+      for (let j = 0; j < n; j++) {
+        row.push(i === j ? Math.cos(angle) : (i === j + 1 || (i === 0 && j === n - 1)) ? -Math.sin(angle) : 0);
+      }
+      matrix.push(row);
+    }
+    return matrix;
   }
+///Extra control to distort the projection
+  function distortProjectionMatrix(projectionMatrix, distortionFactor) {
+    const distortedMatrix = projectionMatrix.map(row =>
+      row.map(value => value + distortionFactor * (Math.random() * 2 - 1))
+    );
+    return distortedMatrix;
+  }
+  
 
   // Generate n-dimensional vertices
 function generateNDimensionalVertices(n, size) {
@@ -113,7 +136,12 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
       
         // Create the projection matrix and project the n-dimensional vertices to 3D
         const projectionMatrix = createProjectionMatrix(dimension);
-        const projectedVertices = projectNDimensionalTo3D(vertices, projectionMatrix);
+        
+        // Add distortion to the projection matrix based on the distortionFactor (controlled by the range input)
+        const distortedMatrix = distortProjectionMatrix(projectionMatrix, distortionFactor);
+      
+        // Project the n-dimensional vertices to 3D using the distorted projection matrix
+        const projectedVertices = projectNDimensionalTo3D(vertices, distortedMatrix);
       
         // Generate the wireframe representation and add it to the scene
         const material = new THREE.LineBasicMaterial({ color: 0xffffff });
@@ -153,6 +181,24 @@ document.getElementById("toggleAnimation").addEventListener("click", () => {
   
   document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
     directionZ = e.target.value * 0.01;
+  });
+
+  document.getElementById("rangeDistortion").addEventListener("input", (e) => {
+    distortionFactor = e.target.value * 0.01;
+  
+    // Update the projection matrix with the new distortion factor
+    const dimension = parseInt(dimensionSelector.value, 10);
+    const vertices = generateNDimensionalVertices(dimension, 1);
+    const projectionMatrix = createProjectionMatrix(dimension);
+    const distortedMatrix = distortProjectionMatrix(projectionMatrix, distortionFactor);
+    const projectedVertices = projectNDimensionalTo3D(vertices, distortedMatrix);
+  
+    // Update the wireframe
+    const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+    const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
+  
+    parentObject.remove(...parentObject.children);
+    parentObject.add(wireframe);
   });
   
 
