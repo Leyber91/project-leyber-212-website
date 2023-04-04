@@ -13,6 +13,8 @@ let directionZ = 0;
 let isAnimating = true;
 let distortionFactor = 0;
 let distortionSpeed = 0;
+let rotationSpeed = 0;
+
 
 
 
@@ -129,6 +131,53 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
     return new THREE.LineSegments(geometry, material);
     }
 
+    function createRotationMatrices(dimension, angle) {
+        const rotationMatrices = [];
+      
+        for (let i = 0; i < dimension - 1; i++) {
+          const matrix = [];
+          for (let j = 0; j < dimension; j++) {
+            const row = [];
+            for (let k = 0; k < dimension; k++) {
+              if (j === i && k === i) {
+                row.push(Math.cos(angle));
+              } else if (j === i && k === i + 1) {
+                row.push(-Math.sin(angle));
+              } else if (j === i + 1 && k === i) {
+                row.push(Math.sin(angle));
+              } else if (j === i + 1 && k === i + 1) {
+                row.push(Math.cos(angle));
+              } else if (j === k) {
+                row.push(1);
+              } else {
+                row.push(0);
+              }
+            }
+            matrix.push(row);
+          }
+          rotationMatrices.push(matrix);
+        }
+      
+        return rotationMatrices;
+      }
+
+      function applyRotation(vertices, rotationMatrices) {
+        return vertices.map(vertex => {
+          let rotatedVertex = vertex.slice();
+          rotationMatrices.forEach(matrix => {
+            const newVertex = [];
+            for (let i = 0; i < matrix.length; i++) {
+              const newValue = rotatedVertex.reduce((acc, curr, idx) => acc + (curr * matrix[i][idx]), 0);
+              newVertex.push(newValue);
+            }
+            rotatedVertex = newVertex;
+          });
+          return rotatedVertex;
+        });
+      }
+      
+      
+
   // Interface for selecting dimensions
     const dimensionSelector = document.querySelector('#dimensionSelector');
     
@@ -187,15 +236,15 @@ document.getElementById("toggleAnimation").addEventListener("click", () => {
   
   document.getElementById("rangeDirectionX").addEventListener("input", (e) => {
     directionX = e.target.value * 0.01;
-  });
+    });
   
   document.getElementById("rangeDirectionY").addEventListener("input", (e) => {
     directionY = e.target.value * 0.01;
-  });
+    });
   
   document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
     directionZ = e.target.value * 0.01;
-  });
+    });
 
   document.getElementById("rangeDistortion").addEventListener("input", (e) => {
     distortionFactor = e.target.value * 0.01;
@@ -213,12 +262,16 @@ document.getElementById("toggleAnimation").addEventListener("click", () => {
   
     parentObject.remove(...parentObject.children);
     parentObject.add(wireframe);
-  });
+    });
+
   document.getElementById("rangeDistortionSpeed").addEventListener("input", (e) => {
     distortionSpeed = e.target.value * 0.0001;
-  });
+    });
   
-  
+  document.getElementById("rangeRotationSpeed").addEventListener("input", (e) => {
+  rotationSpeed = e.target.value * 0.01;
+    });
+
 
 // Consider implementing level of detail (LOD) techniques, spatial partitioning, or selectively rendering only parts of the hypercube that are most relevant to the viewer.
 // ...
@@ -235,12 +288,16 @@ const animate = function () {
       distortionFactor += distortionSpeed;
       const dimension = parseInt(dimensionSelector.value, 10);
       const vertices = generateNDimensionalVertices(dimension, 1);
+      const rotationMatrices = createRotationMatrices(dimension, rotationSpeed);
+      const rotatedVertices = applyRotation(vertices, rotationMatrices);
       const projectionMatrix = createProjectionMatrix(dimension);
       const distortedMatrix = distortProjectionMatrix(projectionMatrix, distortionFactor);
       const projectedVertices = projectNDimensionalTo3D(vertices, distortedMatrix);
   
       const material = new THREE.LineBasicMaterial({ color: 0xffffff });
       const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
+
+
   
       parentObject.remove(...parentObject.children);
       parentObject.add(wireframe);
