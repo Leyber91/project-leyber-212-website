@@ -12,7 +12,7 @@ let directionY = 0;
 let directionZ = 0;
 let isAnimating = true;
 let distortionFactor = 0;
-let distortionSpeed = 0.005;
+let distortionSpeed = 0;
 
 
 
@@ -214,6 +214,10 @@ document.getElementById("toggleAnimation").addEventListener("click", () => {
     parentObject.remove(...parentObject.children);
     parentObject.add(wireframe);
   });
+  document.getElementById("rangeDistortionSpeed").addEventListener("input", (e) => {
+    distortionSpeed = e.target.value * 0.0001;
+  });
+  
   
 
 // Consider implementing level of detail (LOD) techniques, spatial partitioning, or selectively rendering only parts of the hypercube that are most relevant to the viewer.

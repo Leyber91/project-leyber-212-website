@@ -1,34 +1,57 @@
-# Dimensional Test Roadmap:
+# The New Roadmap for Higher Dimensions
 
-## Stage 1: Research and Planning
+## Stage 1: Represent Higher Dimensions with Wireframes
 
-- Investigate existing methods of visualizing higher dimensions (4D, 5D, etc.)
-- Determine which dimensional concepts will be most engaging and accessible for your audience
-- Develop a clear understanding of the goals and objectives of the project
+1. Research existing wireframe models for different dimensions
+2. Develop algorithms to create wireframe models for each dimension
+3. Implement wireframe models in a software environment
+4. Test and optimize wireframe models for performance
+5. Integrate wireframe models into a larger visualization tool
 
-## Stage 2: Design and Prototyping
+To learn more about wireframes, check out this [guide on wireframes](https://www.smashingmagazine.com/2018/07/ux-design-prototyping-wireframing/).
 
-- Create initial designs and mockups for the dimensional visualization tool
-- Develop a user interface that is intuitive and visually appealing
-- Prototype different approaches to visualize higher-dimensional concepts, such as tesseracts and other geometric figures
+## Stage 2: Rotation of each higher dimension on its additional axis
 
-## Stage 3: Development and Implementation
+1. Research existing models for rotating objects in higher dimensions
+2. Develop algorithms to rotate objects in each dimension
+3. Implement rotation algorithms in a software environment
+4. Test and optimize rotation algorithms for performance
+5. Integrate rotation into the wireframe visualization tool
 
-- Begin development of the dimensional visualization tool, incorporating the chosen design and visualizations
-- Implement user interaction features, such as zooming, rotating, and exploring the higher-dimensional figures
-- Test and optimize the tool for performance, ensuring a smooth user experience
+For a more in-depth understanding of rotations in higher dimensions, see this [paper on rotations in 4D](https://arxiv.org/abs/1804.05045).
 
-## Stage 4: Content Creation and Integration
+## Stage 3: Stereographic and orthographic projections
 
-- Develop educational content explaining the concepts of higher dimensions and their significance in various fields (e.g., physics, mathematics)
-- Integrate the content with the visualization tool, creating a cohesive and engaging user experience
-- Continuously update the content as new research and discoveries are made in the field of higher dimensions
+1. Research existing techniques for stereographic and orthographic projections in higher dimensions
+2. Develop algorithms to create stereographic and orthographic projections for each dimension
+3. Implement projection algorithms in a software environment
+4. Test and optimize projection algorithms for performance
+5. Integrate projections into the wireframe visualization tool
 
-## Stage 5: Launch, Promotion, and Community Building
+For a deeper dive into stereographic and orthographic projections, take a look at this [presentation on projections in 3D and beyond](http://www2.math.uu.se/~svante/papers/sjN5.pdf).
 
-- Launch the dimensional visualization tool on your website and promote it through social media, newsletters, and other marketing channels
-- Encourage users to share their experiences and discoveries with the tool, fostering a community of curious learners
-- Continuously gather user feedback and iterate on the tool to improve its functionality, usability, and overall appeal
+## Stage 4: Additional shapes, sphere and pyramid and its respective additional axis per dimension
+
+1. Research existing models for representing additional shapes in higher dimensions
+2. Develop algorithms to create additional shapes for each dimension
+3. Implement additional shape algorithms in a software environment
+4. Test and optimize additional shape algorithms for performance
+5. Integrate additional shapes into the wireframe visualization tool
+
+To explore additional shapes in higher dimensions, take a look at this [visual guide to higher dimensional geometry](https://www.quantamagazine.org/a-journey-to-visit-the-strange-objects-in-the-fourth-dimension-20221028/).
+
+## Stage 5: Implementing physics and mathematical concepts for each higher dimension
+
+1. Research the physics and mathematics of higher dimensions
+2. Develop models and algorithms to represent physics and mathematical concepts for each dimension
+3. Implement physics and mathematical algorithms in a software environment
+4. Test and optimize physics and mathematical algorithms for performance
+5. Integrate physics and mathematics into the wireframe visualization tool
+
+For an overview of the physics of higher dimensions, check out this [article on the physics of dimensions beyond 3D](https://www.pbs.org/wgbh/nova/article/dimensions-beyond-our-universe/).
+
+By following this roadmap, you'll gain a deeper understanding of higher dimensions and their applications in various fields, from computer graphics to physics and mathematics. Good luck on your journey!
+
 
 
 # Hypercubes

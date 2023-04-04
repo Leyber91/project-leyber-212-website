@@ -165,7 +165,44 @@ body {
     height: 16px;
     background-color: #ffffff;
     cursor: pointer;
+
   }
+
+  .toggle-btn-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  
+  .toggle-btn {
+    display: none;
+    font-size: 1em;
+    padding: 0.625em 1.25em;
+    border-radius: 1.25em;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #00ffff;
+    text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+    border: 0.063em solid rgba(0, 255, 255, 0.5);
+    cursor: pointer;
+  }
+  
+  .toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Add the styles for the mobile breakpoint */
+  @media screen and (max-width: 768px) {
+    .toggle-btn {
+      display: block;
+    }
+  
+    .controls {
+      display: none;
+    }
+  }
+  
   
 
   @media only screen and (max-width: 480px) {
@@ -209,12 +246,3 @@ body {
     }
   }
 
-          /* Add your mobile breakpoints for the toggle button */
-          @media screen and (max-width: 768px) {
-            .toggle-btn {
-                display: block;
-            }
-            .controls {
-                display: none;
-            }
-        }
