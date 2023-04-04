@@ -177,15 +177,16 @@ body {
   }
   
   .toggle-btn {
-    display: none;
     font-size: 1em;
-    padding: 0.625em 1.25em;
+    padding: 0.76em 1.25em;
     border-radius: 1.25em;
     background-color: rgba(0, 0, 0, 0.2);
     color: #00ffff;
     text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
     border: 0.063em solid rgba(0, 255, 255, 0.5);
     cursor: pointer;
+    position: absolute;
+    bottom: 0;
   }
   
   .toggle-btn:hover {
