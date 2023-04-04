@@ -14,6 +14,14 @@ let isAnimating = true;
 let distortionFactor = 0;
 let distortionSpeed = 0;
 let rotationSpeed = 0;
+let lenght;
+let adjacencyMatrix; // Move adjacencyMatrix variable to the higher scope
+
+// Optimize for performance
+
+const parentObject = new THREE.Object3D();
+scene.add(parentObject);
+
 
 
 
@@ -182,7 +190,8 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
     const dimensionSelector = document.querySelector('#dimensionSelector');
     
 // Move adjacencyMatrix variable to the higher scope
-let adjacencyMatrix;
+
+
 
 dimensionSelector.addEventListener('change', () => {
   const dimension = parseInt(dimensionSelector.value, 10);
@@ -216,10 +225,7 @@ dimensionSelector.dispatchEvent(new Event('change'));
 // Animation and interaction
 
 
-// Optimize for performance
 
-const parentObject = new THREE.Object3D();
-scene.add(parentObject);
 
 // Scene controls
 document.getElementById("toggleAnimation").addEventListener("click", () => {
