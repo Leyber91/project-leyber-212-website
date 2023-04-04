@@ -103,29 +103,25 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
     dimensionSelector.addEventListener('change', () => {
         const dimension = parseInt(dimensionSelector.value, 10);
         scale = 3 / dimension;
-  
-    // Remove existing wireframe from the scene
-// Remove existing wireframe from the scene
-    if (parentObject.children.length > 0) {
-        parentObject.remove(parentObject.children[0]);
-    }
-    // ...
-    parentObject.add(wireframe);
-  
-     // Generate the n-dimensional vertices and adjacency matrix
-  const vertices = generateNDimensionalVertices(dimension, 1);
-  const adjacencyMatrix = generateNDimensionalAdjacencyMatrix(vertices, dimension);
-
-  // Create the projection matrix and project the n-dimensional vertices to 3D
-  const projectionMatrix = createProjectionMatrix(dimension);
-  const projectedVertices = projectNDimensionalTo3D(vertices, projectionMatrix);
-
-  // Generate the wireframe representation and add it to the scene
-  const material = new THREE.LineBasicMaterial({ color: 0xffffff });
-  const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
-  scene.add(wireframe);
-
-  });
+      
+        // Remove existing wireframes from the scene
+        parentObject.remove(...parentObject.children);
+      
+        // Generate the n-dimensional vertices and adjacency matrix
+        const vertices = generateNDimensionalVertices(dimension, 1);
+        const adjacencyMatrix = generateNDimensionalAdjacencyMatrix(vertices, dimension);
+      
+        // Create the projection matrix and project the n-dimensional vertices to 3D
+        const projectionMatrix = createProjectionMatrix(dimension);
+        const projectedVertices = projectNDimensionalTo3D(vertices, projectionMatrix);
+      
+        // Generate the wireframe representation and add it to the scene
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff });
+        const wireframe = createNDimensionalWireframe(projectedVertices, adjacencyMatrix, material);
+      
+        parentObject.add(wireframe);
+      });
+      
 // Animation and interaction
 
 
