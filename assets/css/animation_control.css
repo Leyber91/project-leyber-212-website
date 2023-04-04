@@ -6,7 +6,10 @@
         background-position: -625em 0;
     }
   }
-  
+  .toggle-btn {
+    display: none;
+}
+
 html,
 body {
     margin: 0;
@@ -205,4 +208,14 @@ body {
       font-size: 0.9em;
     }
   }
+
+          /* Add your mobile breakpoints for the toggle button */
+          @media screen and (max-width: 768px) {
+            .toggle-btn {
+                display: block;
+            }
+            .controls {
+                display: none;
+            }
+        }
   
