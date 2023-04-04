@@ -246,3 +246,36 @@ body {
     }
   }
 
+  @media only screen and (max-width: 480px) {
+    .toggle-btn-container {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      transform: none;
+    }
+  
+    #goBack {
+      position: absolute;
+      right: 1.25em;
+      bottom: 0;
+      left: auto;
+      padding: 0.625em 1.25em;
+      border-radius: 1.25em;
+    }
+  
+    #animation {
+      position: absolute;
+      width: 97%; /* Set the width and height to 95% to create a small margin around the canvas */
+      height: 86%;
+      border-radius: 10px; /* Add border-radius to the canvas */
+    }
+  
+    .animation-container {
+      height: 91%;
+    }
+  
+    .controls {
+      bottom: 14%;
+    }
+  }
+  
