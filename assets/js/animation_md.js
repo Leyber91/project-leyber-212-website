@@ -3,7 +3,14 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#animation') });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0.8);
 camera.position.z = 5;
+let scale = 1;
+let speed = 0.01;
+let directionX = 0;
+let directionY = 0;
+let directionZ = 0;
+let isAnimating = true;
 
 // Create a projection matrix for n dimensions
 function createProjectionMatrix(n) {
@@ -92,13 +99,19 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
 
   // Interface for selecting dimensions
     const dimensionSelector = document.querySelector('#dimensionSelector');
+    
     dimensionSelector.addEventListener('change', () => {
         const dimension = parseInt(dimensionSelector.value, 10);
+        scale = 3 / dimension;
   
     // Remove existing wireframe from the scene
-    if (scene.children.length > 0) {
-      scene.remove(scene.children[0]);
+// Remove existing wireframe from the scene
+    if (parentObject.children.length > 0) {
+        parentObject.remove(parentObject.children[0]);
     }
+    // ...
+    parentObject.add(wireframe);
+  
      // Generate the n-dimensional vertices and adjacency matrix
   const vertices = generateNDimensionalVertices(dimension, 1);
   const adjacencyMatrix = generateNDimensionalAdjacencyMatrix(vertices, dimension);
@@ -114,14 +127,39 @@ function createNDimensionalWireframe(vertices, adjacencyMatrix, material) {
 
   });
 // Animation and interaction
-let isAnimating = true;
-const toggleAnimationBtn = document.querySelector('#toggleAnimation');
-toggleAnimationBtn.addEventListener('click', () => {
-  isAnimating = !isAnimating;
-});
 
 
 // Optimize for performance
+
+const parentObject = new THREE.Object3D();
+scene.add(parentObject);
+
+// Scene controls
+document.getElementById("toggleAnimation").addEventListener("click", () => {
+    isAnimating = !isAnimating;
+  });
+  
+  document.getElementById("rangeSize").addEventListener("input", (e) => {
+    scale = e.target.value / 50;
+  });
+  
+  document.getElementById("rangeSpeed").addEventListener("input", (e) => {
+    speed = e.target.value * 0.01;
+  });
+  
+  document.getElementById("rangeDirectionX").addEventListener("input", (e) => {
+    directionX = e.target.value * 0.01;
+  });
+  
+  document.getElementById("rangeDirectionY").addEventListener("input", (e) => {
+    directionY = e.target.value * 0.01;
+  });
+  
+  document.getElementById("rangeDirectionZ").addEventListener("input", (e) => {
+    directionZ = e.target.value * 0.01;
+  });
+  
+
 // Consider implementing level of detail (LOD) techniques, spatial partitioning, or selectively rendering only parts of the hypercube that are most relevant to the viewer.
 // ...
 
@@ -148,3 +186,5 @@ const animate = function () {
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
   }
+
+  window.addEventListener('resize', onWindowResize);
