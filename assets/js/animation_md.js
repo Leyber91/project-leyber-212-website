@@ -120,23 +120,31 @@ toggleAnimationBtn.addEventListener('click', () => {
   isAnimating = !isAnimating;
 });
 
-// Update loop
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (isAnimating) {
-    // Apply rotation, scaling, and
-        // other adjustments to the visualization as needed
-    // ...
-
-    renderer.render(scene, camera);
-  }
-}
-
-animate();
 
 // Optimize for performance
 // Consider implementing level of detail (LOD) techniques, spatial partitioning, or selectively rendering only parts of the hypercube that are most relevant to the viewer.
 // ...
 
+const animate = function () {
+    requestAnimationFrame(animate);
   
+    if (isAnimating) {
+      parentObject.rotation.x += speed * directionX;
+      parentObject.rotation.y += speed * directionY;
+      parentObject.rotation.z += speed * directionZ;
+    }
+  
+    parentObject.scale.set(scale, scale, scale);
+  
+    renderer.render(scene, camera);
+  };
+  
+  animate();
+  
+  const container = document.querySelector('.animation-container');
+  
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth * 0.97, container.clientHeight * 0.97);
+  }
