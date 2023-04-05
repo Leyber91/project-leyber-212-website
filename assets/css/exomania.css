@@ -1,0 +1,310 @@
+/* General Styles and Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #0c1b33;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Flexbox-based Grid System */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+}
+
+/* Responsive Grid */
+@media screen and (min-width: 768px) {
+    .column {
+        flex-basis: 50%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .column {
+        flex-basis: 33.33%;
+    }
+}
+
+/* Navigation Bar */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #142e51;
+    padding: 1rem;
+    position: relative;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+    opacity: 0.1;
+}
+
+header h1 {
+    color: #fff;
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    z-index: 1;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 1rem 0;
+    width: 100%;
+}
+
+/* Main Content */
+main {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* Exoplanet Sections */
+section.exoplanet-section {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    background-color: #1d3d6e;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+section.exoplanet-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+section.exoplanet-section:hover::before {
+    opacity: 1;
+}
+
+section.exoplanet-section h2 {
+    color: #fff;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+#catalog {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+  /* Exoplanet Catalog Cards */
+  .exoplanet-card {
+    background-color: #24508a;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 0.5rem;
+    flex-basis: calc(100% - 1rem);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .exoplanet-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .exoplanet-card h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .exoplanet-card p {
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Responsive Design */
+  @media screen and (min-width: 480px) {
+    .exoplanet-card {
+      flex-basis: calc(50% - 1rem);
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .exoplanet-card {
+      flex-basis: calc(33.33% - 1rem);
+    }
+  }
+
+  /* Add a subtle background pattern */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.transparenttextures.com/patterns/diagmonds.png");
+    opacity: 0.1;
+    z-index: -1;
+  }
+
+  /* Additional hover effect on nav links */
+  nav a {
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.25rem 0;
+  }
+
+  nav a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #0c1b33;
+    transition: background-color 0.3s ease;
+  }
+
+  nav a:hover::before {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+/* Add keyframes for 3D flip animation */
+@keyframes flipInX {
+    from {
+      transform: perspective(400px) rotateX(90deg);
+      opacity: 0;
+    }
+    to {
+      transform: perspective(400px) rotateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes flipOutX {
+    from {
+      transform: perspective(400px) rotateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: perspective(400px) rotateX(90deg);
+      opacity: 0;
+    }
+  }
+  
+  /* 3D flip effect on exoplanet cards */
+  .exoplanet-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .exoplanet-card:hover {
+    animation: flipInX 0.6s;
+  }
+  
+  .exoplanet-card:hover .card-back {
+    animation: flipOutX 0.6s;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  /* Card back face */
+  .card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1d3d6e;
+    border-radius: 8px;
+    padding: 1rem;
+    opacity: 1;
+    visibility: visible;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    transition: all 0.6s ease;
+  }
+  
+  /* Background stars animation */
+  @keyframes stars {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -10000px 5000px;
+    }
+  }
+  
+  /* Animate background stars */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.transparenttextures.com/patterns/diagmonds.png");
+    background-size: 1000px 1000px;
+    opacity: 0.1;
+    z-index: -1;
+    animation: stars 200s linear infinite;
+  }
+  
+  /* Animate navigation bar */
+  nav {
+    animation: fadeInDown 1s ease;
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
