@@ -8,7 +8,10 @@ async function fetchData() {
   }
   
   async function fetchKeplerData() {
-    const response = await fetch('https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps+where+pl_kepflag=1&format=json');
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps+where+pl_kepflag=1&format=json';
+    
+    const response = await fetch(proxyUrl + url);
     const data = await response.json();
     return data.map(planet => ({
       pl_name: planet.pl_name,
@@ -23,7 +26,10 @@ async function fetchData() {
   }
   
   async function fetchNasaExoplanetData() {
-    const response = await fetch('https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps&format=json');
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps&format=json';
+    
+    const response = await fetch(proxyUrl + url);
     const data = await response.json();
     return data.map(planet => ({
       pl_name: planet.pl_name,
