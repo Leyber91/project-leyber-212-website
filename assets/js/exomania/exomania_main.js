@@ -9,7 +9,7 @@ async function fetchData() {
   
   async function fetchKeplerData() {
     const proxyUrl = 'https://my-cors-proxy-server.herokuapp.com/';
-    const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps+where+pl_kepflag=1&format=json';
+    const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+ps+where+pl_discmethod=%27Transit%27&format=json';
     
     const response = await fetch(proxyUrl + url);
     const data = await response.json();
@@ -24,6 +24,7 @@ async function fetchData() {
       pl_orbincl: planet.pl_orbincl,
     }));
   }
+  
   
   async function fetchNasaExoplanetData() {
     const proxyUrl = 'https://my-cors-proxy-server.herokuapp.com/';
