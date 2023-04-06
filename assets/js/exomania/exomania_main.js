@@ -4,7 +4,7 @@ async function fetchData() {
 }
 
 async function fetchAllData() {
-  const proxyUrl = 'https://my-cors-proxy-server.herokuapp.com/';
+  const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
   const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json';
 
   const response = await fetch(proxyUrl + url);
