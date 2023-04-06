@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./assets/css/exomania.css">
 </head>
 <body>
-    <header>
+    <header class="gradient-bg">
         <nav>
             <a href="#catalog">Catalog</a>
             <a href="#details">Details</a>
@@ -20,21 +20,27 @@
     </header>
     
     <main>
-        <section id="catalog" class="exoplanet-section">
+        <section id="catalog" class="exoplanet-section parallax-container">
+            <div class="background" style="background-image: url('your-image-url.jpg');"></div>
             <h2>Exoplanet Catalog</h2>
             <!-- Exoplanet Catalog will be injected here -->
         </section>
         <div id="pagination"></div>
         <div id="navigation"></div>
         
-        <section id="details" class="exoplanet-section">
+        <section id="details" class="exoplanet-section hover-effect">
             <h2>Exoplanet Details</h2>
             <!-- Exoplanet Details will be injected here -->
         </section>
         
-        <section id="visualization" class="exoplanet-section">
-            <h2>Interactive Visualization</h2>
-            <!-- Visualization will be injected here -->
+        <section id="visualization" class="exoplanet-section card-3d">
+            <div class="card-face">
+              <h2>Interactive Visualization</h2>
+              <!-- Visualization will be injected here -->
+            </div>
+            <div class="card-face">
+              <!-- Add content for the back of the card -->
+            </div>
         </section>
         
         <section id="orbits" class="exoplanet-section">
@@ -43,9 +49,10 @@
         </section>
     </main>
     
-    <footer>
+    <footer class="gradient-bg">
         <!-- Add Footer Content -->
     </footer>
+    
     
     <script src="./assets/js/exomania/exomania_main.js"></script>
 </body>

@@ -31,8 +31,18 @@ function renderCatalog(data, page) {
 
   data.slice(start, end).forEach(planet => {
     const entry = document.createElement('div');
-    entry.classList.add('entry');
-    entry.innerHTML = `
+    entry.classList.add('entry', 'card-3d');
+  
+    const frontFace = document.createElement('div');
+    frontFace.classList.add('card-face');
+    frontFace.innerHTML = `
+      <h3>${planet.pl_name}</h3>
+      <p>Click to view details</p>
+    `;
+  
+    const backFace = document.createElement('div');
+    backFace.classList.add('card-face');
+    backFace.innerHTML = `
       <h3>${planet.pl_name}</h3>
       <p>Radius: ${planet.pl_radius} Earth radii</p>
       <p>Mass: ${planet.pl_mass} Earth masses</p>
@@ -40,9 +50,14 @@ function renderCatalog(data, page) {
       <p>Orbital eccentricity: ${planet.pl_orbeccen}</p>
       <p>Orbital inclination: ${planet.pl_orbincl} degrees</p>
     `;
+  
+    entry.appendChild(frontFace);
+    entry.appendChild(backFace);
     catalogElement.appendChild(entry);
   });
+  
 }
+
 
 function renderNavigation(totalItems, page) {
   navigationElement.innerHTML = '';
@@ -50,7 +65,8 @@ function renderNavigation(totalItems, page) {
 
   if (page > 0) {
     const prevButton = document.createElement('button');
-    prevButton.textContent = 'Previous';
+    prevButton.classList.add('nav-button', 'hover-effect');
+    prevButton.innerHTML = '<i class="icon-arrow-left"></i> Previous';
     prevButton.addEventListener('click', () => {
       currentPage--;
       renderCatalog(planets, currentPage);
@@ -61,7 +77,8 @@ function renderNavigation(totalItems, page) {
 
   if (page < totalPages - 1) {
     const nextButton = document.createElement('button');
-    nextButton.textContent = 'Next';
+    nextButton.classList.add('nav-button', 'hover-effect');
+    nextButton.innerHTML = 'Next <i class="icon-arrow-right"></i>';
     nextButton.addEventListener('click', () => {
       currentPage++;
       renderCatalog(planets, currentPage);
@@ -71,6 +88,7 @@ function renderNavigation(totalItems, page) {
   }
 }
 
+
 let planets = [];
 
 (async function() {
@@ -78,3 +96,13 @@ let planets = [];
   renderCatalog(planets, currentPage);
   renderNavigation(planets.length, currentPage);
 })();
+
+document.addEventListener('scroll', function() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const parallaxBackgrounds = document.querySelectorAll('.parallax-container .background');
+  
+  parallaxBackgrounds.forEach(function(bg) {
+    bg.style.transform = `translateY(${scrollTop * 0.5}px)`;
+  });
+});
+
