@@ -71,6 +71,7 @@ function renderNavigation(totalItems, page) {
   }
 }
 
+let planets = [];
 
 (async function() {
   planets = await fetchAllData(currentPage * itemsPerPage, itemsPerPage);
