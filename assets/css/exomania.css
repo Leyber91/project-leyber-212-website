@@ -15,13 +15,14 @@ body {
   min-height: 100vh;
 }
 
-/* Flexbox-based Grid System */
 .container {
   display: flex;
   flex-wrap: wrap;
-  margin-left: -15px;
-  margin-right: -15px;
+  /* Remove the negative margin */
+  margin-left: 0;
+  margin-right: 0;
 }
+
 
 .row {
   display: flex;
@@ -167,11 +168,18 @@ section.exoplanet-section h2 {
   padding: 1rem;
   margin: 0.5rem;
   flex-basis: calc(100% - 1rem);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Updated box-shadow for a more card-like effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
+  /* Add a margin to separate the cards */
+  margin-bottom: 1rem;
+  /* Add a border to give the card a more sticker-like appearance */
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
+
+
 
 .exoplanet-card:hover {
   transform: translateY(-4px);
