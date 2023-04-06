@@ -1,15 +1,13 @@
-async function fetchData() {
-  const allData = await fetchAllData();
-  return processData(allData);
-}
+const catalogElement = document.querySelector('#catalog');
+const navigationElement = document.querySelector('#navigation');
+const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars+where+rownum+%3C+100+order+by+pl_name+asc&format=json';
+let currentPage = 0;
+const itemsPerPage = 10;
 
-async function fetchAllData() {
-  const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
-  const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json';
-
-  const response = await fetch(proxyUrl + url);
-  const data = await response.json();
-  return data;
+function fetchData(url) {
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => processData(data));
 }
 
 function processData(data) {
@@ -23,25 +21,57 @@ function processData(data) {
   }));
 }
 
-function displayCatalog(data) {
-  const catalogElement = document.getElementById('catalog');
+function renderCatalog(data, page) {
+  catalogElement.innerHTML = '';
+  const start = page * itemsPerPage;
+  const end = start + itemsPerPage;
 
-  data.forEach(planet => {
-    const card = document.createElement('div');
-    card.className = 'exoplanet-card';
-    card.innerHTML = `
+  data.slice(start, end).forEach(planet => {
+    const entry = document.createElement('div');
+    entry.classList.add('entry');
+    entry.innerHTML = `
       <h3>${planet.pl_name}</h3>
-      <p>Mass: ${planet.pl_mass} Earth Masses</p>
-      <p>Radius: ${planet.pl_radius} Earth Radii</p>
-      <p>Orbital Period: ${planet.pl_orbper} days</p>
-      <p>Orbital Eccentricity: ${planet.pl_orbeccen}</p>
-      <p>Orbital Inclination: ${planet.pl_orbincl} degrees</p>
+      <p>Radius: ${planet.pl_radius} Earth radii</p>
+      <p>Mass: ${planet.pl_mass} Earth masses</p>
+      <p>Orbital period: ${planet.pl_orbper} days</p>
+      <p>Orbital eccentricity: ${planet.pl_orbeccen}</p>
+      <p>Orbital inclination: ${planet.pl_orbincl} degrees</p>
     `;
-    catalogElement.appendChild(card);
+    catalogElement.appendChild(entry);
   });
 }
 
-fetchAllData().then(data => {
-  console.log(data);
-  displayCatalog(data);
+function renderNavigation(totalItems, page) {
+  navigationElement.innerHTML = '';
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  if (page > 0) {
+    const prevButton = document.createElement('button');
+    prevButton.textContent = 'Previous';
+    prevButton.addEventListener('click', () => {
+      currentPage--;
+      renderCatalog(planets, currentPage);
+      renderNavigation(planets.length, currentPage);
+    });
+    navigationElement.appendChild(prevButton);
+  }
+
+  if (page < totalPages - 1) {
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Next';
+    nextButton.addEventListener('click', () => {
+      currentPage++;
+      renderCatalog(planets, currentPage);
+      renderNavigation(planets.length, currentPage);
+    });
+    navigationElement.appendChild(nextButton);
+  }
+}
+
+let planets = [];
+
+fetchData(url).then(data => {
+  planets = data;
+  renderCatalog(planets, currentPage);
+  renderNavigation(planets.length, currentPage);
 });
