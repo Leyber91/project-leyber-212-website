@@ -1,11 +1,13 @@
 const catalogElement = document.querySelector('#catalog');
 const navigationElement = document.querySelector('#navigation');
+
+const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
 const url = 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars+where+rownum+%3C+100+order+by+pl_name+asc&format=json';
 let currentPage = 0;
 const itemsPerPage = 10;
 
 function fetchData(url) {
-  return fetch(url)
+  return fetch(proxyUrl + url)
     .then(response => response.json())
     .then(data => processData(data));
 }
