@@ -1,14 +1,16 @@
-const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
-const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json&offset=${offset}&limit=${limit}`;
-
 let exoplanets = [];
 let filteredExoplanets = [];
 let currentPage = 1;
 const itemsPerPage = 10;
 
 // Fetch exoplanet data from API and map to objects
-function fetchExoplanetData(offset, limit) {
-   fetch(proxyUrl + url)
+function fetchExoplanetData(page) {
+  const offset = (page - 1) * itemsPerPage;
+  const limit = itemsPerPage;
+  const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
+  const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json&offset=${offset}&limit=${limit}`;
+
+  fetch(proxyUrl + url)
     .then(response => response.json())
     .then(data => {
       exoplanets = data.map(item => ({
@@ -25,6 +27,7 @@ function fetchExoplanetData(offset, limit) {
     })
     .catch(error => console.log(error));
 }
+
 
 
 // Display exoplanets in grid format
@@ -96,9 +99,8 @@ function filterExoplanets() {
   displayPagination();
 }
 
-const offset = (currentPage - 1) * itemsPerPage;
-const limit = itemsPerPage;
-fetchExoplanetData(offset, limit);
+
+fetchExoplanetData(currentPage);
 
 document.getElementById('search-input').addEventListener('input', (event) => {
   searchExoplanets(event.target.value);
