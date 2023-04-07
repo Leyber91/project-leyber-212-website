@@ -1,141 +1,102 @@
-const exoplanetCardsElement = document.querySelector('.exoplanet-cards');
-const navigationElement = document.querySelector('#navigation');
-const detailsElement = document.querySelector('#details');
-const planets = []
+const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
+const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json`;
 
-
-let currentPage = 0;
+let exoplanets = [];
+let filteredExoplanets = [];
+let currentPage = 1;
 const itemsPerPage = 10;
 
-async function fetchExoplanetData(offset, limit) {
-  try {
-    const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
-    const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json&offset=${offset}&limit=${limit}`;
-
-    const response = await fetch(proxyUrl + url);
-    const data = await response.json();
-    return processData(data);
-  } catch (error) {
-    console.error('Error fetching exoplanet data:', error);
-    return [];
-  }
+// Fetch exoplanet data from API and map to objects
+function fetchExoplanetData() {
+  fetch(proxyUrl + url)
+    .then(response => response.json())
+    .then(data => {
+      exoplanets = data.map(item => ({
+        name: item.pl_name,
+        radius: item.pl_rade,
+        mass: item.pl_masse,
+        period: item.pl_orbper,
+        eccentricity: item.pl_orbeccen,
+        inclination: item.pl_orbincl
+      }));
+      filteredExoplanets = [...exoplanets];
+      displayExoplanets(currentPage);
+      displayPagination();
+    })
+    .catch(error => console.log(error));
 }
 
-
-
-function processData(data) {
-  return data.map(planet => ({
-    name: planet.pl_name,
-    radius: planet.pl_rade,
-    mass: planet.pl_masse,
-    orbitalPeriod: planet.pl_orbper,
-    orbitalEccentricity: planet.pl_orbeccen,
-    orbitalInclination: planet.pl_orbincl,
-  }));
-}
-
-function showExoplanetDetails(planet) {
-  detailsElement.innerHTML = `
-    <h3>${planet.name}</h3>
-    <p>Radius: ${planet.radius} Earth radii</p>
-    <p>Mass: ${planet.mass} Earth masses</p>
-    <p>Orbital period: ${planet.orbitalPeriod} days</p>
-    <p>Orbital eccentricity: ${planet.orbitalEccentricity}</p>
-    <p>Orbital inclination: ${planet.orbitalInclination} degrees</p>
-  `;
-}
-
-
-function createExoplanetCard(planet) {
-  const card = document.createElement('div');
-  card.classList.add('exoplanet-card');
-
-  const cardFront = document.createElement('div');
-  cardFront.classList.add('card-face', 'card-front');
-  cardFront.innerHTML = `
-    <h3>${planet.name}</h3>
-    <p>Click to view details</p>
-  `;
-
-  const cardBack = document.createElement('div');
-  cardBack.classList.add('card-face', 'card-back');
-  cardBack.innerHTML = `
-    <h3>${planet.name}</h3>
-    <p>Radius: ${planet.radius} Earth radii</p>
-    <p>Mass: ${planet.mass} Earth masses</p>
-    <p>Orbital period: ${planet.orbitalPeriod} days</p>
-    <p>Orbital eccentricity: ${planet.orbitalEccentricity}</p>
-    <p>Orbital inclination: ${planet.orbitalInclination} degrees</p>
-  `;
-
-  card.appendChild(cardFront);
-  card.appendChild(cardBack);
-
-  card.addEventListener('click', () => {
-    if (card.classList.contains('card-flipped')) {
-      card.classList.remove('card-flipped');
-    } else {
-      card.classList.add('card-flipped');
-      showExoplanetDetails(planet);
-    }
-  });
-
-  return card;
-}
-
-
-function renderExoplanetCards(data, page) {
-  exoplanetCardsElement.innerHTML = '';
-  const start = page * itemsPerPage;
-  const end = start + itemsPerPage;
-
-  data.slice(start, end).forEach(planet => {
-    const card = createExoplanetCard(planet);
-    exoplanetCardsElement.appendChild(card);
+// Display exoplanets in grid format
+function displayExoplanets(page) {
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const exoplanetGrid = document.getElementById('exoplanet-grid');
+  exoplanetGrid.innerHTML = '';
+  filteredExoplanets.slice(startIndex, endIndex).forEach(exoplanet => {
+    const exoplanetCard = `
+      <div class="card">
+        <div class="card-front">
+          <h3>${exoplanet.name}</h3>
+        </div>
+        <div class="card-back">
+          <p>Radius: ${exoplanet.radius}</p>
+          <p>Mass: ${exoplanet.mass}</p>
+          <p>Period: ${exoplanet.period}</p>
+          <p>Eccentricity: ${exoplanet.eccentricity}</p>
+          <p>Inclination: ${exoplanet.inclination}</p>
+        </div>
+      </div>
+    `;
+    exoplanetGrid.innerHTML += exoplanetCard;
   });
 }
 
-function renderNavigation(totalItems, page) {
-  navigationElement.innerHTML = '';
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  if (page > 0) {
-    const prevButton = document.createElement('button');
-    prevButton.classList.add('nav-button', 'hover-effect');
-    prevButton.textContent = 'Previous';
-    prevButton.addEventListener('click', () => {
-      currentPage--;
-      renderExoplanetCards(planets, currentPage);
-      renderNavigation(planets.length, currentPage);
-    });
-    navigationElement.appendChild(prevButton);
-  }
-
-  if (page < totalPages - 1) {
-    const nextButton = document.createElement('button');
-    nextButton.classList.add('nav-button', 'hover-effect');
-    nextButton.textContent = 'Next';
-    nextButton.addEventListener('click', () => {
-      currentPage++;
-      renderExoplanetCards(planets, currentPage);
-      renderNavigation(planets.length, currentPage);
-    });
-    navigationElement.appendChild(nextButton);
+// Display pagination buttons
+function displayPagination() {
+  const totalPages = Math.ceil(filteredExoplanets.length / itemsPerPage);
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
+  for (let i = 1; i <= totalPages; i++) {
+    const button = `
+      <button class="pagination-button${i === currentPage ? ' active' : ''}" onclick="changePage(${i})">
+        ${i}
+      </button>
+    `;
+    pagination.innerHTML += button;
   }
 }
 
-(async function() {
-  const planets = await fetchExoplanetData(currentPage * itemsPerPage, itemsPerPage);
-  renderExoplanetCards(planets, currentPage);
-  renderNavigation(planets.length, currentPage);
-})();
+// Change page and update exoplanet grid and pagination
+function changePage(page) {
+  currentPage = page;
+  displayExoplanets(currentPage);
+  displayPagination();
+}
 
-document.addEventListener('scroll', function() {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const parallaxBackgrounds = document.querySelectorAll('.parallax-container .background');
-  
-  parallaxBackgrounds.forEach(function(bg) {
-    bg.style.transform = `translateY(${scrollTop * 0.5}px)`;
+// Search exoplanets by name
+function searchExoplanets(searchTerm) {
+  filteredExoplanets = exoplanets.filter(exoplanet =>
+    exoplanet.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  currentPage = 1;
+  displayExoplanets(currentPage);
+  displayPagination();
+}
+
+// Filter exoplanets by planet characteristic
+function filterExoplanets() {
+  const searchQuery = document.getElementById('search-query').value.toLowerCase();
+  const filteredExoplanets = exoplanets.filter(exoplanet => {
+    const name = exoplanet.name.toLowerCase();
+    return name.includes(searchQuery);
   });
+  exoplanets = filteredExoplanets;
+  displayExoplanets(currentPage);
+  displayPagination();
+}
+
+fetchExoplanetData();
+
+document.getElementById('search-input').addEventListener('input', (event) => {
+  searchExoplanets(event.target.value);
 });
-
