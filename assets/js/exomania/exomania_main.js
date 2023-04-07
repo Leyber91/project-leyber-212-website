@@ -30,7 +30,7 @@ function fetchExoplanetData() {
 function displayExoplanets(page) {
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const exoplanetGrid = document.getElementById('exoplanet-grid');
+  const exoplanetGrid = document.querySelector('.catalog');
   exoplanetGrid.innerHTML = '';
   filteredExoplanets.slice(startIndex, endIndex).forEach(exoplanet => {
     const exoplanetCard = `
@@ -54,7 +54,7 @@ function displayExoplanets(page) {
 // Display pagination buttons
 function displayPagination() {
   const totalPages = Math.ceil(filteredExoplanets.length / itemsPerPage);
-  const pagination = document.getElementById('pagination');
+  const pagination = document.querySelector('.pagination');
   pagination.innerHTML = '';
   for (let i = 1; i <= totalPages; i++) {
     const button = `
