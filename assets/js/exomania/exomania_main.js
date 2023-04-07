@@ -1,5 +1,7 @@
 const exoplanetCardsElement = document.querySelector('.exoplanet-cards');
 const navigationElement = document.querySelector('#navigation');
+const detailsElement = document.querySelector('#details');
+
 
 let currentPage = 0;
 const itemsPerPage = 10;
@@ -18,6 +20,8 @@ async function fetchExoplanetData(offset, limit) {
   }
 }
 
+
+
 function processData(data) {
   return data.map(planet => ({
     name: planet.pl_name,
@@ -29,20 +33,32 @@ function processData(data) {
   }));
 }
 
+function showExoplanetDetails(planet) {
+  detailsElement.innerHTML = `
+    <h3>${planet.name}</h3>
+    <p>Radius: ${planet.radius} Earth radii</p>
+    <p>Mass: ${planet.mass} Earth masses</p>
+    <p>Orbital period: ${planet.orbitalPeriod} days</p>
+    <p>Orbital eccentricity: ${planet.orbitalEccentricity}</p>
+    <p>Orbital inclination: ${planet.orbitalInclination} degrees</p>
+  `;
+}
+
+
 function createExoplanetCard(planet) {
   const card = document.createElement('div');
   card.classList.add('exoplanet-card');
 
-  const frontFace = document.createElement('div');
-  frontFace.classList.add('exoplanet-cards');
-  frontFace.innerHTML = `
+  const cardFront = document.createElement('div');
+  cardFront.classList.add('card-face', 'card-front');
+  cardFront.innerHTML = `
     <h3>${planet.name}</h3>
     <p>Click to view details</p>
   `;
 
-  const backFace = document.createElement('div');
-  backFace.classList.add('card-face', 'card-back');
-  backFace.innerHTML = `
+  const cardBack = document.createElement('div');
+  cardBack.classList.add('card-face', 'card-back');
+  cardBack.innerHTML = `
     <h3>${planet.name}</h3>
     <p>Radius: ${planet.radius} Earth radii</p>
     <p>Mass: ${planet.mass} Earth masses</p>
@@ -51,14 +67,21 @@ function createExoplanetCard(planet) {
     <p>Orbital inclination: ${planet.orbitalInclination} degrees</p>
   `;
 
-  card.appendChild(frontFace);
-  card.appendChild(backFace);
+  card.appendChild(cardFront);
+  card.appendChild(cardBack);
+
   card.addEventListener('click', () => {
-    card.classList.toggle('flipped');
+    if (card.classList.contains('card-flipped')) {
+      card.classList.remove('card-flipped');
+    } else {
+      card.classList.add('card-flipped');
+      showExoplanetDetails(planet);
+    }
   });
 
   return card;
 }
+
 
 function renderExoplanetCards(data, page) {
   exoplanetCardsElement.innerHTML = '';
