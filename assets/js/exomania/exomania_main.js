@@ -34,7 +34,7 @@ function createExoplanetCard(planet) {
   card.classList.add('exoplanet-card');
 
   const frontFace = document.createElement('div');
-  frontFace.classList.add('card-face');
+  frontFace.classList.add('exoplanet-cards');
   frontFace.innerHTML = `
     <h3>${planet.name}</h3>
     <p>Click to view details</p>
