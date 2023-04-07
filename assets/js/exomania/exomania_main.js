@@ -1,6 +1,7 @@
 const exoplanetCardsElement = document.querySelector('.exoplanet-cards');
 const navigationElement = document.querySelector('#navigation');
 const detailsElement = document.querySelector('#details');
+const planets = []
 
 
 let currentPage = 0;
