@@ -1,64 +1,73 @@
-const catalogElement = document.querySelector('#catalog');
+const exoplanetCardsElement = document.querySelector('.exoplanet-cards');
 const navigationElement = document.querySelector('#navigation');
 
 let currentPage = 0;
 const itemsPerPage = 10;
 
-async function fetchAllData(offset, limit) {
-  const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
-  const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json&offset=${offset}&limit=${limit}`;
+async function fetchExoplanetData(offset, limit) {
+  try {
+    const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
+    const url = `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,pl_rade,pl_masse,pl_orbper,pl_orbeccen,pl_orbincl+from+ps&format=json&offset=${offset}&limit=${limit}`;
 
-  const response = await fetch(proxyUrl + url);
-  const data = await response.json();
-  return processData(data);
+    const response = await fetch(proxyUrl + url);
+    const data = await response.json();
+    return processData(data);
+  } catch (error) {
+    console.error('Error fetching exoplanet data:', error);
+    return [];
+  }
 }
 
 function processData(data) {
   return data.map(planet => ({
-    pl_name: planet.pl_name,
-    pl_radius: planet.pl_rade,
-    pl_mass: planet.pl_masse,
-    pl_orbper: planet.pl_orbper,
-    pl_orbeccen: planet.pl_orbeccen,
-    pl_orbincl: planet.pl_orbincl,
+    name: planet.pl_name,
+    radius: planet.pl_rade,
+    mass: planet.pl_masse,
+    orbitalPeriod: planet.pl_orbper,
+    orbitalEccentricity: planet.pl_orbeccen,
+    orbitalInclination: planet.pl_orbincl,
   }));
 }
 
-function renderCatalog(data, page) {
-  catalogElement.innerHTML = '';
+function createExoplanetCard(planet) {
+  const card = document.createElement('div');
+  card.classList.add('exoplanet-card');
+
+  const frontFace = document.createElement('div');
+  frontFace.classList.add('card-face');
+  frontFace.innerHTML = `
+    <h3>${planet.name}</h3>
+    <p>Click to view details</p>
+  `;
+
+  const backFace = document.createElement('div');
+  backFace.classList.add('card-face', 'card-back');
+  backFace.innerHTML = `
+    <h3>${planet.name}</h3>
+    <p>Radius: ${planet.radius} Earth radii</p>
+    <p>Mass: ${planet.mass} Earth masses</p>
+    <p>Orbital period: ${planet.orbitalPeriod} days</p>
+    <p>Orbital eccentricity: ${planet.orbitalEccentricity}</p>
+    <p>Orbital inclination: ${planet.orbitalInclination} degrees</p>
+  `;
+
+  card.appendChild(frontFace);
+  card.appendChild(backFace);
+  card.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+  });
+
+  return card;
+}
+
+function renderExoplanetCards(data, page) {
+  exoplanetCardsElement.innerHTML = '';
   const start = page * itemsPerPage;
   const end = start + itemsPerPage;
 
   data.slice(start, end).forEach(planet => {
-    const entry = document.createElement('div');
-    entry.classList.add('entry', 'card-3d');
-
-    const frontFace = document.createElement('div');
-    frontFace.classList.add('card-face');
-    frontFace.innerHTML = `
-      <h3>${planet.pl_name}</h3>
-      <p>Click to view details</p>
-    `;
-
-    const backFace = document.createElement('div');
-    backFace.classList.add('card-face', 'card-back');
-    backFace.innerHTML = `
-      <h3>${planet.pl_name}</h3>
-      <p>Radius: ${planet.pl_radius} Earth radii</p>
-      <p>Mass: ${planet.pl_mass} Earth masses</p>
-      <p>Orbital period: ${planet.pl_orbper} days</p>
-      <p>Orbital eccentricity: ${planet.pl_orbeccen}</p>
-      <p>Orbital inclination: ${planet.pl_orbincl} degrees</p>
-    `;
-
-    entry.appendChild(frontFace);
-    entry.appendChild(backFace);
-    catalogElement.appendChild(entry);
-
-    // Add click event listener to each card
-    entry.addEventListener('click', () => {
-      entry.classList.toggle('flipped');
-    });
+    const card = createExoplanetCard(planet);
+    exoplanetCardsElement.appendChild(card);
   });
 }
 
@@ -69,10 +78,10 @@ function renderNavigation(totalItems, page) {
   if (page > 0) {
     const prevButton = document.createElement('button');
     prevButton.classList.add('nav-button', 'hover-effect');
-    prevButton.innerHTML = '<i class="icon-arrow-left"></i> Previous';
+    prevButton.textContent = 'Previous';
     prevButton.addEventListener('click', () => {
       currentPage--;
-      renderCatalog(planets, currentPage);
+      renderExoplanetCards(planets, currentPage);
       renderNavigation(planets.length, currentPage);
     });
     navigationElement.appendChild(prevButton);
@@ -81,10 +90,10 @@ function renderNavigation(totalItems, page) {
   if (page < totalPages - 1) {
     const nextButton = document.createElement('button');
     nextButton.classList.add('nav-button', 'hover-effect');
-    nextButton.innerHTML = 'Next <i class="icon-arrow-right"></i>';
+    nextButton.textContent = 'Next';
     nextButton.addEventListener('click', () => {
       currentPage++;
-      renderCatalog(planets, currentPage);
+      renderExoplanetCards(planets, currentPage);
       renderNavigation(planets.length, currentPage);
     });
     navigationElement.appendChild(nextButton);
@@ -92,8 +101,8 @@ function renderNavigation(totalItems, page) {
 }
 
 (async function() {
-  const planets = await fetchAllData(currentPage * itemsPerPage, itemsPerPage);
-  renderCatalog(planets, currentPage);
+  const planets = await fetchExoplanetData(currentPage * itemsPerPage, itemsPerPage);
+  renderExoplanetCards(planets, currentPage);
   renderNavigation(planets.length, currentPage);
 })();
 

@@ -158,6 +158,45 @@ section.exoplanet-section h2 {
   justify-content: center;
 }
 
+section.exoplanet-section {
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  background-color: #1d3d6e;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+section.exoplanet-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+section.exoplanet-section:hover::before {
+  opacity: 1;
+}
+
+section.exoplanet-section h2 {
+  color: #fff;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+#catalog {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 /* Exoplanet Catalog Cards */
 .exoplanet-card {
   background-color: #24508a;
@@ -204,57 +243,29 @@ section.exoplanet-section h2 {
   }
 }
 
-/* Card styles */
+/* Additional styles, if needed, can be added below */
+
 .card-3d {
-  position: relative;
-  transform-style: preserve-3d;
   perspective: 1000px;
-  width: 100%;
-  max-width: 300px;
-  height: 100%;
-}
-
-.card-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  transition: transform 0.5s ease;
-}
-
-.card-face:nth-child(1) {
-  transform: rotateY(0deg);
-}
-
-.card-face:nth-child(2) {
-  transform: rotateY(180deg);
+  transform-style: preserve-3d;
 }
 
 .card-3d:hover .card-face {
   transform: rotateY(180deg);
 }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-  .card-3d {
-    max-width: 100%;
-  }
+.card-face {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s ease;
 }
 
-@media screen and (max-width: 480px) {
-  .card-3d {
-    perspective: none;
-  }
-  .card-face {
-    transform: none;
-    position: static;
-    height: auto;
-    width: auto;
-    display: none;
-  }
-  .card-face:first-child {
-    display: flex;
-  }
+.card-back {
+  transform: rotateY(180deg);
 }
+
+
