@@ -23,7 +23,6 @@ body {
   margin-right: 0;
 }
 
-
 .row {
   display: flex;
   flex-direction: row;
@@ -121,7 +120,6 @@ main {
   flex: 1;
 }
 
-/* Exoplanet Sections */
 section.exoplanet-section {
   margin-bottom: 2rem;
   border-radius: 8px;
@@ -177,9 +175,9 @@ section.exoplanet-section h2 {
   margin-bottom: 1rem;
   /* Add a border to give the card a more sticker-like appearance */
   border: 2px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 300px; /* or whatever width you want */
 }
-
-
 
 .exoplanet-card:hover {
   transform: translateY(-4px);
@@ -210,8 +208,63 @@ section.exoplanet-section h2 {
   }
 }
 
+/* Pokeman card styles */
+.pokemon-card {
+  background-color: #F5F5F5;
+  border-radius: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  transition: transform 0.3s ease;
+  position: relative;
+  border: 2px solid #fff;
+}
 
-/* ... previous CSS code ... */
+.pokemon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pokemon-card h3 {
+  color: #000;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.pokemon-card img {
+  width: 100%;
+  height: auto;
+  margin: auto;
+  display: block;
+}
+
+.pokemon-card p {
+  color: #000;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media screen and (min-width: 480px) {
+  .pokemon-card {
+    flex-basis: calc(50% - 1rem);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .pokemon-card {
+    flex-basis: calc(33.33% - 1rem);
+  }
+}
 
 /* Parallax scrolling */
 .parallax-container {
@@ -235,32 +288,13 @@ section.exoplanet-section h2 {
 }
 
 /* 3D transforms */
-.card-3d {
-  position: relative;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
-
-.card-3d:hover .card-face {
-  transform: rotateY(180deg);
-}
-
-.card-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  transition: transform 0.5s ease;
-}
 
 .card-face:nth-child(2) {
   transform: rotateY(180deg);
 }
 
 /* Hover effects */
-.hover-effect:hover {
+.pokemon-card:hover {
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -318,9 +352,11 @@ section.exoplanet-section h2 {
   position: relative;
   transform-style: preserve-3d;
   perspective: 1000px;
+  width: 100%;
+  max-width: 300px; /* or whatever width you want */
 }
 
-.card-3d:hover .card-face {
+.card-face {
   transform: rotateY(180deg);
 }
 
@@ -336,4 +372,32 @@ section.exoplanet-section h2 {
 
 .card-face:nth-child(2) {
   transform: rotateY(180deg);
+}
+
+.card-back {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .card-3d {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .card-3d {
+    perspective: none;
+  }
+  .card-face {
+    transform: none;
+    position: static;
+    height: auto;
+    width: auto;
+    display: none;
+  }
+  .card-face:first-child {
+    display: flex;
+  }
 }

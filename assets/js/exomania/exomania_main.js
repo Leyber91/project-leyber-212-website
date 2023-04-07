@@ -41,7 +41,7 @@ function renderCatalog(data, page) {
     `;
   
     const backFace = document.createElement('div');
-    backFace.classList.add('card-face');
+    backFace.classList.add('card-face', 'card-back');
     backFace.innerHTML = `
       <h3>${planet.pl_name}</h3>
       <p>Radius: ${planet.pl_radius} Earth radii</p>
@@ -54,6 +54,11 @@ function renderCatalog(data, page) {
     entry.appendChild(frontFace);
     entry.appendChild(backFace);
     catalogElement.appendChild(entry);
+
+    // Add click event listener to each card
+    entry.addEventListener('click', () => {
+      entry.classList.toggle('flipped');
+    });
   });
   
 }
