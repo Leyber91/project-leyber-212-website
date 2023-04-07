@@ -32,14 +32,14 @@ function renderCatalog(data, page) {
   data.slice(start, end).forEach(planet => {
     const entry = document.createElement('div');
     entry.classList.add('entry', 'card-3d');
-  
+
     const frontFace = document.createElement('div');
     frontFace.classList.add('card-face');
     frontFace.innerHTML = `
       <h3>${planet.pl_name}</h3>
       <p>Click to view details</p>
     `;
-  
+
     const backFace = document.createElement('div');
     backFace.classList.add('card-face', 'card-back');
     backFace.innerHTML = `
@@ -50,7 +50,7 @@ function renderCatalog(data, page) {
       <p>Orbital eccentricity: ${planet.pl_orbeccen}</p>
       <p>Orbital inclination: ${planet.pl_orbincl} degrees</p>
     `;
-  
+
     entry.appendChild(frontFace);
     entry.appendChild(backFace);
     catalogElement.appendChild(entry);
@@ -60,9 +60,7 @@ function renderCatalog(data, page) {
       entry.classList.toggle('flipped');
     });
   });
-  
 }
-
 
 function renderNavigation(totalItems, page) {
   navigationElement.innerHTML = '';
@@ -93,11 +91,8 @@ function renderNavigation(totalItems, page) {
   }
 }
 
-
-let planets = [];
-
 (async function() {
-  planets = await fetchAllData(currentPage * itemsPerPage, itemsPerPage);
+  const planets = await fetchAllData(currentPage * itemsPerPage, itemsPerPage);
   renderCatalog(planets, currentPage);
   renderNavigation(planets.length, currentPage);
 })();
