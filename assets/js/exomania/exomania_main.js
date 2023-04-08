@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchExoplanets() {
-  fetch('https://exomania-main.herokuapp.com/get_exoplanets/get_exoplanets')
+  const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
+  const targetUrl = 'https://exomania-main.herokuapp.com/get_exoplanets/get_exoplanets';
+
+  fetch(proxyUrl + targetUrl)
       .then(response => response.json())
       .then(data => displayExoplanets(data))
       .catch(error => console.error('Error fetching exoplanets:', error));
