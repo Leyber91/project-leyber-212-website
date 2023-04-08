@@ -24,6 +24,15 @@ def scheduled_update():
     fetch_and_update_exoplanets()
     print("Scheduled update of exoplanets completed.")
 
+def fill_up_exoplanet_table():
+    exoplanets = Exoplanet.query.all()
+    if not exoplanets:
+        print("Exoplanet table is empty, fetching data from NASA API...")
+        fetch_and_update_exoplanets()
+        exoplanets = Exoplanet.query.all()
+    return exoplanets
+
+
 # Create a scheduler and add a job to run the scheduled_update function every 24 hours
 scheduler = BackgroundScheduler()
 scheduler.add_job(scheduled_update, 'interval', hours=24)
@@ -120,6 +129,8 @@ with app.app_context():
 @app.route('/exoplanets', methods=['GET'])
 def get_exoplanets():
   print("3. Received GET request for exoplanets")
+  fill_up_exoplanet_table()
+
 
   exoplanets = Exoplanet.query.all()
   exoplanets_data = [{
@@ -202,9 +213,6 @@ def fetch_and_update_exoplanets():
   if response.status_code == 200:
     # Clear existing exoplanets from the database
     print("5. Successfully fetched data from NASA API")
-    Exoplanet.query.delete()
-    db.session.commit()
-    print("6. Cleared existing exoplanets from the database")
 
     # Parse XML response and convert it to JSON
     root = ET.fromstring(response.content)
@@ -213,6 +221,10 @@ def fetch_and_update_exoplanets():
     print("Exoplanets Data:", exoplanets_data)
     for exoplanet_data in exoplanets_data:
       print("Processing exoplanet data:", exoplanet_data)
+      # Check if the exoplanet already exists in the database by its name
+      exoplanet = Exoplanet.query.filter_by(name=exoplanet_data['name']).first()
+
+
       exoplanet_fields = [
         "name", "hostname", "pl_bmassj", "pl_radj", "st_dist", "pl_disc", "pl_discmethod", "pl_facility",
         "pl_eqt", "pl_disc_reflink", "pl_pelink", "pl_edelink", "pl_publ_date", "pl_mnum", "pl_orbsmax",
@@ -225,11 +237,19 @@ def fetch_and_update_exoplanets():
         "sy_gaiamagerr2", "sy_vmag", "sy_vmagerr1", "sy_vmagerr2", "pl_dens", "pl_denserr1", "pl_denserr2"
         ]
 
-      exoplanet = Exoplanet(**{field: exoplanet_data[field] for field in exoplanet_fields})
+      # If the exoplanet exists, update its fields with the new data
+        if exoplanet:
+            for field in exoplanet_fields:
+                setattr(exoplanet, field, exoplanet_data[field])
+            print(f"Exoplanet {exoplanet.name} updated")
+        else:
+            # If the exoplanet doesn't exist, create a new entry
+            exoplanet = Exoplanet(**{field: exoplanet_data[field] for field in exoplanet_fields})
+            db.session.add(exoplanet)
+            print(f"Exoplanet {exoplanet.name} added")
 
-
-      db.session.add(exoplanet)
-      db.session.commit()
+        # Commit the changes (either update or insert) to the database
+        db.session.commit()
       print("Exoplanet added:", exoplanet.name)
   else:
       print("Failed to fetch data from NASA API")
