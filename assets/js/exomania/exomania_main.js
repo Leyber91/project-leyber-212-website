@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function fetchExoplanets() {
   const proxyUrl = 'https://leyber-cors-proxy-server.herokuapp.com/';
-  const targetUrl = 'https://exomania-main.herokuapp.com/get_exoplanets/get_exoplanets';
+  const targetUrl = 'https://exomania-main.herokuapp.com/exoplanets';
 
   fetch(proxyUrl + targetUrl)
       .then(response => response.json())
