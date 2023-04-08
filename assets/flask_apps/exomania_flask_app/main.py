@@ -210,7 +210,7 @@ def fetch_and_update_exoplanets():
 
     print("Exoplanets Data:", exoplanets_data)
     for exoplanet_data in exoplanets_data:
-    print("Processing exoplanet data:", exoplanet_data)
+      print("Processing exoplanet data:", exoplanet_data)
       exoplanet_fields = [
         "name", "hostname", "pl_bmassj", "pl_radj", "st_dist", "pl_disc", "pl_discmethod", "pl_facility",
         "pl_eqt", "pl_disc_reflink", "pl_pelink", "pl_edelink", "pl_publ_date", "pl_mnum", "pl_orbsmax",
