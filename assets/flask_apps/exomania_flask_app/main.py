@@ -238,18 +238,18 @@ def fetch_and_update_exoplanets():
         ]
 
       # If the exoplanet exists, update its fields with the new data
-        if exoplanet:
-            for field in exoplanet_fields:
-                setattr(exoplanet, field, exoplanet_data[field])
+      if exoplanet:
+        for field in exoplanet_fields:
+            setattr(exoplanet, field, exoplanet_data[field])
             print(f"Exoplanet {exoplanet.name} updated")
-        else:
+      else:
             # If the exoplanet doesn't exist, create a new entry
             exoplanet = Exoplanet(**{field: exoplanet_data[field] for field in exoplanet_fields})
             db.session.add(exoplanet)
             print(f"Exoplanet {exoplanet.name} added")
 
         # Commit the changes (either update or insert) to the database
-        db.session.commit()
+      db.session.commit()
       print("Exoplanet added:", exoplanet.name)
   else:
       print("Failed to fetch data from NASA API")
