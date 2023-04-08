@@ -188,7 +188,7 @@ def fetch_and_update_exoplanets():
   print("4. Received POST request for updating exoplanets")
   # Use the CORS proxy server to bypass CORS restrictions
   url = f"{CORS_PROXY_URL}{NASA_API_URL}"
-  headers = {'x-requested-with': 'exomania-main'}  # Replace 'your-app-name' with an appropriate name for your application
+  headers = {'origin': 'https://exomania-main.herokuapp.com','x-requested-with': 'exomania-main'}  # Replace 'your-app-name' with an appropriate name for your application
 
   response = requests.get(url, headers=headers)
 
