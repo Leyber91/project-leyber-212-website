@@ -112,7 +112,9 @@ class Exoplanet(db.Model):
 
 
 # Create the tables in the database
-db.create_all()
+with app.app_context():
+    db.create_all()
+
 
 
 @app.route('/exoplanets', methods=['GET'])
