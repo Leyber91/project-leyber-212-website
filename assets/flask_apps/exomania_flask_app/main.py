@@ -1,14 +1,14 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from flask import jsonify
 import os
 import requests
-from flask import request
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+CORS(app)
 
 print("1. Flask app and database initialized")
 
@@ -93,6 +93,7 @@ class Exoplanet(db.Model):
 
 
 # Create the tables in the database
+db.create_all()
 
 
 @app.route('/exoplanets', methods=['GET'])
@@ -102,7 +103,7 @@ def get_exoplanets():
   exoplanets = Exoplanet.query.all()
   exoplanets_data = [{
     'id': exoplanet.id,
-    'name': exoplanet.pl_name,
+    'name': exoplanet.name,
     'hostname': exoplanet.hostname,
     'mass': exoplanet.pl_bmassj,
     'radius': exoplanet.pl_radj,
@@ -156,6 +157,12 @@ def get_exoplanets():
 
 CORS_PROXY_URL = "https://leyber-cors-proxy-server.herokuapp.com/"
 NASA_API_URL = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars"
+
+@app.route('/update_exoplanets', methods=['POST'])
+def update_exoplanets():
+    fetch_and_update_exoplanets()
+    return jsonify({'message': 'Exoplanets updated successfully'}), 200
+
 
 def fetch_and_update_exoplanets():
     # The content of the original update_exoplanets function goes here, except the return statement.
@@ -244,15 +251,8 @@ def fetch_and_update_exoplanets():
     db.session.commit()
 
 
-# Add this line at the end of your code to update the database when the code is executed.
-fetch_and_update_exoplanets()
-
 if __name__ == "__main__":
   print("2. Starting Flask app")
-  
-  with app.app_context():
-    fetch_and_update_exoplanets()
-    db.create_all()
   app.run(debug=True)
 
 
