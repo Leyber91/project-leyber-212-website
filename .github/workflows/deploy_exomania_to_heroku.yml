@@ -12,17 +12,15 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-      with:
-        node-version: 16
 
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.x
-        node-version: 16
 
     - name: Install dependencies
       run: |
+        cd assets/flask_apps/exomania_flask_app
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
@@ -33,3 +31,5 @@ jobs:
         heroku_app_name: "exomania-main"
         heroku_email: "leyber.91.2@gmail.com"
         appdir: "assets/flask_apps/exomania_flask_app"
+      env:
+        WORKING_DIRECTORY: "assets/flask_apps/exomania_flask_app"
