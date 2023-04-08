@@ -4,5 +4,4 @@ Flask-CORS
 requests
 psycopg2-binary
 Flask-Migrate
-os
 
