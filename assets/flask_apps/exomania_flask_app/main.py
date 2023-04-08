@@ -5,7 +5,7 @@ import requests
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://sfcdfdpjqyuwmv:660930987a33a88d9045379be0f846eefe8a998dc2627e74d3538095c491a413@ec2-35-169-9-79.compute-1.amazonaws.com:5432/d2bc4pipooeeg4"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
