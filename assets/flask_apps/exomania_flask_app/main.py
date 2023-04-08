@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import requests
 from flask_cors import CORS
+from apscheduler.schedulers.background import BackgroundScheduler
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://sfcdfdpjqyuwmv:660930987a33a88d9045379be0f846eefe8a998dc2627e74d3538095c491a413@ec2-35-169-9-79.compute-1.amazonaws.com:5432/d2bc4pipooeeg4"
@@ -10,6 +12,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
+def update_exoplanets():
+    fetch_and_update_exoplanets()
+    return jsonify({'message': 'Exoplanets updated successfully'}), 200
+
+# Function to run scheduled update of exoplanets
+def scheduled_update():
+    print("Running scheduled update of exoplanets...")
+    fetch_and_update_exoplanets()
+    print("Scheduled update of exoplanets completed.")
+
+# Create a scheduler and add a job to run the scheduled_update function every 24 hours
+scheduler = BackgroundScheduler()
+scheduler.add_job(scheduled_update, 'interval', hours=24)
+scheduler.start()
 
 print("1. Flask app and database initialized")
 

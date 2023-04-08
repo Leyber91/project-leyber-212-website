@@ -5,4 +5,5 @@ requests
 psycopg2-binary
 Flask-Migrate
 gunicorn
+APScheduler
 
