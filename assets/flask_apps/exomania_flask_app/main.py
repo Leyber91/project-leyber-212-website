@@ -12,7 +12,6 @@ db = SQLAlchemy(app)
 
 print("1. Flask app and database initialized")
 
-
 class Exoplanet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
