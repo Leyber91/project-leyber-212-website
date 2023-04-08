@@ -182,12 +182,15 @@ def update_exoplanets():
 
 
 def fetch_and_update_exoplanets():
+  
     # The content of the original update_exoplanets function goes here, except the return statement.
     # The return statement is the content of the new update_exoplanets function.
   print("4. Received POST request for updating exoplanets")
   # Use the CORS proxy server to bypass CORS restrictions
   url = f"{CORS_PROXY_URL}{NASA_API_URL}"
   response = requests.get(url)
+  print("Status Code:", response.status_code)
+  print("Response Content:", response.content)
 
   if response.status_code == 200:
     # Clear existing exoplanets from the database
@@ -197,7 +200,9 @@ def fetch_and_update_exoplanets():
     print("6. Cleared existing exoplanets from the database")
 
     exoplanets_data = response.json()
+    print("Exoplanets Data:", exoplanets_data)
     for exoplanet_data in exoplanets_data:
+    print("Processing exoplanet data:", exoplanet_data)
       exoplanet = Exoplanet(name=exoplanet_data["name"],
                             hostname=exoplanet_data["hostname"],
                             pl_bmassj=exoplanet_data["pl_bmassj"],
