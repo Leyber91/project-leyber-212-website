@@ -8,6 +8,12 @@ import xml.etree.ElementTree as ET
 from xmljson import badgerfish as bf
 
 
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://sfcdfdpjqyuwmv:660930987a33a88d9045379be0f846eefe8a998dc2627e74d3538095c491a413@ec2-35-169-9-79.compute-1.amazonaws.com:5432/d2bc4pipooeeg4"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+CORS(app)
+
 
 def fetch_and_update_exoplanets():
   
@@ -81,14 +87,6 @@ def scheduled_update():
     fetch_and_update_exoplanets()
     print("Scheduled update of exoplanets completed.")
 
-
-
-
-
-
-
-
-
 @app.route('/exoplanets', methods=['GET'])
 def get_exoplanets():
   print("3. Received GET request for exoplanets")
@@ -157,12 +155,6 @@ NASA_API_URL = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+
 def update_exoplanets():
     fetch_and_update_exoplanets()
     return jsonify({'message': 'Exoplanets updated successfully'}), 200
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://sfcdfdpjqyuwmv:660930987a33a88d9045379be0f846eefe8a998dc2627e74d3538095c491a413@ec2-35-169-9-79.compute-1.amazonaws.com:5432/d2bc4pipooeeg4"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-CORS(app)
 
 
 
