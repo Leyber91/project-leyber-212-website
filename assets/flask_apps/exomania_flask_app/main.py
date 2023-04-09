@@ -24,7 +24,15 @@ def fetch_and_update_exoplanets():
   url = f"{CORS_PROXY_URL}{NASA_API_URL}"
   headers = {'origin': 'https://exomania-main.herokuapp.com','x-requested-with': 'exomania-main'}  # Replace 'your-app-name' with an appropriate name for your application
 
-  response = requests.get(url, headers=headers)
+  try:
+        response = requests.get(url, headers=headers, timeout=300)  # Set timeout to 5 minutes (300 seconds)
+        response.raise_for_status()  # Raises a HTTPError if response code is not 200
+    except Timeout:
+        print("Request timed out")
+        return
+    except requests.exceptions.HTTPError as err:
+        print(f"HTTP Error: {err}")
+        return
 
   print("Status Code:", response.status_code)
   print("Response Content:", response.content)
