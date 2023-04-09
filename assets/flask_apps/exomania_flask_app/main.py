@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 import requests
+from requests.exceptions import Timeout, HTTPError, RequestException
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
 import xml.etree.ElementTree as ET
@@ -27,7 +28,7 @@ def fetch_and_update_exoplanets():
   try:
         response = requests.get(url, headers=headers, timeout=300)  # Set timeout to 5 minutes (300 seconds)
         response.raise_for_status()  # Raises a HTTPError if response code is not 200
-  except Timeout:
+  except requests.exceptions.Timeout:
         print("Request timed out")
         return
   except requests.exceptions.HTTPError as err:
