@@ -1,0 +1,10 @@
+2023-04-09T02:31:45.677282+00:00 app[web.1]: 	--version
+2023-04-09T02:31:45.677282+00:00 app[web.1]: Shell options:
+2023-04-09T02:31:45.677282+00:00 app[web.1]: 	-ilrsD or -c command or -O shopt_option		(invocation only)
+2023-04-09T02:31:45.677282+00:00 app[web.1]: 	-abefhkmnptuvxBCHP or -o option
+2023-04-09T02:31:45.807455+00:00 heroku[web.1]: Process exited with status 2
+2023-04-09T02:31:45.854158+00:00 heroku[web.1]: State changed from starting to crashed
+2023-04-09T02:32:10.453009+00:00 app[web.1]: [2023-04-09 02:32:10 +0000] [2] [INFO] Shutting down: Master
+2023-04-09T02:32:10.453996+00:00 heroku[web.1]: Error R12 (Exit timeout) -> At least one process failed to exit within 30 seconds of SIGTERM
+2023-04-09T02:32:10.456158+00:00 heroku[web.1]: Stopping remaining processes with SIGKILL
+2023-04-09T02:32:10.578624+00:00 heroku[web.1]: Process exited with status 137

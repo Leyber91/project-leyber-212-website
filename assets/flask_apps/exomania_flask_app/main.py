@@ -16,6 +16,9 @@ db = SQLAlchemy(app)
 CORS(app)
 
 
+CORS_PROXY_URL = "https://leyber-cors-proxy-server.herokuapp.com/"
+NASA_API_URL = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars"
+
 def fetch_and_update_exoplanets():
   
     # The content of the original update_exoplanets function goes here, except the return statement.
@@ -49,8 +52,10 @@ def fetch_and_update_exoplanets():
     print("Exoplanets Data:", exoplanets_data)
     for exoplanet_data in exoplanets_data:
       print("Processing exoplanet data:", exoplanet_data)
+      exoplanet_name = exoplanet_data['{http://www.ivoa.net/xml/VOTable/v1.3}TD'][0]
+
       # Check if the exoplanet already exists in the database by its name
-      exoplanet = Exoplanet.query.filter_by(name=exoplanet_data['name']).first()
+      exoplanet = Exoplanet.query.filter_by(name=exoplanet_name).first()
 
 
       exoplanet_fields = [
@@ -157,8 +162,6 @@ def get_exoplanets():
   return jsonify(exoplanets_data)
 
 
-CORS_PROXY_URL = "https://leyber-cors-proxy-server.herokuapp.com/"
-NASA_API_URL = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+*+from+pscomppars"
 
 @app.route('/update_exoplanets', methods=['POST'])
 def update_exoplanets():
