@@ -30,7 +30,7 @@ def fill_up_exoplanet_table():
         print("Exoplanet table is empty, fetching data from NASA API...")
         fetch_and_update_exoplanets()
         exoplanets = Exoplanet.query.all()
-    return exoplanets
+    return Exoplanet.query.all()
 
 
 # Create a scheduler and add a job to run the scheduled_update function every 24 hours
@@ -123,6 +123,7 @@ class Exoplanet(db.Model):
 # Create the tables in the database
 with app.app_context():
     db.create_all()
+    fetch_and_update_exoplanets()
 
 
 
