@@ -99,17 +99,18 @@ function populateCarousel(data) {
 let carouselPaused = false;
 
 function togglePausePlayButton() {
-  const pauseIcon = document.querySelector('.pause-play-button .fa-pause');
-  const playIcon = document.querySelector('.pause-play-button .fa-play');
-
-  if (carouselPaused) {
-    pauseIcon.style.display = 'inline-block';
-    playIcon.style.display = 'none';
-  } else {
-    pauseIcon.style.display = 'none';
-    playIcon.style.display = 'inline-block';
+    const pauseIcon = pausePlayButton.querySelector('.fa-pause');
+    const playIcon = pausePlayButton.querySelector('.fa-play');
+  
+    if (carouselPaused) {
+      pauseIcon.style.display = 'none';
+      playIcon.style.display = 'inline-block';
+    } else {
+      pauseIcon.style.display = 'inline-block';
+      playIcon.style.display = 'none';
+    }
   }
-}
+  
   
 function initializeCarousel() {
     if ($('.carousel').hasClass('slick-initialized')) {
