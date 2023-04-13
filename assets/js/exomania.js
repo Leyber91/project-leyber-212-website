@@ -149,7 +149,12 @@ function initializeCarousel() {
       carouselPaused = !carouselPaused;
       togglePausePlayButton();
     });
+  
+    // Set the initial button state
+    carouselPaused = false;
+    togglePausePlayButton();
   }
+  
   
   
 
