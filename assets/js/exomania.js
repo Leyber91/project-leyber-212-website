@@ -9,12 +9,24 @@ function formatValue(value, unit) {
   return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
 }
 
+function animateLogo() {
+    const logo = document.querySelector('.logo');
+    logo.classList.add('logo-animation');
+  }
+  
+
 function populateCarousel(data) {
   const carousel = document.querySelector('.carousel');
   const loadMoreButton = document.createElement('button');
   loadMoreButton.textContent = 'Load More Planets';
   loadMoreButton.classList.add('load-more-button');
   document.body.appendChild(loadMoreButton);
+
+  const goBackHomeButton = document.createElement('button');
+  goBackHomeButton.textContent = 'Go Back Home';
+  goBackHomeButton.classList.add('back-home-button');
+  goBackHomeButton.onclick = () => window.location.href = 'index.html';
+  document.body.appendChild(goBackHomeButton);
 
   function getRandomPlanets(num) {
     const planets = [];
@@ -53,33 +65,35 @@ function populateCarousel(data) {
 
   const initialPlanets = getRandomPlanets(10);
   displayPlanets(initialPlanets);
+  animateLogo();
 }
 
 function initializeCarousel() {
-    if ($('.carousel').hasClass('slick-initialized')) {
-      $('.carousel').slick('unslick');
-    }
-  
-    $('.carousel').slick({
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 2000,
-      arrows: true,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 2,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 1,
-          },
-        },
-      ],
-    });
+  if ($('.carousel').hasClass('slick-initialized')) {
+    $('.carousel').slick('unslick');
   }
-  
+
+  $('.carousel').slick({
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  });
+}
+
+animateLogo();
