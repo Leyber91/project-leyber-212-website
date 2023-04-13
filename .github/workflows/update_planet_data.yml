@@ -23,4 +23,4 @@ jobs:
         git config --global user.email "actions@users.noreply.github.com"
         git add exoplanet_data.json
         git commit -m "Update exoplanet data" || exit 0
-        git push
+        git push https://${{ secrets.GH_TOKEN }}@github.com/Leyber91/project-leyber-212-website.git HEAD:main
