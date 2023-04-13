@@ -97,3 +97,4 @@ function initializeCarousel() {
 }
 
 animateLogo();
+$('.load-more-button').hide().fadeIn(1000);
