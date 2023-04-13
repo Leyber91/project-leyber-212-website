@@ -17,9 +17,12 @@ header {
   padding: 2rem;
 }
 
+/* Logo styles */
 .logo {
   font-size: 4rem;
   animation: pulse 2s infinite;
+  text-shadow: -10px 0 10px rgba(255, 255, 255, 0.5);
+  animation: move-shadow 2s infinite;
 }
 
 @keyframes pulse {
