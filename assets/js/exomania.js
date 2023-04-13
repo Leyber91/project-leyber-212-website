@@ -5,25 +5,30 @@ fetch('exoplanet_data.json')
     initializeCarousel();
   });
 
-function populateCarousel(data) {
-  const carousel = document.querySelector('.carousel');
-  data.forEach(planet => {
-    const card = document.createElement('div');
-    card.classList.add('carousel-item');
-    card.innerHTML = `
-      <h2>${planet.pl_name}</h2>
-      <p>Host Star: ${planet.hostname}</p>
-      <p>Distance from Earth: ${planet.sy_dist.toFixed(2)} Parsecs</p>
-      <p>Orbital Period: ${planet.pl_orbper.toFixed(2)} Days</p>
-      <p>Semi-Major Axis: ${planet.pl_orbsmax.toFixed(2)} AU</p>
-      <p>Planet Radius: ${planet.pl_rade.toFixed(2)} Earth Radii</p>
-      <p>Planet Mass: ${planet.pl_masse.toFixed(2)} Earth Masses</p>
-      <p>Equilibrium Temperature: ${planet.pl_eqt ? planet.pl_eqt.toFixed(2) : 'N/A'} K</p>
-      <p>Stellar Effective Temperature: ${planet.st_teff.toFixed(2)} K</p>
-    `;
-    carousel.appendChild(card);
-  });
-}
+  function formatValue(value, unit) {
+    return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
+  }
+  
+  function populateCarousel(data) {
+    const carousel = document.querySelector('.carousel');
+    data.forEach(planet => {
+      const card = document.createElement('div');
+      card.classList.add('carousel-item');
+      card.innerHTML = `
+        <h2>${planet.pl_name}</h2>
+        <p>Host Star: ${planet.hostname}</p>
+        <p>Distance from Earth: ${formatValue(planet.sy_dist, 'Parsecs')}</p>
+        <p>Orbital Period: ${formatValue(planet.pl_orbper, 'Days')}</p>
+        <p>Semi-Major Axis: ${formatValue(planet.pl_orbsmax, 'AU')}</p>
+        <p>Planet Radius: ${formatValue(planet.pl_rade, 'Earth Radii')}</p>
+        <p>Planet Mass: ${formatValue(planet.pl_masse, 'Earth Masses')}</p>
+        <p>Equilibrium Temperature: ${formatValue(planet.pl_eqt, 'K')}</p>
+        <p>Stellar Effective Temperature: ${formatValue(planet.st_teff, 'K')}</p>
+      `;
+      carousel.appendChild(card);
+    });
+  }
+  
 
 function initializeCarousel() {
   $('.carousel').slick({
