@@ -168,7 +168,7 @@ header {
 
 .pause-play-button {
   position: absolute;
-  bottom: 10px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.5);
@@ -178,6 +178,7 @@ header {
   cursor: pointer;
   transition: background 0.3s;
 }
+
 
 
 .pause-play-button:hover {

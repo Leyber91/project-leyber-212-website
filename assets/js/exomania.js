@@ -98,7 +98,7 @@ function populateCarousel(data) {
 
 let carouselPaused = false;
 
-function togglePausePlayButton() {
+function togglePausePlayButton(pausePlayButton) {
     const pauseIcon = pausePlayButton.querySelector('.fa-pause');
     const playIcon = pausePlayButton.querySelector('.fa-play');
   
@@ -148,14 +148,13 @@ function initializeCarousel() {
         $('.carousel').slick('slickPause');
       }
       carouselPaused = !carouselPaused;
-      togglePausePlayButton();
+      togglePausePlayButton(pausePlayButton);
     });
   
     // Set the initial button state
     carouselPaused = false;
-    togglePausePlayButton();
+    togglePausePlayButton(pausePlayButton);
   }
-  
   
   
 
