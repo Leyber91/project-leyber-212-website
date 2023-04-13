@@ -13,6 +13,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Check secret access
+      run: |
+        echo "Secret is available and masked: ***${{ secrets.GH_PAT }}***"
+
     - name: Fetch data from NASA API
       run: |
         curl "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name,hostname,sy_dist,pl_orbper,pl_orbsmax,pl_rade,pl_masse,pl_eqt,st_teff+from+ps&format=json" -o exoplanet_data.json
