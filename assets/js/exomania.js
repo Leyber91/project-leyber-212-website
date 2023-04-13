@@ -5,13 +5,29 @@ fetch('exoplanet_data.json')
     initializeCarousel();
   });
 
-  function formatValue(value, unit) {
-    return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
+function formatValue(value, unit) {
+  return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
+}
+
+function populateCarousel(data) {
+  const carousel = document.querySelector('.carousel');
+  const loadMoreButton = document.createElement('button');
+  loadMoreButton.textContent = 'Load More Planets';
+  loadMoreButton.classList.add('load-more-button');
+  document.body.appendChild(loadMoreButton);
+
+  function getRandomPlanets(num) {
+    const planets = [];
+    for (let i = 0; i < num; i++) {
+      const randomIndex = Math.floor(Math.random() * data.length);
+      planets.push(data[randomIndex]);
+    }
+    return planets;
   }
-  
-  function populateCarousel(data) {
-    const carousel = document.querySelector('.carousel');
-    data.forEach(planet => {
+
+  function displayPlanets(planets) {
+    carousel.innerHTML = '';
+    planets.forEach(planet => {
       const card = document.createElement('div');
       card.classList.add('carousel-item');
       card.innerHTML = `
@@ -28,7 +44,15 @@ fetch('exoplanet_data.json')
       carousel.appendChild(card);
     });
   }
-  
+
+  loadMoreButton.addEventListener('click', () => {
+    const randomPlanets = getRandomPlanets(10);
+    displayPlanets(randomPlanets);
+  });
+
+  const initialPlanets = getRandomPlanets(10);
+  displayPlanets(initialPlanets);
+}
 
 function initializeCarousel() {
   $('.carousel').slick({
