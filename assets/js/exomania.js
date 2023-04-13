@@ -1,3 +1,5 @@
+const pausePlayButton = document.querySelector('.pause-play-button');
+
 fetch('exoplanet_data.json')
   .then(response => response.json())
   .then(data => {
@@ -112,7 +114,7 @@ function togglePausePlayButton(pausePlayButton) {
   }
   
   
-function initializeCarousel() {
+  function initializeCarousel() {
     if ($('.carousel').hasClass('slick-initialized')) {
       $('.carousel').slick('unslick');
     }
@@ -140,7 +142,6 @@ function initializeCarousel() {
     });
   
     // Add event listener for the pause/play button
-    const pausePlayButton = document.querySelector('.pause-play-button');
     pausePlayButton.addEventListener('click', () => {
       if (carouselPaused) {
         $('.carousel').slick('slickPlay');
@@ -154,7 +155,7 @@ function initializeCarousel() {
     // Set the initial button state
     carouselPaused = false;
     togglePausePlayButton(pausePlayButton);
-  }
+}
   
   
 
