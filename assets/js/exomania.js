@@ -96,7 +96,20 @@ function populateCarousel(data) {
   animateLogo();
 }
 
-function initializeCarousel() {
+function togglePausePlayButton(isPaused) {
+    const pauseIcon = document.querySelector('.pause-play-button .fa-pause');
+    const playIcon = document.querySelector('.pause-play-button .fa-play');
+    
+    if (isPaused) {
+      pauseIcon.style.display = 'none';
+      playIcon.style.display = 'inline-block';
+    } else {
+      pauseIcon.style.display = 'inline-block';
+      playIcon.style.display = 'none';
+    }
+  }
+  
+  function initializeCarousel() {
     if ($('.carousel').hasClass('slick-initialized')) {
       $('.carousel').slick('unslick');
     }
@@ -126,17 +139,16 @@ function initializeCarousel() {
     // Add event listener for the pause/play button
     const pausePlayButton = document.querySelector('.pause-play-button');
     pausePlayButton.addEventListener('click', () => {
-      if ($('.carousel').slick('slickGetOption', 'autoplay')) {
-        $('.carousel').slick('slickSetOption', 'autoplay', false, true);
-        pausePlayButton.querySelector('.fa-pause').style.display = 'none';
-        pausePlayButton.querySelector('.fa-play').style.display = 'inline-block';
+      const isPaused = $('.carousel').slick('slickGetOption', 'autoplay');
+      if (isPaused) {
+        $('.carousel').slick('slickSetOption', 'autoplay', false, false);
       } else {
-        $('.carousel').slick('slickSetOption', 'autoplay', true, true);
-        pausePlayButton.querySelector('.fa-pause').style.display = 'inline-block';
-        pausePlayButton.querySelector('.fa-play').style.display = 'none';
+        $('.carousel').slick('slickSetOption', 'autoplay', true, false);
       }
+      togglePausePlayButton(isPaused);
     });
   }
+  
   
 
 animateLogo();
