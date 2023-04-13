@@ -166,25 +166,3 @@ header {
   right: 1rem;
 }
 
-.pause-play-button {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.5);
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-
-
-.pause-play-button:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.pause-play-button i {
-  transition: display 0.3s;
-}
