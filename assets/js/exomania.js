@@ -43,6 +43,7 @@ function populateCarousel(data) {
       `;
       carousel.appendChild(card);
     });
+    initializeCarousel();
   }
 
   loadMoreButton.addEventListener('click', () => {
@@ -55,6 +56,7 @@ function populateCarousel(data) {
 }
 
 function initializeCarousel() {
+  $('.carousel').slick('unslick');
   $('.carousel').slick({
     slidesToShow: 3,
     slidesToScroll: 1,
