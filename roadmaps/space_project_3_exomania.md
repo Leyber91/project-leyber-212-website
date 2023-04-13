@@ -2,7 +2,7 @@
 
 ## Stage 1: Data Collection and Catalog Display
 
-- Connect with NASA's API to gather the latest data on exoplanets, including information such as planet name, mass, distance from its star, atmospheric composition, and orbital characteristics
+- Connect with NASA's API to gather the latest data on exoplanets, including information such as planet name, mass, distance from its star, atmospheric composition, and orbital characteristics. Could get a JSON
 - Process the data using SQL to create a structured and organized database of exoplanets that can be easily queried and updated with new information as it becomes available
 - Develop a catalog display of the exoplanets that allows users to browse through the list of exoplanets and view basic information such as planet name, mass, and distance from Earth
 - Incorporate a text description of each planet to provide additional information, such as atmospheric composition and notable features
