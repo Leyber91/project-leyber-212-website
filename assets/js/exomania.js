@@ -37,6 +37,32 @@ function populateCarousel(data) {
     return planets;
   }
 
+  function generateDescription(planet) {
+    let description = `Welcome to ${planet.pl_name}! `;
+  
+    // Calculate and add more characteristics based on the available data
+    if (planet.sy_dist !== null) {
+      const lightYears = (planet.sy_dist * 3.26156).toFixed(2);
+      description += `This exoplanet is located ${lightYears} light-years away from Earth in the ${planet.hostname} star system. `;
+    }
+  
+    if (planet.pl_orbper !== null && planet.pl_orbsmax !== null) {
+      const orbitalVelocity = (2 * Math.PI * planet.pl_orbsmax * 215) / planet.pl_orbper;
+      description += `It orbits its host star at an approximate speed of ${orbitalVelocity.toFixed(2)} km/s. `;
+    }
+  
+    if (planet.pl_rade !== null) {
+      const planetRadiusKm = (planet.pl_rade * 6371).toFixed(2);
+      description += `With a radius of ${planetRadiusKm} km, it's ${planet.pl_rade.toFixed(2)} times larger than Earth. `;
+    }
+  
+    if (planet.st_teff !== null) {
+      description += `The host star has an effective temperature of ${planet.st_teff.toFixed(2)} K. `;
+    }
+  
+    return description;
+  }
+  
   function displayPlanets(planets) {
     carousel.innerHTML = '';
     planets.forEach(planet => {
@@ -44,6 +70,7 @@ function populateCarousel(data) {
       card.classList.add('carousel-item');
       card.innerHTML = `
         <h2>${planet.pl_name}</h2>
+        <p>${generateDescription(planet)}</p>
         <p>Host Star: ${planet.hostname}</p>
         <p>Distance from Earth: ${formatValue(planet.sy_dist, 'Parsecs')}</p>
         <p>Orbital Period: ${formatValue(planet.pl_orbper, 'Days')}</p>
@@ -57,6 +84,7 @@ function populateCarousel(data) {
     });
     initializeCarousel();
   }
+  
 
   loadMoreButton.addEventListener('click', () => {
     const randomPlanets = getRandomPlanets(10);
@@ -69,32 +97,47 @@ function populateCarousel(data) {
 }
 
 function initializeCarousel() {
-  if ($('.carousel').hasClass('slick-initialized')) {
-    $('.carousel').slick('unslick');
+    if ($('.carousel').hasClass('slick-initialized')) {
+      $('.carousel').slick('unslick');
+    }
+  
+    $('.carousel').slick({
+      slidesToShow: 3,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 2000,
+      arrows: true,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 2,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+          },
+        },
+      ],
+    });
+  
+    // Add event listener for the pause/play button
+    const pausePlayButton = document.querySelector('.pause-play-button');
+    pausePlayButton.addEventListener('click', () => {
+      if ($('.carousel').slick('slickGetOption', 'autoplay')) {
+        $('.carousel').slick('slickSetOption', 'autoplay', false, true);
+        pausePlayButton.querySelector('.fa-pause').style.display = 'none';
+        pausePlayButton.querySelector('.fa-play').style.display = 'inline-block';
+      } else {
+        $('.carousel').slick('slickSetOption', 'autoplay', true, true);
+        pausePlayButton.querySelector('.fa-pause').style.display = 'inline-block';
+        pausePlayButton.querySelector('.fa-play').style.display = 'none';
+      }
+    });
   }
-
-  $('.carousel').slick({
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    arrows: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  });
-}
+  
 
 animateLogo();
 $('.load-more-button').hide().fadeIn(1000);
