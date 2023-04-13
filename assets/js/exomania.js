@@ -96,45 +96,61 @@ function populateCarousel(data) {
   animateLogo();
 }
 
-function togglePausePlayButton(isPaused) {
-    const pauseIcon = document.querySelector('.pause-play-button .fa-pause');
-    const playIcon = document.querySelector('.pause-play-button .fa-play');
-    
-    if (isPaused) {
-      pauseIcon.style.display = 'none';
-      playIcon.style.display = 'inline-block';
-    } else {
-      pauseIcon.style.display = 'inline-block';
-      playIcon.style.display = 'none';
-    }
+let carouselPaused = false;
+
+function togglePausePlayButton() {
+  const pauseIcon = document.querySelector('.pause-play-button .fa-pause');
+  const playIcon = document.querySelector('.pause-play-button .fa-play');
+
+  if (carouselPaused) {
+    pauseIcon.style.display = 'inline-block';
+    playIcon.style.display = 'none';
+  } else {
+    pauseIcon.style.display = 'none';
+    playIcon.style.display = 'inline-block';
   }
-  
-  function initializeCarousel() {
-    if ($('.carousel').hasClass('slick-initialized')) {
-      $('.carousel').slick('unslick');
+}
+
+function initializeCarousel() {
+  if ($('.carousel').hasClass('slick-initialized')) {
+    $('.carousel').slick('unslick');
+  }
+
+  $('.carousel').slick({
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  });
+
+  // Add event listener for the pause/play button
+  const pausePlayButton = document.querySelector('.pause-play-button');
+  pausePlayButton.addEventListener('click', () => {
+    if (carouselPaused) {
+      $('.carousel').slick('slickPlay');
+    } else {
+      $('.carousel').slick('slickPause');
     }
-  
-    $('.carousel').slick({
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 2000,
-      arrows: true,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 2,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 1,
-          },
-        },
-      ],
-    });
+    carouselPaused = !carouselPaused;
+    togglePausePlayButton();
+  });
+}
+
   
     // Add event listener for the pause/play button
     const pausePlayButton = document.querySelector('.pause-play-button');

@@ -168,15 +168,17 @@ header {
 
 .pause-play-button {
   position: absolute;
-  bottom: 15px;
-  right: 15px;
-  background: rgba(0, 0, 0, 0.6);
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.5);
   border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 50%;
   cursor: pointer;
   transition: background 0.3s;
 }
+
 
 .pause-play-button:hover {
   background: rgba(0, 0, 0, 0.8);
