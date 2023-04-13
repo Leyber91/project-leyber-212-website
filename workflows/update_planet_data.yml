@@ -3,6 +3,7 @@ name: Update Exoplanet Data
 on:
   schedule:
     - cron: '0 0 * * *' # This will run the workflow daily at 00:00 UTC
+  workflow_dispatch:
 
 jobs:
   update_data:
