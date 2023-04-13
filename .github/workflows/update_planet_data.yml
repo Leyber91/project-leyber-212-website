@@ -32,5 +32,5 @@ jobs:
         git config --global user.email "actions@users.noreply.github.com"
         git add exoplanet_data.json
         git commit -m "Update exoplanet data" || exit 0
-        git remote set-url origin git@github.com:Leyber91/project-leyber-212-website.git
+        git remote set-url origin https://github.com/Leyber91/project-leyber-212-website.git
         git push
