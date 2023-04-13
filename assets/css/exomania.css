@@ -135,3 +135,31 @@ header {
 .load-more-button:hover {
   background-color: rgba(255, 255, 255, 0.8);
 }
+
+.load-more-button,
+.back-to-home-button {
+  position: fixed;
+  bottom: 1rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.load-more-button:hover,
+.back-to-home-button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.load-more-button {
+  left: 1rem;
+}
+
+.back-to-home-button {
+  right: 1rem;
+}
+
