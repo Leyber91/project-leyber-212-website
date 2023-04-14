@@ -88,8 +88,8 @@ function generateCompositionStyle(composition) {
   function generateTemperatureBorderStyle(temperature) {
     if (temperature === null) return {};
   
-    const tempMin = 100; // Minimum temperature for icy effect
-    const tempMax = 1000; // Maximum temperature for fiery effect
+    const tempMin = 0; // Minimum temperature for icy effect
+    const tempMax = 6000; // Maximum temperature for fiery effect
   
     const tempNormalized = Math.min(Math.max(temperature, tempMin), tempMax);
     const tempRatio = (tempNormalized - tempMin) / (tempMax - tempMin);
@@ -103,7 +103,40 @@ function generateCompositionStyle(composition) {
       borderImageSlice: 1,
     };
   }
-  
+
+// Add keyframes for icy and fiery animations
+const icyKeyframes = `
+  @keyframes icy {
+    0% {
+      box-shadow: 0 0 10px rgba(50, 150, 255, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(50, 150, 255, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(50, 150, 255, 0.8);
+    }
+  }
+`;
+
+const fieryKeyframes = `
+  @keyframes fiery {
+    0% {
+      box-shadow: 0 0 10px rgba(255, 100, 0, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 100, 0, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(255, 100, 0, 0.8);
+    }
+  }
+`;
+
+// Append the keyframes to the document
+const style = document.createElement('style');
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes}`;
+document.head.appendChild(style);
 
   function displayPlanets(planets) {
     carousel.innerHTML = '';
@@ -122,6 +155,12 @@ function generateCompositionStyle(composition) {
         ...temperatureBorderStyle,
       }
       Object.assign(card.style, cardStyle);
+          // Add animation based on the temperature
+        if (planet.pl_eqt <= tempMin) {
+        card.style.animation = 'icy 2s infinite';
+      } else if (planet.pl_eqt >= tempMax) {
+        card.style.animation = 'fiery 2s infinite';
+      }
   
       // Set the card's content
       card.innerHTML = `

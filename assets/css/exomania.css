@@ -63,8 +63,33 @@ header {
   width: 80%;
 }
 
+/* Add these lines */
+@keyframes fiery-border {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 100, 0, 0.8), 0 0 15px rgba(255, 100, 0, 0.6) inset;
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 100, 0, 0.8), 0 0 20px rgba(255, 100, 0, 0.6) inset;
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 100, 0, 0.8), 0 0 15px rgba(255, 100, 0, 0.6) inset;
+  }
+}
+
+@keyframes icy-border {
+  0% {
+    box-shadow: 0 0 10px rgba(50, 150, 255, 0.8), 0 0 15px rgba(50, 150, 255, 0.6) inset;
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(50, 150, 255, 0.8), 0 0 20px rgba(50, 150, 255, 0.6) inset;
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(50, 150, 255, 0.8), 0 0 15px rgba(50, 150, 255, 0.6) inset;
+  }
+}
+
 .slick-slide {
-  box-sizing: border-box; /* Add this line */
+  box-sizing: border-box;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
@@ -73,8 +98,17 @@ header {
   margin: 1rem;
   border-width: 6px;
   border-style: solid;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.1) inset;
+  border-radius: 10px;
 
+}
+
+/* Add these two classes */
+.fiery-border {
+  animation: fiery-border 2s infinite;
+}
+
+.icy-border {
+  animation: icy-border 2s infinite;
 }
 
 .slick-prev,
