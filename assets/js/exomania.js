@@ -63,12 +63,46 @@ function populateCarousel(data) {
   
     return description;
   }
+
+
+
+//STYLE FOR EXOPLANETS
+function generateCompositionStyle(composition) {
+    // For the basic version, we will use a simple linear gradient
+    // You can replace this with a more sophisticated approach later
+    const gradient = composition === 'gas' ? 'linear-gradient(135deg, #F0B27A, #E6B0AA)' : 'linear-gradient(135deg, #D7BDE2, #A9CCE3)';
+    return {
+      backgroundImage: gradient,
+    };
+  }
   
+  function generateStarBrightnessStyle(starTemperature) {
+    // For the basic version, we will use a simple brightness value
+    // You can replace this with a more sophisticated approach later
+    const brightness = starTemperature ? (starTemperature / 10000) * 100 : 50;
+    return {
+      filter: `brightness(${brightness}%)`,
+    };
+  }
+
   function displayPlanets(planets) {
     carousel.innerHTML = '';
     planets.forEach(planet => {
       const card = document.createElement('div');
       card.classList.add('carousel-item');
+  
+      // Generate the styles for the card
+      const compositionStyle = generateCompositionStyle(planet.pl_dens);
+      const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
+      const cardStyle = {
+        ...compositionStyle,
+        ...starBrightnessStyle,
+      };
+  
+      // Apply the styles to the card
+      Object.assign(card.style, cardStyle);
+  
+      // Set the card's content
       card.innerHTML = `
         <h2>${planet.pl_name}</h2>
         <p>${generateDescription(planet)}</p>
