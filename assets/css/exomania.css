@@ -221,4 +221,41 @@ header {
   position: relative;
 }
 
+@keyframes pulsating-glow {
+  0%, 100% {
+    text-shadow: 0 0 18px currentColor;
+  }
+  10% {
+    text-shadow: 0 0 20px currentColor;
+  }
+  20% {
+    text-shadow: 0 0 22px currentColor;
+  }
+  30% {
+    text-shadow: 0 0 24px currentColor;
+  }
+  40% {
+    text-shadow: 0 0 26px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 28px currentColor;
+  }
+  60% {
+    text-shadow: 0 0 26px currentColor;
+  }
+  70% {
+    text-shadow: 0 0 24px currentColor;
+  }
+  80% {
+    text-shadow: 0 0 22px currentColor;
+  }
+  90% {
+    text-shadow: 0 0 20px currentColor;
+  }
+}
+
+.pulsating-text {
+  animation: pulsating-glow 2s infinite;
+}
+
 

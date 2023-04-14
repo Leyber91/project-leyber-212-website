@@ -178,7 +178,7 @@ document.head.appendChild(style);
         ...temperatureBorderStyle,
         textShadow: `0 0 ${textShadowBlurRadius}px ${textShadowColor}`,
         color: textColor,
-
+        animation: `pulsating-glow 3s infinite`,
       }
       Object.assign(card.style, cardStyle);
           // Add animation based on the temperature
