@@ -10,8 +10,8 @@ function formatValue(value, unit) {
 }
 
   
-const tempMin = 1; // Minimum temperature for icy effect
-const tempMax = 6000; // Maximum temperature for fiery effect
+const tempMin = 2000; // Minimum temperature for icy effect
+const tempMax = 4000; // Maximum temperature for fiery effect
 
 function animateLogo() {
     const logo = document.querySelector('.logo');
@@ -178,14 +178,15 @@ document.head.appendChild(style);
         ...temperatureBorderStyle,
         textShadow: `0 0 ${textShadowBlurRadius}px ${textShadowColor}`,
         color: textColor,
-        animation: `pulsating-glow 3s infinite`,
       }
       Object.assign(card.style, cardStyle);
-          // Add animation based on the temperature
-        if (planet.pl_eqt <= tempMin) {
+      // Add animation based on the temperature
+      if (planet.pl_eqt <= tempMin) {
         card.style.animation = 'icy 2s infinite';
       } else if (planet.pl_eqt >= tempMax) {
         card.style.animation = 'fiery 2s infinite';
+      } else {
+        card.style.animation = 'pulsating-glow 3s infinite';
       }
   
       // Set the card's content
