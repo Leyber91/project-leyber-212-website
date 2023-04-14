@@ -160,7 +160,6 @@ function createSvgTexture(color, fireRatio, iceRatio) {
   }
   
   const temperatureBorderStyle = {
-    borderImageSource: `url(${dataUrl})`,
     borderImageSlice: '5',
     borderColor: color,
     borderWidth: '1em',
