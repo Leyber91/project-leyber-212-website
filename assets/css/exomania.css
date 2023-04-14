@@ -71,6 +71,10 @@ header {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   padding: 2rem;
   margin: 1rem;
+  border-width: 6px;
+  border-style: solid;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.1) inset;
+
 }
 
 .slick-prev,
@@ -168,35 +172,4 @@ header {
 }
 
 
-.fire-animation {
-  animation: fire-border-animation 1s linear infinite;
-}
-
-.ice-animation {
-  animation: ice-border-animation 1s linear infinite;
-}
-
-@keyframes fire-border-animation {
-  0% {
-    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.6), 0 0 20px 10px rgba(255, 128, 0, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.6), 0 0 10px 5px rgba(255, 128, 0, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.6), 0 0 20px 10px rgba(255, 128, 0, 0.6);
-  }
-}
-
-@keyframes ice-border-animation {
-  0% {
-    box-shadow: 0 0 10px 5px rgba(0, 0, 255, 0.6), 0 0 20px 10px rgba(0, 128, 255, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 20px 10px rgba(0, 0, 255, 0.6), 0 0 10px 5px rgba(0, 128, 255, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 10px 5px rgba(0, 0, 255, 0.6), 0 0 20px 10px rgba(0, 128, 255, 0.6);
-  }
-}
 

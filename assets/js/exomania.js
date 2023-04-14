@@ -85,6 +85,26 @@ function generateCompositionStyle(composition) {
     };
   }
 
+  function generateTemperatureBorderStyle(temperature) {
+    if (temperature === null) return {};
+  
+    const tempMin = 100; // Minimum temperature for icy effect
+    const tempMax = 1000; // Maximum temperature for fiery effect
+  
+    const tempNormalized = Math.min(Math.max(temperature, tempMin), tempMax);
+    const tempRatio = (tempNormalized - tempMin) / (tempMax - tempMin);
+  
+    const icyColor = 'rgba(50, 150, 255, 0.8)';
+    const fieryColor = 'rgba(255, 100, 0, 0.8)';
+    const borderColor = `linear-gradient(135deg, ${icyColor} ${100 - tempRatio * 100}%, ${fieryColor} ${tempRatio * 100}%)`;
+  
+    return {
+      borderImage: borderColor,
+      borderImageSlice: 1,
+    };
+  }
+  
+
   function displayPlanets(planets) {
     carousel.innerHTML = '';
     planets.forEach(planet => {
@@ -94,12 +114,13 @@ function generateCompositionStyle(composition) {
       // Generate the styles for the card
       const compositionStyle = generateCompositionStyle(planet.pl_dens);
       const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
+      const temperatureBorderStyle = generateTemperatureBorderStyle(planet.pl_eqt);
+
       const cardStyle = {
         ...compositionStyle,
         ...starBrightnessStyle,
-      };
-  
-      // Apply the styles to the card
+        ...temperatureBorderStyle,
+      }
       Object.assign(card.style, cardStyle);
   
       // Set the card's content
