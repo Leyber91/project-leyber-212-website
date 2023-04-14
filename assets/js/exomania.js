@@ -9,6 +9,9 @@ function formatValue(value, unit) {
   return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
 }
 
+  
+const tempMin = 1; // Minimum temperature for icy effect
+const tempMax = 6000; // Maximum temperature for fiery effect
 
 function animateLogo() {
     const logo = document.querySelector('.logo');
@@ -87,9 +90,7 @@ function generateCompositionStyle(composition) {
 
   function generateTemperatureBorderStyle(temperature) {
     if (temperature === null) return {};
-  
-    const tempMin = 0; // Minimum temperature for icy effect
-    const tempMax = 6000; // Maximum temperature for fiery effect
+
   
     const tempNormalized = Math.min(Math.max(temperature, tempMin), tempMax);
     const tempRatio = (tempNormalized - tempMin) / (tempMax - tempMin);
