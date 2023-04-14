@@ -64,6 +64,7 @@ header {
 }
 
 .slick-slide {
+  box-sizing: border-box; /* Add this line */
   text-align: center;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
