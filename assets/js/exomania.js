@@ -89,19 +89,20 @@ function generateCompositionStyle(composition) {
   }
 
   function generateTextShadowColor(starTemperature) {
-    if (starTemperature === null) return 'rgba(255, 255, 255, 0.6)';
+    if (starTemperature === null) return 'rgba(255, 255, 255, 0.8)';
   
     const minTemp = 1;
     const maxTemp = 8000;
     const tempNormalized = Math.min(Math.max(starTemperature, minTemp), maxTemp);
     const tempRatio = (tempNormalized - minTemp) / (maxTemp - minTemp);
   
-    const coolColor = 'rgba(50, 150, 255, 0.6)';
-    const warmColor = 'rgba(255, 100, 0, 0.6)';
-    const color = `rgba(${(1 - tempRatio) * 50 + tempRatio * 255}, ${(1 - tempRatio) * 150 + tempRatio * 100}, ${(1 - tempRatio) * 255 + tempRatio * 0}, 0.6)`;
+    const coolColor = 'rgba(50, 150, 255, 0.8)';
+    const warmColor = 'rgba(255, 100, 0, 0.8)';
+    const color = `rgba(${(1 - tempRatio) * 50 + tempRatio * 255}, ${(1 - tempRatio) * 150 + tempRatio * 100}, ${(1 - tempRatio) * 255 + tempRatio * 0}, 0.8)`;
   
     return color;
   }
+  
   
   
 
@@ -167,14 +168,16 @@ document.head.appendChild(style);
       const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
       const temperatureBorderStyle = generateTemperatureBorderStyle(planet.pl_eqt);
     // Calculate the text shadow color and blur radius based on the star's temperature
-        const textShadowColor = generateTextShadowColor(planet.st_teff);
-        const textShadowBlurRadius = 8;
+    const textShadowColor = generateTextShadowColor(planet.st_teff);
+    const textShadowBlurRadius = 10;
+    const textColor = planet.st_teff > 4000 ? 'white' : 'black';
 
       const cardStyle = {
         ...compositionStyle,
         ...starBrightnessStyle,
         ...temperatureBorderStyle,
         textShadow: `0 0 ${textShadowBlurRadius}px ${textShadowColor}`,
+        color: textColor,
 
       }
       Object.assign(card.style, cardStyle);
