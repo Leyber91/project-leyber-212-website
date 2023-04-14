@@ -60,10 +60,23 @@ function populateCarousel(data) {
     if (planet.st_teff !== null) {
       description += `The host star has an effective temperature of ${planet.st_teff.toFixed(2)} K. `;
     }
+      // Fallback message when no data is available
+    if (description === `Welcome to ${planet.pl_name}! `) {
+    description += "Unfortunately, there's not much information available about this exoplanet.";
+    }
+
   
     return description;
   }
 
+  function temperatureToColor(temperature) {
+    const minTemp = 0;
+    const maxTemp = 2000;
+    const ratio = (temperature - minTemp) / (maxTemp - minTemp);
+  
+    const hue = (1 - ratio) * 240;
+    return `hsl(${hue}, 100%, 50%)`;
+  }
 
 
 //STYLE FOR EXOPLANETS
