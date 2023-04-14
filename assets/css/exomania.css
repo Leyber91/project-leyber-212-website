@@ -172,10 +172,13 @@ header {
 
 @keyframes border-animation {
   0% {
-    border-image-source: url("data:image/svg+xml;base64,START_PATTERN");
+    border-image-source: url("data:image/svg+xml;base64,START_PATTERN_FIRE");
+  }
+  50% {
+    border-image-source: url("data:image/svg+xml;base64,MIDDLE_PATTERN");
   }
   100% {
-    border-image-source: url("data:image/svg+xml;base64,END_PATTERN");
+    border-image-source: url("data:image/svg+xml;base64,END_PATTERN_CRYSTAL");
   }
 }
 

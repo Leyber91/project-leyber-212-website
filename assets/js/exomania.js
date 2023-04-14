@@ -107,8 +107,10 @@ function generateCompositionStyle(composition) {
 function createSvgTexture(color, ratio) {
   const firePattern = `
     <pattern id="firePattern" patternUnits="userSpaceOnUse" width="20" height="20" viewBox="0 0 20 20">
-      <path d="M10,20 L10,15" stroke="${color}" stroke-width="2" filter="url(#fireGlow)" />
-      <circle cx="10" cy="10" r="5" fill="${color}" filter="url(#fireGlow)" />
+        <path d="M10,20 L10,15" stroke="${color}" stroke-width="2" filter="url(#fireGlow)" />
+        <path d="M5,20 L5,15" stroke="${color}" stroke-width="2" filter="url(#fireGlow)" />
+        <path d="M15,20 L15,15" stroke="${color}" stroke-width="2" filter="url(#fireGlow)" />
+        <circle cx="10" cy="10" r="5" fill="${color}" filter="url(#fireGlow)" />
     </pattern>
   `;
 
@@ -166,7 +168,9 @@ function displayPlanets(planets) {
       const minTemp = 0;
       const maxTemp = 2000;
       const ratio = (planet.pl_eqt - minTemp) / (maxTemp - minTemp);
-      const svgTexture = createSvgTexture(color, ratio);
+      const fireRatio = ratio;
+      const crystalRatio = 1 - ratio;
+      const svgTexture = createSvgTexture(color, fireRatio, crystalRatio);
       const dataUrl = 'data:image/svg+xml;base64,' + btoa(svgTexture);
   
       const temperatureBorderStyle = {
