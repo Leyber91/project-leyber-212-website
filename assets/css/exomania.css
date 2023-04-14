@@ -168,17 +168,35 @@ header {
 }
 
 
+.fire-animation {
+  animation: fire-border-animation 1s linear infinite;
+}
 
+.ice-animation {
+  animation: ice-border-animation 1s linear infinite;
+}
 
-@keyframes border-animation {
+@keyframes fire-border-animation {
   0% {
-    border-image-source: url("data:image/svg+xml;base64,START_PATTERN_FIRE");
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.6), 0 0 20px 10px rgba(255, 128, 0, 0.6);
   }
   50% {
-    border-image-source: url("data:image/svg+xml;base64,MIDDLE_PATTERN");
+    box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.6), 0 0 10px 5px rgba(255, 128, 0, 0.6);
   }
   100% {
-    border-image-source: url("data:image/svg+xml;base64,END_PATTERN_CRYSTAL");
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.6), 0 0 20px 10px rgba(255, 128, 0, 0.6);
+  }
+}
+
+@keyframes ice-border-animation {
+  0% {
+    box-shadow: 0 0 10px 5px rgba(0, 0, 255, 0.6), 0 0 20px 10px rgba(0, 128, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(0, 0, 255, 0.6), 0 0 10px 5px rgba(0, 128, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 10px 5px rgba(0, 0, 255, 0.6), 0 0 20px 10px rgba(0, 128, 255, 0.6);
   }
 }
 
