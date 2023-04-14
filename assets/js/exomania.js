@@ -1,5 +1,3 @@
-const pausePlayButton = document.querySelector('.pause-play-button');
-
 fetch('exoplanet_data.json')
   .then(response => response.json())
   .then(data => {
@@ -10,6 +8,7 @@ fetch('exoplanet_data.json')
 function formatValue(value, unit) {
   return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
 }
+
 
 function animateLogo() {
     const logo = document.querySelector('.logo');
@@ -99,20 +98,6 @@ function populateCarousel(data) {
 }
 
 let carouselPaused = false;
-
-function togglePausePlayButton(pausePlayButton) {
-    const pauseIcon = pausePlayButton.querySelector('.fa-pause');
-    const playIcon = pausePlayButton.querySelector('.fa-play');
-  
-    if (carouselPaused) {
-      pauseIcon.style.display = 'none';
-      playIcon.style.display = 'inline-block';
-    } else {
-      pauseIcon.style.display = 'inline-block';
-      playIcon.style.display = 'none';
-    }
-  }
-  
   
   function initializeCarousel() {
     if ($('.carousel').hasClass('slick-initialized')) {
@@ -140,20 +125,7 @@ function togglePausePlayButton(pausePlayButton) {
       });
       
   
-    // Add event listener for the pause/play button
-    pausePlayButton.addEventListener('click', () => {
-      if (carouselPaused) {
-        $('.carousel').slick('slickPlay');
-      } else {
-        $('.carousel').slick('slickPause');
-      }
-      carouselPaused = !carouselPaused;
-      togglePausePlayButton(pausePlayButton);
-    });
-  
-    // Set the initial button state
-    carouselPaused = false;
-    togglePausePlayButton(pausePlayButton);
+
 }
   
   
