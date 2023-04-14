@@ -89,16 +89,16 @@ function generateCompositionStyle(composition) {
   }
 
   function generateTextShadowColor(starTemperature) {
-    if (starTemperature === null) return 'rgba(255, 255, 255, 0.8)';
+    if (starTemperature === null) return 'rgba(255, 255, 255, 0.9)';
   
-    const minTemp = 1;
+    const minTemp = 1000;
     const maxTemp = 8000;
     const tempNormalized = Math.min(Math.max(starTemperature, minTemp), maxTemp);
     const tempRatio = (tempNormalized - minTemp) / (maxTemp - minTemp);
   
-    const coolColor = 'rgba(50, 150, 255, 0.8)';
-    const warmColor = 'rgba(255, 100, 0, 0.8)';
-    const color = `rgba(${(1 - tempRatio) * 50 + tempRatio * 255}, ${(1 - tempRatio) * 150 + tempRatio * 100}, ${(1 - tempRatio) * 255 + tempRatio * 0}, 0.8)`;
+    const coolColor = 'rgba(50, 150, 255, 0.9)';
+    const warmColor = 'rgba(255, 100, 0, 0.9)';
+    const color = `rgba(${(1 - tempRatio) * 50 + tempRatio * 255}, ${(1 - tempRatio) * 150 + tempRatio * 100}, ${(1 - tempRatio) * 255 + tempRatio * 0}, 0.9)`;
   
     return color;
   }
