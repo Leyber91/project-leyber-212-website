@@ -60,31 +60,10 @@ function populateCarousel(data) {
     if (planet.st_teff !== null) {
       description += `The host star has an effective temperature of ${planet.st_teff.toFixed(2)} K. `;
     }
-    if (planet.pl_eqt !== null) {
-        description += `The surface temperature of this exoplanet is approximately ${planet.pl_eqt.toFixed(2)} K. `;
-    }
-    // Fallback message when no data is available
-    if (description === `Welcome to ${planet.pl_name}! `) {
-    description += "Unfortunately, there's not much information available about this exoplanet.";
-    }
-
   
     return description;
   }
 
-  function temperatureToColor(temperature) {
-    const minTemp = 0;
-    const maxTemp = 2000;
-    const ratio = (temperature - minTemp) / (maxTemp - minTemp);
-  
-    const hue = (1 - ratio) * 240;
-    return {
-      color: `hsl(${hue}, 100%, 50%)`,
-      fireRatio: ratio,
-      iceRatio: 1 - ratio
-    };
-  }
-  
 
 
 //STYLE FOR EXOPLANETS
@@ -106,71 +85,7 @@ function generateCompositionStyle(composition) {
     };
   }
 
-
-// Function to generate a color based on the temperature spectrum
-
-function createSvgTexture(color, fireRatio, iceRatio) {
-    const firePattern = `
-      <pattern id="firePattern" patternUnits="userSpaceOnUse" width="40" height="40" viewBox="0 0 40 40">
-        <path d="M20,40 L20,30" stroke="${color}" stroke-width="4" filter="url(#fireGlow)" />
-        <path d="M10,40 L10,30" stroke="${color}" stroke-width="4" filter="url(#fireGlow)" />
-        <path d="M30,40 L30,30" stroke="${color}" stroke-width="4" filter="url(#fireGlow)" />
-        <circle cx="20" cy="20" r="10" fill="${color}" filter="url(#fireGlow)" />
-      </pattern>
-    `;
-  
-    const icePattern = `
-      <pattern id="icePattern" patternUnits="userSpaceOnUse" width="20" height="20" viewBox="0 0 20 20">
-        <circle cx="10" cy="10" r="5" fill="none" stroke="${color}" stroke-width="1" />
-        <circle cx="10" cy="10" r="8" fill="none" stroke="${color}" stroke-width="1" />
-        <path d="M0,10 L20,10" stroke="${color}" stroke-width="1" />
-        <path d="M10,0 L10,20" stroke="${color}" stroke-width="1" />
-        <path d="M0,0 L20,20" stroke="${color}" stroke-width="1" />
-        <path d="M0,20 L20,0" stroke="${color}" stroke-width="1" />
-      </pattern>
-    `;
-  
-    const interpolatedPattern = `
-      <pattern id="interpolatedPattern" patternUnits="userSpaceOnUse" width="20" height="20" viewBox="0 0 20 20">
-        <rect width="20" height="20" fill="url(#firePattern)" opacity="${fireRatio}" />
-        <rect width="20" height="20" fill="url(#icePattern)" opacity="${iceRatio}" />
-      </pattern>
-    `;
-  
-    const svgString = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-      <defs>
-        <filter id="fireGlow" width="150%" height="150%" x="-25%" y="-25%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-          <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0
-                                                        0 1 0 0 0
-                                                        0 0 1 0 0
-                                                        0 0 0 18 -8" result="glow" />
-          <feBlend in="SourceGraphic" in2="glow" mode="screen" />
-        </filter>
-        ${firePattern}
-        ${icePattern}
-        ${interpolatedPattern}
-      </defs>
-      <rect width="100%" height="100%" fill="url(#interpolatedPattern)" />
-    </svg>
-  `;
-
-  return 'data:image/svg+xml;base64,' + btoa(svgString);
-  }
-  
-  const temperatureBorderStyle = {
-    borderImageSlice: '5',
-    borderColor: color,
-    borderWidth: '1em',
-    borderStyle: 'solid',
-    animation: fireRatio > 0.5 ? 'fire-animation 5s linear infinite' : 'ice-animation 5s linear infinite',
-  };
-  
-
-  
-
-function displayPlanets(planets) {
+  function displayPlanets(planets) {
     carousel.innerHTML = '';
     planets.forEach(planet => {
       const card = document.createElement('div');
@@ -179,27 +94,9 @@ function displayPlanets(planets) {
       // Generate the styles for the card
       const compositionStyle = generateCompositionStyle(planet.pl_dens);
       const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
-      const { color, fireRatio, iceRatio } = temperatureToColor(planet.pl_eqt);
-      const minTemp = 0;
-      const maxTemp = 2000;
-      const ratio = (planet.pl_eqt - minTemp) / (maxTemp - minTemp);
-      const crystalRatio = 1 - ratio;
-      const dataUrl = createSvgTexture(color, fireRatio, iceRatio);
-
-  
-      const temperatureBorderStyle = {
-        borderImageSource: `url(${dataUrl})`,
-        borderImageSlice: '5',
-        borderColor: color,
-        borderWidth: '1em',
-        borderStyle: 'solid',
-        animation: fireRatio > 0.5 ? 'fire-animation 5s linear infinite' : 'ice-animation 5s linear infinite',
-      };
-        
       const cardStyle = {
         ...compositionStyle,
         ...starBrightnessStyle,
-        ...temperatureBorderStyle,
       };
   
       // Apply the styles to the card
@@ -222,7 +119,6 @@ function displayPlanets(planets) {
     });
     initializeCarousel();
   }
-  
   
 
   loadMoreButton.addEventListener('click', () => {
@@ -269,4 +165,4 @@ let carouselPaused = false;
   
 
 animateLogo();
-$('.load-more-button').hide().fadeIn(1000);
+$('.load-more-button').hide().fadeIn(1000); 
