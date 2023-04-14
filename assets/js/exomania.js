@@ -137,24 +137,26 @@ function createSvgTexture(color, fireRatio, iceRatio) {
       </pattern>
     `;
   
-    return `
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-        <defs>
-          <filter id="fireGlow" width="150%" height="150%" x="-25%" y="-25%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-            <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0
-                                                          0 1 0 0 0
-                                                          0 0 1 0 0
-                                                          0 0 0 18 -8" result="glow" />
-            <feBlend in="SourceGraphic" in2="glow" mode="screen" />
-          </filter>
-          ${firePattern}
-          ${icePattern}
-          ${interpolatedPattern}
-        </defs>
-        <rect width="100%" height="100%" fill="url(#interpolatedPattern)" />
-      </svg>
-    `;
+    const svgString = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <filter id="fireGlow" width="150%" height="150%" x="-25%" y="-25%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+          <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0
+                                                        0 1 0 0 0
+                                                        0 0 1 0 0
+                                                        0 0 0 18 -8" result="glow" />
+          <feBlend in="SourceGraphic" in2="glow" mode="screen" />
+        </filter>
+        ${firePattern}
+        ${icePattern}
+        ${interpolatedPattern}
+      </defs>
+      <rect width="100%" height="100%" fill="url(#interpolatedPattern)" />
+    </svg>
+  `;
+
+  return 'data:image/svg+xml;base64,' + btoa(svgString);
   }
   
   const temperatureBorderStyle = {
@@ -183,8 +185,8 @@ function displayPlanets(planets) {
       const maxTemp = 2000;
       const ratio = (planet.pl_eqt - minTemp) / (maxTemp - minTemp);
       const crystalRatio = 1 - ratio;
-      const svgTexture = createSvgTexture(color, fireRatio, crystalRatio);
-      const dataUrl = 'data:image/svg+xml;base64,' + btoa(svgTexture);
+      const dataUrl = createSvgTexture(color, fireRatio, iceRatio);
+
   
       const temperatureBorderStyle = {
         borderImageSource: `url(${dataUrl})`,
