@@ -85,20 +85,51 @@ function generateCompositionStyle(composition) {
     };
   }
 
+
+// Function to generate a color based on the temperature spectrum
+function temperatureToColor(temperature) {
+    const minTemp = 0;
+    const maxTemp = 2000;
+    const ratio = (temperature - minTemp) / (maxTemp - minTemp);
+  
+    const hue = (1 - ratio) * 240;
+    return `hsl(${hue}, 100%, 50%)`;
+  }
+  
+  // Function to generate an SVG texture with the given color
+  function createSvgTexture(color) {
+    return `
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+        <defs>
+          <pattern id="borderPattern" patternUnits="userSpaceOnUse" width="10" height="10" viewBox="0 0 10 10">
+            <circle cx="5" cy="5" r="3" fill="${color}" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#borderPattern)" />
+      </svg>
+    `;
+  }
+
   function displayPlanets(planets) {
     carousel.innerHTML = '';
     planets.forEach(planet => {
       const card = document.createElement('div');
       card.classList.add('carousel-item');
   
-      // Generate the styles for the card
-      const compositionStyle = generateCompositionStyle(planet.pl_dens);
-      const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
-      const cardStyle = {
+        // Generate the styles for the card
+        const compositionStyle = generateCompositionStyle(planet.pl_dens);
+        const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
+        const color = temperatureToColor(planet.pl_eqt);
+        const svgTexture = createSvgTexture(color);
+        const temperatureBorderStyle = {
+        borderImage: `url('data:image/svg+xml,${encodeURIComponent(svgTexture)}') 5 repeat`,
+        };
+        const cardStyle = {
         ...compositionStyle,
         ...starBrightnessStyle,
-      };
-  
+        ...temperatureBorderStyle,
+        };
+
       // Apply the styles to the card
       Object.assign(card.style, cardStyle);
   
