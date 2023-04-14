@@ -80,10 +80,13 @@ function generateCompositionStyle(composition) {
   }
   
   function generateStarBrightnessStyle(starTemperature) {
-    const opacity = starTemperature ? (starTemperature / 10000) * 0.6 : 0.3;
-    return `background-image: radial-gradient(circle at center, rgba(255, 255, 255, ${opacity}) 0%, rgba(255, 255, 255, 0) 100%);`;
+    // For the basic version, we will use a simple brightness value
+    // You can replace this with a more sophisticated approach later
+    const brightness = starTemperature ? (starTemperature / 10000) * 100 : 50;
+    return {
+      filter: `brightness(${brightness}%)`,
+    };
   }
-  
 
   function generateTemperatureBorderStyle(temperature) {
     if (temperature === null) return {};
