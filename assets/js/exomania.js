@@ -1,3 +1,6 @@
+const tempMin = 2000; // Minimum temperature for icy effect
+const tempMax = 4000; // Maximum temperature for fiery effect
+
 fetch('exoplanet_data.json')
   .then(response => response.json())
   .then(data => {
@@ -8,6 +11,8 @@ fetch('exoplanet_data.json')
 function formatValue(value, unit) {
   return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
 }
+
+
 
 const pulsatingGlowKeyframesAndClass = `
 @keyframes pulsating-glow {
@@ -48,8 +53,7 @@ const style = document.createElement('style');
 style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass}`;
 document.head.appendChild(style);
 
-const tempMin = 2000; // Minimum temperature for icy effect
-const tempMax = 4000; // Maximum temperature for fiery effect
+
 
 function animateLogo() {
     const logo = document.querySelector('.logo');
