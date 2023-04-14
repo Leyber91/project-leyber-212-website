@@ -122,7 +122,8 @@ function temperatureToColor(temperature) {
         const color = temperatureToColor(planet.pl_eqt);
         const svgTexture = createSvgTexture(color);
         const temperatureBorderStyle = {
-        borderImage: `url('data:image/svg+xml,${encodeURIComponent(svgTexture)}') 5 repeat`,
+            borderImage: `url('data:image/svg+xml,${encodeURIComponent(svgTexture)}') 5 repeat`,
+            borderWidth: '1em',
         };
         const cardStyle = {
         ...compositionStyle,
