@@ -9,7 +9,45 @@ function formatValue(value, unit) {
   return value !== null ? `${value.toFixed(2)} ${unit}` : 'N/A';
 }
 
-  
+const pulsatingGlowKeyframesAndClass = `
+@keyframes pulsating-glow {
+    0%, 100% {
+      text-shadow: 0 0 18px currentColor;
+    }
+    10% {
+      text-shadow: 0 0 20px currentColor;
+    }
+    20% {
+      text-shadow: 0 0 22px currentColor;
+    }
+    30% {
+      text-shadow: 0 0 24px currentColor;
+    }
+    40% {
+      text-shadow: 0 0 26px currentColor;
+    }
+    50% {
+      text-shadow: 0 0 28px currentColor;
+    }
+    60% {
+      text-shadow: 0 0 26px currentColor;
+    }
+    70% {
+      text-shadow: 0 0 24px currentColor;
+    }
+    80% {
+      text-shadow: 0 0 22px currentColor;
+    }
+    90% {
+      text-shadow: 0 0 20px currentColor;
+    }
+  }
+`;
+
+const style = document.createElement('style');
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass}`;
+document.head.appendChild(style);
+
 const tempMin = 2000; // Minimum temperature for icy effect
 const tempMax = 4000; // Maximum temperature for fiery effect
 
@@ -180,15 +218,14 @@ document.head.appendChild(style);
         color: textColor,
       }
       Object.assign(card.style, cardStyle);
-      // Add animation based on the temperature
-      if (planet.pl_eqt <= tempMin) {
+    // Add animation based on the temperature
+    if (planet.pl_eqt <= tempMin * 0.9) {
         card.style.animation = 'icy 2s infinite';
-      } else if (planet.pl_eqt >= tempMax) {
+      } else if (planet.pl_eqt >= tempMax * 1.1) {
         card.style.animation = 'fiery 2s infinite';
       } else {
-        card.style.animation = 'pulsating-glow 3s infinite';
+        card.classList.add('pulsating-text');
       }
-  
       // Set the card's content
       card.innerHTML = `
         <h2>${planet.pl_name}</h2>
