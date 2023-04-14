@@ -60,7 +60,10 @@ function populateCarousel(data) {
     if (planet.st_teff !== null) {
       description += `The host star has an effective temperature of ${planet.st_teff.toFixed(2)} K. `;
     }
-      // Fallback message when no data is available
+    if (planet.pl_eqt !== null) {
+        description += `The surface temperature of this exoplanet is approximately ${planet.pl_eqt.toFixed(2)} K. `;
+    }
+    // Fallback message when no data is available
     if (description === `Welcome to ${planet.pl_name}! `) {
     description += "Unfortunately, there's not much information available about this exoplanet.";
     }
@@ -172,6 +175,7 @@ function displayPlanets(planets) {
         borderColor: color,
         borderWidth: '1em',
         borderStyle: 'solid',
+        animation: 'border-animation 5s linear infinite',
       };
   
       const cardStyle = {

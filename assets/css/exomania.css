@@ -167,3 +167,15 @@ header {
   right: 1rem;
 }
 
+
+
+
+@keyframes border-animation {
+  0% {
+    border-image-source: url("data:image/svg+xml;base64,START_PATTERN");
+  }
+  100% {
+    border-image-source: url("data:image/svg+xml;base64,END_PATTERN");
+  }
+}
+
