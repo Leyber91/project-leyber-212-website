@@ -89,16 +89,16 @@ function generateCompositionStyle(composition) {
   }
 
   function generateTextShadowColor(starTemperature) {
-    if (starTemperature === null) return 'rgba(255, 255, 255, 0.9)';
+    if (starTemperature === null) return 'rgba(255, 255, 255, 1)';
   
     const minTemp = 1000;
     const maxTemp = 8000;
     const tempNormalized = Math.min(Math.max(starTemperature, minTemp), maxTemp);
     const tempRatio = (tempNormalized - minTemp) / (maxTemp - minTemp);
   
-    const coolColor = 'rgba(50, 150, 255, 0.9)';
-    const warmColor = 'rgba(255, 100, 0, 0.9)';
-    const color = `rgba(${(1 - tempRatio) * 50 + tempRatio * 255}, ${(1 - tempRatio) * 150 + tempRatio * 100}, ${(1 - tempRatio) * 255 + tempRatio * 0}, 0.9)`;
+    const coolColor = 'rgba(50, 150, 255, 1)';
+    const warmColor = 'rgba(255, 100, 0, 1)';
+    const color = `rgba(${(1 - tempRatio) * 50 + tempRatio * 255}, ${(1 - tempRatio) * 150 + tempRatio * 100}, ${(1 - tempRatio) * 255 + tempRatio * 0}, 1)`;
   
     return color;
   }
@@ -160,17 +160,17 @@ document.head.appendChild(style);
   function displayPlanets(planets) {
     carousel.innerHTML = '';
     planets.forEach(planet => {
-      const card = document.createElement('div');
-      card.classList.add('carousel-item');
+        const card = document.createElement('div');
+        card.classList.add('carousel-item');
   
     // Generate the styles for the card
-      const compositionStyle = generateCompositionStyle(planet.pl_dens);
-      const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
-      const temperatureBorderStyle = generateTemperatureBorderStyle(planet.pl_eqt);
+        const compositionStyle = generateCompositionStyle(planet.pl_dens);
+        const starBrightnessStyle = generateStarBrightnessStyle(planet.st_teff);
+        const temperatureBorderStyle = generateTemperatureBorderStyle(planet.pl_eqt);
     // Calculate the text shadow color and blur radius based on the star's temperature
-    const textShadowColor = generateTextShadowColor(planet.st_teff);
-    const textShadowBlurRadius = 10;
-    const textColor = planet.st_teff > 4000 ? 'white' : 'black';
+        const textShadowColor = generateTextShadowColor(planet.st_teff);
+        const textShadowBlurRadius = 18;
+        const textColor = planet.st_teff > 4000 ? 'white' : 'black';
 
       const cardStyle = {
         ...compositionStyle,
