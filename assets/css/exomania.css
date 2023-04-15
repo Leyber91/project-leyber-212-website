@@ -219,10 +219,19 @@ header {
 
 .planet-card {
   position: relative;
-  
+
 }
 
+.textured-text {
+  background-image: url('texture.png');
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
-
-
-
+.gradient-text {
+  background-image: linear-gradient(to right, #f06, #0ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

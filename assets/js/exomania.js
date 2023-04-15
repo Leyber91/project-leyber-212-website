@@ -163,13 +163,13 @@ function populateCarousel(data) {
 
 //STYLE FOR EXOPLANETS
 function generateCompositionStyle(composition) {
-    // For the basic version, we will use a simple linear gradient
-    // You can replace this with a more sophisticated approach later
+    const texture = generatePerlinTexture(256, 256);
     const gradient = composition === 'gas' ? 'linear-gradient(135deg, #F0B27A, #E6B0AA)' : 'linear-gradient(135deg, #D7BDE2, #A9CCE3)';
     return {
-      backgroundImage: gradient,
+      backgroundImage: `${gradient}, url(${texture})`,
     };
   }
+  
   
   function generateStarBrightnessStyle(starTemperature) {
     // For the basic version, we will use a simple brightness value
@@ -244,9 +244,44 @@ const fieryKeyframes = `
   }
 `;
 
+function generatePerlinTexture(width, height) {
+    const simplex = new SimplexNoise();
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.createImageData(width, height);
+  
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        const value = simplex.noise2D(x / 50, y / 50);
+        const color = (value + 1) * 128;
+        const index = (x + y * width) * 4;
+        imageData.data[index] = color;
+        imageData.data[index + 1] = color;
+        imageData.data[index + 2] = color;
+        imageData.data[index + 3] = 255;
+      }
+    }
+  
+    ctx.putImageData(imageData, 0, 0);
+    return canvas.toDataURL();
+  }
+
+  
+function applyTextEffects(element, data) {
+    // Apply textured text effect if pl_orbsmax is less than 0.15
+    if (data.pl_orbsmax < 0.15) {
+      element.classList.add('textured-text');
+    }
+    // Apply gradient text effect if pl_rade is greater than 3
+    else if (data.pl_rade > 3) {
+      element.classList.add('gradient-text');
+    }
+  }
 // Append the keyframes to the document
 const style = document.createElement('style');
-style.innerHTML = `${icyKeyframes} ${fieryKeyframes}`;
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass} ${supernovaKeyframes}`;
 document.head.appendChild(style);
 
   function displayPlanets(planets) {
@@ -297,6 +332,8 @@ document.head.appendChild(style);
         <p>Equilibrium Temperature: ${formatValue(planet.pl_eqt, 'K')}</p>
         <p>Stellar Effective Temperature: ${formatValue(planet.st_teff, 'K')}</p>
       `;
+
+      applyTextEffects(card, planet);
       carousel.appendChild(card);
     });
     initializeCarousel();
