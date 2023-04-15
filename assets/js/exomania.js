@@ -64,7 +64,7 @@ function formatValue(value, unit) {
 
 
 
-const pulsatingGlowKeyframesAndClass = `
+const pulsatingGlowKeyframes = `
 @keyframes pulsating-glow {
     0%, 100% {
       text-shadow: 0 0 18px currentColor;
@@ -100,7 +100,7 @@ const pulsatingGlowKeyframesAndClass = `
 `;
 
 const style = document.createElement('style');
-style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass} ${supernovaKeyframes}`;
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframes} ${supernovaKeyframes}`;
 document.head.appendChild(style);
 
 
@@ -281,7 +281,7 @@ function applyTextEffects(element, data) {
   }
 // Append the keyframes to the document
 const style = document.createElement('style');
-style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass} ${supernovaKeyframes}`;
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframe} ${supernovaKeyframes}`;
 document.head.appendChild(style);
 
   function displayPlanets(planets) {

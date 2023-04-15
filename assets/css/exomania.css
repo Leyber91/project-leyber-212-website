@@ -94,7 +94,7 @@ header {
 .slick-slide {
   box-sizing: border-box;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  linear-gradient:(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   padding: 2rem;
@@ -102,7 +102,7 @@ header {
   border-width: 6px;
   border-style: solid;
   border-radius: 10px;
-
+  
 }
 
 /* Add these two classes */
