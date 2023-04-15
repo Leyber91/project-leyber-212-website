@@ -1,5 +1,8 @@
 const tempMin = 2000; // Minimum temperature for icy effect
 const tempMax = 4000; // Maximum temperature for fiery effect
+const supernovaMin = 1500;
+const supernovaMax = 3000;
+
 const icyKeyframes = `
   @keyframes icy {
     0% {
@@ -24,6 +27,26 @@ const fieryKeyframes = `
     }
     100% {
       box-shadow: 0 0 10px rgba(255, 100, 0, 0.8);
+    }
+  }
+`;
+
+const supernovaKeyframes = `
+  @keyframes supernova {
+    0%, 100% {
+      text-shadow: 0 0 50px currentColor;
+    }
+    20% {
+      text-shadow: 0 0 60px currentColor;
+    }
+    40% {
+      text-shadow: 0 0 70px currentColor;
+    }
+    60% {
+      text-shadow: 0 0 80px currentColor;
+    }
+    80% {
+      text-shadow: 0 0 90px currentColor;
     }
   }
 `;
@@ -77,7 +100,7 @@ const pulsatingGlowKeyframesAndClass = `
 `;
 
 const style = document.createElement('style');
-style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass}`;
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframesAndClass} ${supernovaKeyframes}`;
 document.head.appendChild(style);
 
 
@@ -239,7 +262,7 @@ document.head.appendChild(style);
     // Calculate the text shadow color and blur radius based on the star's temperature
         const textShadowColor = generateTextShadowColor(planet.st_teff);
         const textShadowBlurRadius = 18;
-        const textColor = planet.st_teff > 4000 ? 'white' : 'black';
+        const textColor = planet.st_teff > 4000 || planet.pl_eqt >= 1500 ? 'white' : 'black';
 
       const cardStyle = {
         ...compositionStyle,
@@ -249,14 +272,18 @@ document.head.appendChild(style);
         color: textColor,
       }
       Object.assign(card.style, cardStyle);
-    // Add animation based on the temperature
-    if (planet.pl_eqt <= tempMin * 0.9) {
-        card.style.animation = 'icy 2s infinite';
+
+      // Add animation based on the temperature
+      if (planet.pl_eqt <= tempMin * 0.9) {
+          card.style.animation = 'icy 2s infinite';
       } else if (planet.pl_eqt >= tempMax * 1.1) {
-        card.style.animation = 'fiery 2s infinite';
+          card.style.animation = 'fiery 2s infinite';
+      } else if (planet.pl_eqt > supernovaMin && planet.pl_eqt < supernovaMax) {
+          card.style.animation = 'supernova 2s infinite';
       } else {
-        card.classList.add('pulsating-text');
+          card.classList.add('pulsating-text');
       }
+      
       // Set the card's content
       card.innerHTML = `
         <h2>${planet.pl_name}</h2>
