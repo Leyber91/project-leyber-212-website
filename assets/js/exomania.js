@@ -64,7 +64,7 @@ function formatValue(value, unit) {
 
 
 
-const pulsatingGlowKeyframes = `
+const pulsatingGlowKeyframe = `
 @keyframes pulsating-glow {
     0%, 100% {
       text-shadow: 0 0 18px currentColor;
@@ -100,7 +100,7 @@ const pulsatingGlowKeyframes = `
 `;
 
 const style = document.createElement('style');
-style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframes} ${supernovaKeyframes}`;
+style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframe} ${supernovaKeyframes}`;
 document.head.appendChild(style);
 
 
