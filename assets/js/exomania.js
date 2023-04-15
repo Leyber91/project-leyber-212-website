@@ -1,5 +1,32 @@
 const tempMin = 2000; // Minimum temperature for icy effect
 const tempMax = 4000; // Maximum temperature for fiery effect
+const icyKeyframes = `
+  @keyframes icy {
+    0% {
+      box-shadow: 0 0 10px rgba(50, 150, 255, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(50, 150, 255, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(50, 150, 255, 0.8);
+    }
+  }
+`;
+
+const fieryKeyframes = `
+  @keyframes fiery {
+    0% {
+      box-shadow: 0 0 10px rgba(255, 100, 0, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 100, 0, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(255, 100, 0, 0.8);
+    }
+  }
+`;
 
 fetch('exoplanet_data.json')
   .then(response => response.json())
