@@ -279,6 +279,21 @@ function applyTextEffects(element, data) {
       element.classList.add('gradient-text');
     }
   }
+
+  function generateTemperatureAnimation(temperature) {
+    if (temperature <= 1000) {
+      return 'cool';
+    } else if (temperature > 1000 && temperature <= 2000) {
+      return 'mild';
+    } else if (temperature > 2000 && temperature <= 3000) {
+      return 'neutral';
+    } else if (temperature > 3000 && temperature <= 4000) {
+      return 'warm';
+    } else {
+      return 'hot';
+    }
+  }
+  
 // Append the keyframes to the document
 const style = document.createElement('style');
 style.innerHTML = `${icyKeyframes} ${fieryKeyframes} ${pulsatingGlowKeyframe} ${supernovaKeyframes}`;
@@ -289,6 +304,9 @@ document.head.appendChild(style);
     planets.forEach(planet => {
         const card = document.createElement('div');
         card.classList.add('carousel-item');
+         // Add this line to get the temperature animation
+        const temperatureAnimation = generateTemperatureAnimation(planet.pl_eqt);
+
   
     // Generate the styles for the card
         const compositionStyle = generateCompositionStyle(planet.pl_dens);
@@ -332,6 +350,8 @@ document.head.appendChild(style);
         <p>Equilibrium Temperature: ${formatValue(planet.pl_eqt, 'K')}</p>
         <p>Stellar Effective Temperature: ${formatValue(planet.st_teff, 'K')}</p>
       `;
+          // Add this line to apply the temperature animation
+        card.classList.add(temperatureAnimation);
 
       applyTextEffects(card, planet);
       carousel.appendChild(card);
