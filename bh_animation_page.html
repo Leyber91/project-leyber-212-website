@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pre-Blackhole</title>
-    <link rel="stylesheet" href="./assets/css/animation_control.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
-  </head>
-  <body>
-    <div class="animation-container">
-      <canvas id="animation"></canvas>
-      <div class="controls">
-        <label>
-          Shape:
-          <select id="shapeSelector">
-            <option value="sphere">Sphere</option>
-            <option value="cube">Cube</option>
-            <option value="torus">Torus</option>
-            <option value="octahedron">Octahedron</option>
-            <option value="cone">Cone</option>
-          </select>
-        </label>
-        <button id="toggleAnimation">Start / Stop</button>
-        <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="5"></label>
-        <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interstellar Black Hole Simulation</title>
+  <link rel="stylesheet" href="./assets/css/animation_control.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
+</head>
+<body>
+  <div class="animation-container">
+    <canvas id="animation"></canvas>
+    <div class="controls">
+      <label>
+        Shape:
+        <select id="shapeSelector">
+          <option value="sphere">Sphere</option>
+          <option value="cube">Cube</option>
+          <option value="torus">Torus</option>
+          <option value="octahedron">Octahedron</option>
+          <option value="cone">Cone</option>
+        </select>
+      </label>
+      <button id="toggleAnimation">Start / Stop</button>
+      <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="50"></label>
+      <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
     </div>
-    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
-    <script src="./assets/js/test_animation_step_1_2.js"></script>
-  </body>
+  </div>
+  <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+  <div class="toggle-btn-container">
+    <button class="toggle-btn">Toggle Controls</button>
+  </div>
+  <div id="pagination">
+    <!-- Pagination buttons can be added here if needed -->
+  </div>
+  <script type="module" src="./assets/js/black_hole/main.js"></script>
+</body>
 </html>

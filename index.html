@@ -1,98 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets\css\styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
-
-    <title>Project Leyber 212</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interstellar Black Hole Simulation</title>
+  <link rel="stylesheet" href="./assets/css/animation_control.css" />
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
 </head>
 <body>
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-        <defs>
-          <filter id="crystalize-filter">
-            <feTurbulence baseFrequency=".25" numOctaves="4" type="fractalNoise" />
-            <feDiffuseLighting surfaceScale="4" diffuseConstant="1">
-              <feDistantLight azimuth="45" elevation="20" />
-            </feDiffuseLighting>
-            <feComposite operator="in" in2="SourceGraphic" />
-          </filter>
-        </defs>
-      </svg>
-      
-    <header>
-        <button id="toggle-sidebar" aria-label="Toggle Sidebar">&#9776;</button>
-        <a href="#" class="logo">Project Leyber 212</a>
-    </header>
-    <section class="hero">
-        <canvas id="blackHole"></canvas>
-        <h1>Project Leyber 212</h1>
-    </section>
-    
-    <div id="sidebar">
-        <div class="sidebar-block-wrapper">
-            <div class="sidebar-block">
-                <h3>Space</h3>
-                <ul>
-                    <li><a href="bh_animation_page.html" class="sidebar-link">Pre-Black Hole Animation</a></li>
-                    <li><a href="md_animation_page.html" class="sidebar-link">Dimensional Test</a></li>
-                    <li><a href="./exomania.html" class="sidebar-link">Exomania</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-block">
-                <h3>Fitness</h3>
-                <ul>
-                    <li><a href="#">Virtual Reality Fitness</a></li>
-                    <li><a href="#">Community Fitness Challenges</a></li>
-                    <li><a href="#">Personalized Workout Plans</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-block">
-                <h3>Data Driven</h3>
-                <ul>
-                    <li><a href="#">Predictive Analytics for Sports</a></li>
-                    <li><a href="#">AI in Healthcare</a></li>
-                    <li><a href="#">Virtual Mentorship</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-block">
-                <h3>Self Improvement</h3>
-                <ul>
-                    <li><a href="#">Learning Pathways</a></li>
-                    <li><a href="#">Habit Formation</a></li>
-                    <li><a href="#">Mindfulness & Meditation</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-block">
-                <h3>Tryverse</h3>
-                <ul>
-                    <li><a href="#">Interactive Timeline</a></li>
-                    <li><a href="#">Tryverse Art & Media</a></li>
-                    <li><a href="#">Alternate Reality Scenarios</a></li>
-                </ul>
-            </div>
-            <div class="sidebar-block">
-                <h3>Metapower</h3>
-                <ul>
-                    <li><a href="#">Automated Post Generation</a></li>
-                    <li><a href="#">Personalized Online Learning Platform</a></li>
-                    <li><a href="#">AI-Driven Social Media Management Tool</a></li>
-                </ul>
-            </div>
-        </div>
+  <div class="animation-container">
+    <canvas id="animation"></canvas>
+    <div class="controls">
+      <label>
+        Shape:
+        <select id="shapeSelector">
+          <option value="sphere">Sphere</option>
+          <option value="cube">Cube</option>
+          <option value="torus">Torus</option>
+          <option value="octahedron">Octahedron</option>
+          <option value="cone">Cone</option>
+        </select>
+      </label>
+      <button id="toggleAnimation">Start / Stop</button>
+      <label>
+        Size:
+        <input type="range" id="rangeSize" min="1" max="120" value="50">
+      </label>
+      <label>
+        Speed:
+        <input type="range" id="rangeSpeed" min="1" max="100" value="5">
+      </label>
     </div>
-    <main class="fractal-clip-path"> </main>
-    <footer>
-        <p>&copy; 2023 Project Leyber 212. All rights reserved.</p>
-    </footer>
-    
-    <script src="assets\js\scripts.js"></script>
+  </div>
+  <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+  <div class="toggle-btn-container">
+    <button class="toggle-btn">Toggle Controls</button>
+  </div>
+  <div id="pagination">
+    <!-- Pagination buttons can be added here if needed -->
+  </div>
+  <!-- Main JavaScript Module -->
+  <script type="module" src="./assets/js/main.js"></script>
 </body>
 </html>
