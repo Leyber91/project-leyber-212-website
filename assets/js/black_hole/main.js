@@ -6,201 +6,206 @@
  * This module initializes and manages the entire black hole simulation,
  * including scene setup, camera configuration, renderer initialization,
  * and integration of various visual components such as the skybox,
- * accretion disk, gravitational lensing, and particle system.
+ * accretion disk, gravitational lensing, and enhanced particle system.
  * 
  * Dependencies:
- * - Three.js (imported via script tag in index.html)
+ * - Three.js (imported via ES Modules)
  * - Custom Modules:
  *   - custom_orbit_controls.js
  *   - skybox.js
  *   - gravitational_lensing.js
  *   - accretion_disk.js
  *   - particle_system.js
+ *   - event_horizon.js
  */
 
-// Import Custom Modules (ensure correct relative paths)
+// Import Three.js as an ES Module
+
+// Import Custom Modules
 import { CustomOrbitControls } from './custom_orbit_controls.js';
 import { createSkybox } from './skybox.js';
 import { createGravitationalLensing } from './gravitational_lensing.js';
 import { createAccretionDisk } from './accretion_disk.js';
 import { createParticleSystem } from './particle_system.js';
+import { createEventHorizon } from './event_horizon.js';
 
-/**
- * Initialize the Simulation Once the DOM is Fully Loaded
- * This ensures that all DOM elements (like the canvas and controls)
- * are available when the script runs.
- */
 document.addEventListener('DOMContentLoaded', () => {
-  // **1. Scene Setup**
+  // Scene Setup
   const scene = new THREE.Scene();
 
-  // **2. Camera Configuration**
+  // Camera Configuration
   const camera = new THREE.PerspectiveCamera(
-    75,                                 // Field of View
-    window.innerWidth / window.innerHeight, // Aspect Ratio
-    0.1,                                // Near Clipping Plane
-    1000                                // Far Clipping Plane
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
   );
-  camera.position.set(0, 5, 30);        // Position the camera
+  camera.position.set(0, 5, 30);
 
-  // **3. Renderer Initialization**
+  // Renderer Initialization
   const renderer = new THREE.WebGLRenderer({
-    canvas: document.getElementById("animation"), // Reference to the canvas element
-    antialias: true                              // Enable antialiasing for smoother edges
+    canvas: document.getElementById("animation"),
+    antialias: true,
   });
-  renderer.setSize(window.innerWidth, window.innerHeight);      // Set renderer size
-  renderer.setPixelRatio(window.devicePixelRatio);               // Optimize for device pixel ratio
-  renderer.setClearColor(0x000000, 1);                           // Set background color to black
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setClearColor(0x000000, 1);
 
-  // **4. Custom Orbit Controls**
+  // Custom Orbit Controls
   const controls = new CustomOrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;           // Enable damping (inertia)
-  controls.dampingFactor = 0.05;           // Damping factor
-  controls.enablePan = false;              // Disable panning
-  controls.minDistance = 10;               // Minimum zoom distance
-  controls.maxDistance = 100;              // Maximum zoom distance
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.enablePan = false;
+  controls.minDistance = 10;
+  controls.maxDistance = 100;
 
-  // **5. Parent Object for Rotating Elements**
-  const parentObject = new THREE.Object3D(); // Create a parent object
-  scene.add(parentObject);                    // Add it to the scene
+  // Parent Object for Rotating Elements
+  const parentObject = new THREE.Object3D();
+  scene.add(parentObject);
 
-  // **6. Create Black Hole Core**
-  const coreGeometry = new THREE.SphereGeometry(2, 64, 64);  // High-resolution sphere
-  const coreMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Black material
-  const blackHole = new THREE.Mesh(coreGeometry, coreMaterial);            // Create mesh
-  parentObject.add(blackHole);                                             // Add to parent
+  // Create Black Hole Core
+  const blackHole = {
+    mass: 1.989e30, // Mass of the sun in kg as placeholder
+    schwarzschildRadius: 2 * 6.67430e-11 * 1.989e30 / Math.pow(299792458, 2), // Calculated Schwarzschild radius
+    spinParameter: new THREE.Vector3(0, 1, 0), // Spin axis
+    position: new THREE.Vector3(0, 0, 0),
+  };
 
-  // **7. Procedurally Generated Skybox**
-  const updateSkybox = createSkybox(scene); // Initialize skybox and get its update function
+  const coreGeometry = new THREE.SphereGeometry(blackHole.schwarzschildRadius, 64, 64);
+  const coreMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+  const blackHoleMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+  parentObject.add(blackHoleMesh);
 
-  // **8. Accretion Disk**
-  const updateAccretionDisk = createAccretionDisk(scene, camera); // Initialize accretion disk
+  // Procedurally Generated Skybox
+  const updateSkybox = createSkybox(scene);
 
-  // **9. Gravitational Lensing**
-  const updateLensing = createGravitationalLensing(scene, camera); // Initialize gravitational lensing
+  // Gravitational Lensing
+  const { update: updateLensing, material: lensingMaterial } = createGravitationalLensing(scene, camera);
 
-  // **10. Enhanced Particle System**
-  const particleSystem = createParticleSystem(scene); // Initialize particle system
+  // Accretion Disk
+  const updateAccretionDisk = createAccretionDisk(scene, camera);
 
-  // **11. Control Variables for Animation**
-  let isAnimating = true;    // Flag to control animation state
-  let scale = 1;             // Scaling factor for the parent object
-  let speed = 0.5;           // Rotation speed
+  // Enhanced Particle System
+  const particleSystem = createParticleSystem(scene, blackHole, camera);
 
-  // **12. User Interface Elements and Event Listeners**
+  // Event Horizon Representation
+  const eventHorizon = createEventHorizon(scene, blackHole, camera);
 
-  // **Toggle Animation Button**
+  // Control Variables for Animation
+  let isAnimating = true;
+  let scale = 1;
+  let speed = 0.5;
+
+  // User Interface Elements and Event Listeners
   const toggleAnimationBtn = document.getElementById("toggleAnimation");
   toggleAnimationBtn.addEventListener("click", () => {
-    isAnimating = !isAnimating; // Toggle animation state
-    toggleAnimationBtn.textContent = isAnimating ? "Stop Animation" : "Start Animation"; // Update button text
+    isAnimating = !isAnimating;
+    toggleAnimationBtn.textContent = isAnimating ? "Stop Animation" : "Start Animation";
   });
 
-  // **Size Range Slider**
   const rangeSize = document.getElementById("rangeSize");
   rangeSize.addEventListener("input", (e) => {
-    scale = e.target.value / 50; // Update scale based on slider value
+    scale = e.target.value / 50;
   });
 
-  // **Speed Range Slider**
   const rangeSpeed = document.getElementById("rangeSpeed");
   rangeSpeed.addEventListener("input", (e) => {
-    speed = e.target.value * 0.5; // Update speed based on slider value
+    speed = e.target.value * 0.5;
   });
 
-  // **Shape Selector Dropdown**
   const shapeSelector = document.getElementById("shapeSelector");
   shapeSelector.addEventListener("change", (e) => {
-    const selectedShape = e.target.value; // Get selected shape
+    const selectedShape = e.target.value;
 
     // Remove existing black hole mesh from parent
-    parentObject.remove(blackHole);
+    parentObject.remove(blackHoleMesh);
 
     // Create new geometry based on selection
     let newGeometry;
     switch (selectedShape) {
       case "sphere":
-        newGeometry = new THREE.SphereGeometry(2, 64, 64);
+        newGeometry = new THREE.SphereGeometry(blackHole.schwarzschildRadius, 64, 64);
         break;
       case "cube":
-        newGeometry = new THREE.BoxGeometry(3, 3, 3);
+        newGeometry = new THREE.BoxGeometry(2 * blackHole.schwarzschildRadius, 2 * blackHole.schwarzschildRadius, 2 * blackHole.schwarzschildRadius);
         break;
       case "torus":
-        newGeometry = new THREE.TorusGeometry(2, 0.5, 16, 100);
+        newGeometry = new THREE.TorusGeometry(blackHole.schwarzschildRadius, 0.5 * blackHole.schwarzschildRadius, 16, 100);
         break;
       case "octahedron":
-        newGeometry = new THREE.OctahedronGeometry(2);
+        newGeometry = new THREE.OctahedronGeometry(blackHole.schwarzschildRadius);
         break;
       case "cone":
-        newGeometry = new THREE.ConeGeometry(2, 4, 32);
+        newGeometry = new THREE.ConeGeometry(blackHole.schwarzschildRadius, 4 * blackHole.schwarzschildRadius, 32);
         break;
       default:
-        newGeometry = new THREE.SphereGeometry(2, 64, 64);
+        newGeometry = new THREE.SphereGeometry(blackHole.schwarzschildRadius, 64, 64);
     }
 
-    // Dispose of old geometry to free memory
-    blackHole.geometry.dispose();
-    blackHole.geometry = newGeometry; // Assign new geometry
+    // Dispose of old geometry
+    blackHoleMesh.geometry.dispose();
+    blackHoleMesh.geometry = newGeometry;
 
-    parentObject.add(blackHole); // Add updated mesh back to parent
+    parentObject.add(blackHoleMesh);
   });
 
-  // **Toggle Controls Visibility on Smaller Screens**
+  // Toggle Controls Visibility on Smaller Screens
   const toggleBtn = document.querySelector('.toggle-btn');
   const controlsDiv = document.querySelector('.controls');
 
   toggleBtn.addEventListener('click', () => {
-    controlsDiv.classList.toggle('active'); // Toggle 'active' class to show/hide controls
+    controlsDiv.classList.toggle('active');
   });
 
-  // **Window Resize Handler**
+  // Window Resize Handler
   function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight; // Update camera aspect
-    camera.updateProjectionMatrix();                        // Apply aspect change
-    renderer.setSize(window.innerWidth, window.innerHeight); // Update renderer size
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
   }
-  window.addEventListener("resize", onWindowResize, false); // Listen for resize events
+  window.addEventListener("resize", onWindowResize, false);
 
-  // **Animation Loop Setup**
-  const clock = new THREE.Clock(); // Clock to track time between frames
+  // Animation Loop Setup
+  const clock = new THREE.Clock();
 
   function animate() {
-    requestAnimationFrame(animate); // Request the next frame
+    requestAnimationFrame(animate);
 
-    const delta = clock.getDelta(); // Get time elapsed since last frame
+    const delta = clock.getDelta();
 
     if (isAnimating) {
-      parentObject.rotation.x += speed * delta; // Rotate around X-axis
-      parentObject.rotation.y += speed * delta; // Rotate around Y-axis
+      parentObject.rotation.x += speed * delta;
+      parentObject.rotation.y += speed * delta;
     }
 
-    parentObject.scale.set(scale, scale, scale); // Apply scaling to parent object
+    parentObject.scale.set(scale, scale, scale);
 
     // Update all visual components
     updateSkybox(delta);
-    updateAccretionDisk(delta);
     updateLensing(delta);
-    particleSystem.update(delta); // Update particle system with delta time
+    updateAccretionDisk(delta);
 
-    controls.update();                // Update orbit controls
-    renderer.render(scene, camera);   // Render the scene from the camera's perspective
+    // Update uniforms
+    particleSystem.material.uniforms.uCameraPosition.value.copy(camera.position);
+    particleSystem.material.uniforms.blackHolePosition.value.copy(blackHole.position);
+    particleSystem.trailMaterial.uniforms.uCameraPosition.value.copy(camera.position);
+    particleSystem.trailMaterial.uniforms.blackHolePosition.value.copy(blackHole.position);
+
+    particleSystem.update(delta);
+
+    controls.update();
+    renderer.render(scene, camera);
   }
 
-  animate(); // Start the animation loop
+  animate();
 
-  /**
-   * Cleanup Function (Optional)
-   * Call this function when you need to dispose of all resources, e.g., when navigating away from the simulation.
-   */
+  // Cleanup Function (Optional)
   function disposeSimulation() {
-    particleSystem.dispose();           // Dispose of particle system
+    particleSystem.dispose();
+    eventHorizon.geometry.dispose();
+    eventHorizon.material.dispose();
     // Dispose of other components as needed
-    updateSkybox = null;
-    updateAccretionDisk = null;
-    updateLensing = null;
-    // Remove event listeners if necessary
   }
 
-  // **Optional: Expose Cleanup Function Globally**
-  window.disposeSimulation = disposeSimulation; // Allow manual cleanup via console or other scripts
+  window.disposeSimulation = disposeSimulation;
 });
