@@ -1,58 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dimensional Cubes</title>
-    <link rel="stylesheet" href="./assets/css/animation_control.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
-  </head>
-  <body>
-    <div class="animation-container">
-      <div class="toggle-btn-container">
-      </div>
-      <canvas id="animation">
-      </canvas>
-      <div class="controls">
-        <label>
-          Dimension:
-          <select id="dimensionSelector">
-            <option value="1">1D</option>
-            <option value="2">2D</option>
-            <option value="3">3D</option>
-            <option value="4">4D</option>
-            <option value="5">5D</option>
-            <option value="6">6D</option>
-            <option value="7">7D</option>
-            <option value="8">8D</option>
-            <option value="9">9D</option>
-            <option value="10">10D</option>
-            <option value="11">11D</option>
-            <option value="12">12D</option>
-          </select>
-        </label>
-        <label>
-          Mode:
-          <select id="modeSelector">
-            <option value="alpha">Easy</option>
-            <option value="beta">Complex</option>
-            <option value="gamma">Crazy</option>
-            <option value="delta">Complete Madness</option>
-          </select>
-        </label>
-        <button id="toggleAnimation">Start / Stop</button>
-        <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="5"></label>
-        <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
-        <label>Direction X: <input type="range" id="rangeDirectionX" min="-100" max="100" value="0"></label>
-        <label>Direction Y: <input type="range" id="rangeDirectionY" min="-100" max="100" value="0"></label>
-        <label>Direction Z: <input type="range" id="rangeDirectionZ" min="-100" max="100" value="0"></label>
-        <label for="rangeDistortion">Distortion:</label> <input type="range" id="rangeDistortion" min="0" max="100" value="0" />
-        <label for="rangeDistortionSpeed">Distortion Speed:</label> <input type="range" id="rangeDistortionSpeed" min="0" max="100" value="0" step="1">
-        <label for="rangeRotationSpeed">Rotation Speed:</label> <input type="range" id="rangeRotationSpeed" min="0" max="100" value="0" step="1" />
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interstellar Black Hole Simulation</title>
+  <link rel="stylesheet" href="./assets/css/animation_control.css" />
+  <!-- Include Three.js via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
+  <!-- Include dat.GUI via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+</head>
+<body>
+  <div class="animation-container">
+    <canvas id="animation"></canvas>
+    <div class="controls">
+      <label>
+        <select id="shapeSelector">
+          <option value="sphere">Sphere</option>
+          <option value="cube">Cube</option>
+          <option value="torus">Torus</option>
+          <option value="octahedron">Octahedron</option>
+          <option value="cone">Cone</option>
+        </select>
+      </label>
+      <button id="toggleAnimation">Stop Animation</button>
+      <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="50"></label>
+      <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
     </div>
-    <button class="toggle-btn" onclick="toggleControls()">Toggle Controls</button>
-    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
-    <script src="./assets/js/controls_md.js"></script>
-  </body>
+  </div>
+  <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+  <div class="toggle-btn-container">
+    <button class="toggle-btn">Toggle Controls</button>
+  </div>
+  <div id="pagination">
+    <!-- Pagination buttons can be added here if needed -->
+  </div>
+  <!-- Main JavaScript Module -->
+  <script type="module" src="./assets/js/black_hole/main.js"></script>
+</body>
 </html>
