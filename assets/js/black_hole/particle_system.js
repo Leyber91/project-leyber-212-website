@@ -136,8 +136,8 @@ vec3 applyGravitationalLensing(vec3 position) {
         // Assuming normalized units where G = c = 1, alpha ≈ 4 * mass / b
         float alpha = (4.0 * schwarzschildRadius) / impactParameter;
 
-        // Limit the deflection angle to prevent extreme bending
-        alpha = min(alpha, PI / 2.0); // Adjusted limit for more realism
+        // Remove or adjust the deflection angle limit
+        // alpha = min(alpha, PI / 2.0); // Removed for full 360-degree lensing
 
         // Calculate the bending axis
         vec3 bendAxis = normalize(cross(toCamera, toBlackHole));
@@ -158,6 +158,7 @@ vec3 applyGravitationalLensing(vec3 position) {
         return position;
     }
 }
+
 
       void main() {
           // Declare variables
@@ -216,125 +217,162 @@ vec3 applyGravitationalLensing(vec3 position) {
   // ======================
   // Define Shader Material for Particles with Enhanced Gravitational Lensing and Relativistic Effects
   // ======================
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
-      pointTexture: { value: generatePointTexture() },
-      time: { value: 0.0 },
-      blackHolePosition: { value: blackHole.position },
-      schwarzschildRadius: { value: config.SCHWARZSCHILD_RADIUS }, // Accessed dynamically
-      uCameraPosition: { value: camera.position },
-      chromaticFactor: { value: config.chromaticFactor || 0.1 }, // Added default value
-      intensityFactor: { value: config.intensityFactor || 1.0 }, // Added default value
-    },
-    vertexShader: `
-      uniform vec3 uCameraPosition;
-      uniform vec3 blackHolePosition;
-      uniform float schwarzschildRadius;
-      uniform float chromaticFactor;
-      uniform float intensityFactor;
+ // Inside particle_system.js
+ const material = new THREE.ShaderMaterial({
+  uniforms: {
+    pointTexture: { value: generatePointTexture() },
+    time: { value: 0.0 },
+    blackHolePosition: { value: blackHole.position },
+    schwarzschildRadius: { value: config.SCHWARZSCHILD_RADIUS },
+    uCameraPosition: { value: camera.position },
+    chromaticFactor: { value: config.chromaticFactor || 0.1 },
+    intensityFactor: { value: config.intensityFactor || 1.0 },
+    deltaTime: { value: 0.016 }, // Initialize with approximate frame time
+    relativisticBeaming: { value: config.relativisticBeaming || 1.0 },
+    chromaticAberration: { value: config.chromaticAberration || 0.05 },
+    lensingStrength: { value: config.LENSING_STRENGTH || 1.0 }, // Ensure this is present
+    focalLength: { value: config.FOCAL_LENGTH || 1.0 },         // Ensure this is present
+  },
+  vertexShader: `
+    uniform vec3 uCameraPosition;
+    uniform vec3 blackHolePosition;
+    uniform float schwarzschildRadius;
+    uniform float chromaticFactor;
+    uniform float intensityFactor;
+    uniform float deltaTime;
+    uniform float relativisticBeaming;
+    uniform float chromaticAberration;
+    uniform float lensingStrength; // Added
+    uniform float focalLength;      // Added
 
-      const float PI = 3.14159265358979323846264;
+    const float PI = 3.14159265358979323846264;
 
-      attribute float size;
-      attribute vec3 customColor;
-      attribute float lifetime;
-      attribute float energy;
-      attribute vec3 velocity; // Added declaration for velocity
-      varying vec3 vColor;
-      varying float vLifetime;
+    attribute float size;
+    attribute vec3 customColor;
+    attribute float lifetime;
+    attribute float energy;
+    attribute vec3 velocity;
+    varying vec3 vColor;
+    varying float vLifetime;
 
-      // Helper function to rotate a point around an axis by an angle
-      vec3 rotateAroundAxis(vec3 point, vec3 center, vec3 axis, float angle) {
-          vec3 pos = point - center;
-          float cosAngle = cos(angle);
-          float sinAngle = sin(angle);
-          return center + (cosAngle * pos) + (sinAngle * cross(axis, pos)) + ((1.0 - cosAngle) * dot(axis, pos) * axis);
-      }
+    // Doppler Effect Function
+    vec3 applyDopplerShift(vec3 velocity, vec3 direction, vec3 color) {
+        float speed = length(velocity);
+        float dopplerFactor = sqrt((1.0 + speed) / (1.0 - speed));
+        // Shift color based on Doppler factor
+        return color * dopplerFactor;
+    }
 
-      // Doppler Effect Function
-      vec3 applyDopplerShift(vec3 velocity, vec3 direction, vec3 color) {
-          float speed = length(velocity);
-          float dopplerFactor = sqrt((1.0 + speed) / (1.0 - speed));
-          // Shift color based on Doppler factor
-          return color * dopplerFactor;
-      }
+    // Helper function to rotate a point around an axis by an angle
+    vec3 rotateAroundAxis(vec3 point, vec3 center, vec3 axis, float angle) {
+        vec3 pos = point - center;
+        float cosAngle = cos(angle);
+        float sinAngle = sin(angle);
+        return center + (cosAngle * pos) + (sinAngle * cross(axis, pos)) + ((1.0 - cosAngle) * dot(axis, pos) * axis);
+    }
 
-      vec3 applyGravitationalLensing(vec3 position, float wavelength) {
-          vec3 toCamera = normalize(uCameraPosition - position);
-          vec3 toBlackHole = normalize(blackHolePosition - position);
-          vec3 displacement = position - blackHolePosition;
-          float r = length(displacement);
+    // Enhanced Gravitational Lensing Function for Full 360-Degree Coverage
+    vec3 applyGravitationalLensing(vec3 position) {
+        vec3 toCamera = normalize(uCameraPosition - position);
+        vec3 toBlackHole = normalize(blackHolePosition - position);
+        vec3 displacement = position - blackHolePosition;
+        float r = length(displacement);
 
-          if (r > schwarzschildRadius) {
-              // Calculate the impact parameter 'b'
-              float impactParameter = length(cross(displacement, toCamera)) / length(toCamera);
+        if (r > schwarzschildRadius) {
+            // Calculate the impact parameter 'b'
+            float impactParameter = length(cross(displacement, toCamera)) / length(toCamera);
 
-              // Avoid division by zero
-              impactParameter = max(impactParameter, schwarzschildRadius * 0.001);
+            // Avoid division by zero
+            impactParameter = max(impactParameter, schwarzschildRadius * 0.001);
 
-              // Calculate the deflection angle 'alpha'
-              float deflectionAngle = (2.0 * schwarzschildRadius) / impactParameter;
-              deflectionAngle *= (1.0 + chromaticFactor * wavelength); // Different deflection for different wavelengths
+            // Calculate the deflection angle 'alpha' using a precise formula
+            // For relativistic lensing, use alpha ≈ (4 * G * M) / (c^2 * b)
+            // Assuming normalized units where G = c = 1
+            float alpha = (4.0 * schwarzschildRadius) / impactParameter;
 
-              // Limit the deflection angle to avoid extreme bending
-              deflectionAngle = min(deflectionAngle, PI);
+            // Calculate the bending axis
+            vec3 bendAxis = normalize(cross(toCamera, toBlackHole));
+            if (length(bendAxis) < 0.001) {
+                // Handle the case when vectors are parallel
+                bendAxis = vec3(0.0, 1.0, 0.0);
+            }
 
-              // Calculate the bending axis
-              vec3 bendAxis = normalize(cross(toCamera, toBlackHole));
-              if (length(bendAxis) < 0.001) {
-                  // Handle the case when vectors are parallel
-                  bendAxis = vec3(0.0, 1.0, 0.0);
-              }
+            // Apply lensing strength and focal length
+            alpha *= lensingStrength;
+            float focal = focalLength;
 
-              // Rotate the position around the bend axis by the deflection angle
-              vec3 lensedPosition = rotateAroundAxis(position, blackHolePosition, bendAxis, deflectionAngle);
+            // Rotate the position around the bend axis by the deflection angle scaled by lensing strength
+            vec3 lensedPosition = rotateAroundAxis(position, blackHolePosition, bendAxis, alpha * focal);
 
-              return lensedPosition;
-          } else {
-              return position;
-          }
-      }
+            return lensedPosition;
+        } else {
+            return position;
+        }
+    }
 
-      void main() {
-          vColor = customColor;
-          vLifetime = lifetime;
+    void main() {
+        // Assign initial color and lifetime
+        vColor = customColor;
+        vLifetime = lifetime;
 
-          // Assign a wavelength based on energy for chromatic effects
-          // Map energy to a wavelength range (e.g., visible spectrum: 0.3 (blue) to 0.7 (red))
-          float wavelength = mix(0.3, 0.7, clamp(energy / 2.0, 0.0, 1.0)); // Normalized wavelengths
+        // Assign a wavelength based on energy for chromatic effects
+        float wavelength = mix(0.3, 0.7, clamp(energy / 2.0, 0.0, 1.0));
 
-          vec3 lensedPosition = applyGravitationalLensing(position, wavelength);
-          vec4 mvPosition = modelViewMatrix * vec4(lensedPosition, 1.0);
+        // Calculate gravitational lensing effect
+        vec3 lensedPosition = applyGravitationalLensing(position);
 
-          // Calculate Doppler Shift based on particle velocity
-          vec3 direction = normalize(lensedPosition - blackHolePosition);
-          vColor = applyDopplerShift(velocity, direction, customColor);
+        vec4 mvPosition = modelViewMatrix * vec4(lensedPosition, 1.0);
 
-          // Modulate intensity based on deflection angle
-          float distance = length(mvPosition.xyz);
-          float deflectionIntensity = intensityFactor * (schwarzschildRadius / distance);
-          float beaming = 1.0 + energy * 0.5 + deflectionIntensity;
+        // Calculate Doppler Shift based on particle velocity
+        vec3 direction = normalize(lensedPosition - blackHolePosition);
+        vColor = applyDopplerShift(velocity, direction, customColor);
 
-          gl_PointSize = size * (300.0 / distance) * beaming;
-          gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      uniform sampler2D pointTexture;
-      varying vec3 vColor;
-      varying float vLifetime;
+        // Apply chromatic aberration
+        vec3 chromaticOffset = normalize(lensedPosition - uCameraPosition) * chromaticFactor * wavelength * chromaticAberration;
+        mvPosition.xyz += chromaticOffset;
 
-      void main() {
-        float alpha = texture2D(pointTexture, gl_PointCoord.xy).a;
-        alpha *= vLifetime / 5000.0; // Updated PARTICLE_LIFETIME to 5000
-        gl_FragColor = vec4(vColor, alpha);
-        if (gl_FragColor.a < 0.01) discard;
-      }
-    `,
-    blending: THREE.AdditiveBlending,
-    depthTest: false,
-    transparent: true,
-  });
+        // Modulate intensity based on deflection angle and relativistic beaming
+        float distance = length(mvPosition.xyz);
+        float deflectionIntensity = intensityFactor * (schwarzschildRadius / distance);
+        float beaming = 1.0 + energy * 0.5 + deflectionIntensity * relativisticBeaming;
+
+        // Apply time dilation effect
+        float distanceToBlackHole = length(blackHolePosition - lensedPosition);
+        float timeDilation = sqrt(1.0 - schwarzschildRadius / distanceToBlackHole);
+        vLifetime *= timeDilation;
+
+        // Adjust point size based on beaming and attenuation
+        gl_PointSize = size * (300.0 / distance) * beaming;
+        gl_Position = projectionMatrix * mvPosition;
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D pointTexture;
+    uniform float chromaticAberration;
+    varying vec3 vColor;
+    varying float vLifetime;
+
+    void main() {
+      // Sample the point texture for alpha
+      float alpha = texture2D(pointTexture, gl_PointCoord.xy).a;
+
+      // Combine with lifetime-based alpha
+      alpha *= vLifetime / 5000.0;
+
+      gl_FragColor = vec4(vColor, alpha);
+
+      // Discard fragments with low alpha to improve performance
+      if (gl_FragColor.a < 0.01) discard;
+    }
+  `,
+  blending: THREE.AdditiveBlending,
+  depthTest: false,
+  transparent: true,
+  side: THREE.DoubleSide, // Ensure particles are visible from all angles
+});
+
+
+
 
   // ======================
   // Create the Particle System
