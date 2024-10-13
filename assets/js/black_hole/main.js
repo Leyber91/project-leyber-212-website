@@ -15,6 +15,11 @@ import { createEventHorizon } from './event_horizon.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // ======================
+  // Loading Screen Handling
+  // ======================
+  const loadingScreen = document.getElementById('loading-screen');
+
+  // ======================
   // Scene Setup
   // ======================
   const scene = new THREE.Scene();
@@ -141,53 +146,20 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleAnimationBtn.addEventListener("click", () => {
     isAnimating = !isAnimating;
     toggleAnimationBtn.textContent = isAnimating ? "Stop Animation" : "Start Animation";
+    toggleAnimationBtn.setAttribute('aria-pressed', isAnimating);
   });
 
   const rangeSize = document.getElementById("rangeSize");
-  rangeSize.addEventListener("input", (e) => {
+  const handleSizeChange = debounce((e) => {
     scale = e.target.value / 50;
-  });
+  }, 100);
+  rangeSize.addEventListener("input", handleSizeChange);
 
   const rangeSpeed = document.getElementById("rangeSpeed");
-  rangeSpeed.addEventListener("input", (e) => {
+  const handleSpeedChange = debounce((e) => {
     speed = e.target.value * 0.1; // Adjusted multiplier for finer control
-  });
-
-  const shapeSelector = document.getElementById("shapeSelector");
-  shapeSelector.addEventListener("change", (e) => {
-    const selectedShape = e.target.value;
-
-    // Remove existing black hole mesh from parent
-    parentObject.remove(blackHoleMesh);
-
-    // Create new geometry based on selection
-    let newGeometry;
-    switch (selectedShape) {
-      case "sphere":
-        newGeometry = new THREE.SphereGeometry(blackHole.schwarzschildRadius, 64, 64);
-        break;
-      case "cube":
-        newGeometry = new THREE.BoxGeometry(2 * blackHole.schwarzschildRadius, 2 * blackHole.schwarzschildRadius, 2 * blackHole.schwarzschildRadius);
-        break;
-      case "torus":
-        newGeometry = new THREE.TorusGeometry(blackHole.schwarzschildRadius, 0.5 * blackHole.schwarzschildRadius, 16, 100);
-        break;
-      case "octahedron":
-        newGeometry = new THREE.OctahedronGeometry(blackHole.schwarzschildRadius);
-        break;
-      case "cone":
-        newGeometry = new THREE.ConeGeometry(blackHole.schwarzschildRadius, 4 * blackHole.schwarzschildRadius, 32);
-        break;
-      default:
-        newGeometry = new THREE.SphereGeometry(blackHole.schwarzschildRadius, 64, 64);
-    }
-
-    // Dispose of old geometry
-    blackHoleMesh.geometry.dispose();
-    blackHoleMesh.geometry = newGeometry;
-
-    parentObject.add(blackHoleMesh);
-  });
+  }, 100);
+  rangeSpeed.addEventListener("input", handleSpeedChange);
 
   // ======================
   // Toggle Controls Visibility on Smaller Screens
@@ -197,13 +169,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   toggleBtn.addEventListener("click", () => {
     controlsDiv.classList.toggle('active');
+    toggleBtn.textContent = controlsDiv.classList.contains('active') ? 'Show Controls' : 'Hide Controls';
   });
 
   // ======================
   // Initialize dat.GUI
   // ======================
   const gui = new dat.GUI();
-
+  
   // Create GUI Folders and Controls
   const particleFolder = gui.addFolder('Particle System');
   particleFolder.add(particleConfig, 'GRAVITATIONAL_CONSTANT', 0.01, 1.0).name('Gravitational Const').onChange((value) => {
@@ -310,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderer.render(scene, camera);
   }
 
+  // Start the animation loop after initialization
   animate();
 
   // ======================
@@ -323,4 +297,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.disposeSimulation = disposeSimulation;
+
+  // ======================
+  // Remove Loading Screen
+  // ======================
+  // Simulate initialization delay for demonstration
+  setTimeout(() => {
+    loadingScreen.style.display = 'none';
+  }, 3000); // Adjust as needed based on actual initialization time
 });
+
+/**
+ * Debounce Function to Limit the Rate at Which a Function Can Fire.
+ * Useful for improving performance on high-frequency events like 'input'.
+ */
+function debounce(func, delay) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+}

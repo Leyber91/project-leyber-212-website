@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Interstellar Black Hole Simulation</title>
-  <link rel="stylesheet" href="./assets/css/animation_control.css" />
-  <!-- Include Three.js via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.151.2/three.min.js"></script>
-  <!-- Include dat.GUI via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Dimensional Cube Renderer</title>
+    <link rel="stylesheet" href="./assets/css/md/animation_control.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-  <div class="animation-container">
-    <canvas id="animation"></canvas>
-    <div class="controls">
-      <label>
-        <select id="shapeSelector">
-          <option value="sphere">Sphere</option>
-          <option value="cube">Cube</option>
-          <option value="torus">Torus</option>
-          <option value="octahedron">Octahedron</option>
-          <option value="cone">Cone</option>
-        </select>
-      </label>
-      <button id="toggleAnimation">Stop Animation</button>
-      <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="50"></label>
-      <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
+    <div class="animation-container">
+        <div id="animation"></div>
+        <div class="controls">
+            <label>
+                Dimension:
+                <select id="dimensionSelector">
+                    <option value="3">3D</option>
+                    <option value="4">4D</option>
+                    <option value="5">5D</option>
+                    <option value="6">6D</option>
+                    <option value="7">7D</option>
+                    <option value="8">8D</option>
+                    <option value="9">9D</option>
+                    <option value="10">10D</option>
+
+                </select>
+            </label>
+            <button id="toggleAnimation">Stop Animation</button>
+            <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="50"></label>
+            <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="50"></label>
+        </div>
     </div>
-  </div>
-  <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
-  <div class="toggle-btn-container">
-    <button class="toggle-btn">Toggle Controls</button>
-  </div>
-  <div id="pagination">
-    <!-- Pagination buttons can be added here if needed -->
-  </div>
-  <!-- Main JavaScript Module -->
-  <script type="module" src="./assets/js/black_hole/main.js"></script>
+    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+
+    <script src="./assets/js/dimensional_mania/main.js" type="module"></script>
 </body>
 </html>

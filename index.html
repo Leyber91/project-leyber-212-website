@@ -4,42 +4,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets\css\styles.css">
+    <!-- Orbitron Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron&display=swap" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
-
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJ+Y5StiBoeUQJkqRrrPZfO9pdJ6en/uZJ+VQ=" crossorigin="anonymous" defer></script>
+    
+    <!-- GSAP and Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    
     <title>Project Leyber 212</title>
+    <link rel="stylesheet" href="assets/css/mainPage/styles.css">
+
 </head>
 <body>
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <!-- SVG Filters for Effects -->
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: none;">
         <defs>
-          <filter id="crystalize-filter">
-            <feTurbulence baseFrequency=".25" numOctaves="4" type="fractalNoise" />
-            <feDiffuseLighting surfaceScale="4" diffuseConstant="1">
-              <feDistantLight azimuth="45" elevation="20" />
-            </feDiffuseLighting>
-            <feComposite operator="in" in2="SourceGraphic" />
-          </filter>
+            <filter id="crystallize-filter">
+                <feTurbulence baseFrequency=".25" numOctaves="4" type="fractalNoise" />
+                <feDiffuseLighting surfaceScale="4" diffuseConstant="1">
+                    <feDistantLight azimuth="45" elevation="20" />
+                </feDiffuseLighting>
+                <feComposite operator="in" in2="SourceGraphic" />
+            </filter>
         </defs>
-      </svg>
-      
-    <header>
-        <button id="toggle-sidebar" aria-label="Toggle Sidebar">&#9776;</button>
-        <a href="#" class="logo">Project Leyber 212</a>
-    </header>
-    <section class="hero">
-        <canvas id="blackHole"></canvas>
-        <h1>Project Leyber 212</h1>
-    </section>
-    
+    </svg>
+
+    <!-- Aurora Overlay -->
+    <div class="aurora-overlay"></div>
+
+    <!-- Nebula Overlay for Enhanced Space Effect -->
+    <div class="nebula-overlay"></div>
+
+    <!-- Starfield Background -->
+    <div class="starfield"></div>
+
+    <!-- Shooting Stars -->
+    <div class="shooting-stars-container"></div>
+
+    <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-block-wrapper">
             <div class="sidebar-block">
-                <h3>Space</h3>
+                <h3><i class="fas fa-rocket"></i> Space</h3>
                 <ul>
                     <li><a href="bh_animation_page.html" class="sidebar-link">Pre-Black Hole Animation</a></li>
                     <li><a href="md_animation_page.html" class="sidebar-link">Dimensional Test</a></li>
@@ -47,7 +63,7 @@
                 </ul>
             </div>
             <div class="sidebar-block">
-                <h3>Fitness</h3>
+                <h3><i class="fas fa-dumbbell"></i> Fitness</h3>
                 <ul>
                     <li><a href="#">Virtual Reality Fitness</a></li>
                     <li><a href="#">Community Fitness Challenges</a></li>
@@ -55,7 +71,7 @@
                 </ul>
             </div>
             <div class="sidebar-block">
-                <h3>Data Driven</h3>
+                <h3><i class="fas fa-chart-line"></i> Data Driven</h3>
                 <ul>
                     <li><a href="#">Predictive Analytics for Sports</a></li>
                     <li><a href="#">AI in Healthcare</a></li>
@@ -63,7 +79,7 @@
                 </ul>
             </div>
             <div class="sidebar-block">
-                <h3>Self Improvement</h3>
+                <h3><i class="fas fa-user-selfie"></i> Self Improvement</h3>
                 <ul>
                     <li><a href="#">Learning Pathways</a></li>
                     <li><a href="#">Habit Formation</a></li>
@@ -71,7 +87,7 @@
                 </ul>
             </div>
             <div class="sidebar-block">
-                <h3>Tryverse</h3>
+                <h3><i class="fas fa-portal-enter"></i> Tryverse</h3>
                 <ul>
                     <li><a href="#">Interactive Timeline</a></li>
                     <li><a href="#">Tryverse Art & Media</a></li>
@@ -79,7 +95,7 @@
                 </ul>
             </div>
             <div class="sidebar-block">
-                <h3>Metapower</h3>
+                <h3><i class="fas fa-superpowers"></i> Metapower</h3>
                 <ul>
                     <li><a href="#">Automated Post Generation</a></li>
                     <li><a href="#">Personalized Online Learning Platform</a></li>
@@ -88,12 +104,29 @@
             </div>
         </div>
     </div>
-    <main class="fractal-clip-path"> </main>
+
+    <!-- Header -->
+    <header>
+        <button id="toggle-sidebar" aria-label="Toggle Sidebar" aria-expanded="false" aria-controls="sidebar">&#9776;</button>
+        <a href="#" class="logo">Project Leyber 212</a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="fractal-clip-path">
+        <section class="hero">
+            <canvas id="blackHole"></canvas>
+            <h1>Project Leyber 212</h1>
+        </section>
+        <!-- Dynamic Sections Added via JavaScript -->
+    </main>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2023 Project Leyber 212. All rights reserved.</p>
+        <p>&copy; 2024 Project Leyber 212. All rights reserved.</p>
     </footer>
-    
-    <script src="assets\js\main_page\scripts.js"></script>
-    <script type="module" src="assets/js/black_hole/gravitational_lensing.js"></script>
+
+    <!-- JavaScript Files -->
+    <script src="assets/js/main_page/scripts.js" defer></script>
+    <script type="module" src="assets/js/black_hole/gravitational_lensing.js" defer></script>
 </body>
 </html>

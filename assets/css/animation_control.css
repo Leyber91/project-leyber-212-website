@@ -1,12 +1,8 @@
-@keyframes movingStars {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: -625em 0;
-  }
-}
+/* =======================
+   Keyframe Animations
+======================= */
 
+/* Glowing Button Animation */
 @keyframes glowing {
   0% {
     box-shadow: 0 0 0.313em #00ffff;
@@ -19,6 +15,29 @@
   }
 }
 
+/* Star Twinkling Animation */
+@keyframes twinkling {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+/* Particle Movement Animation */
+@keyframes moveParticles {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* =======================
+   General Styles
+======================= */
+
+/* Hide toggle button by default; shown on smaller screens */
 .toggle-btn {
   display: none;
 }
@@ -28,15 +47,83 @@ body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #08273a;
-  background-repeat: repeat;
-  background-size: auto;
-  animation: movingStars 300s linear infinite;
+  position: relative;
 }
 
+/* =======================
+   Animated Starfield
+======================= */
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(white 0.5px, transparent 0.5px);
+  background-size: 20px 20px;
+  opacity: 0.8;
+  animation: twinkling 3s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.starfield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.starfield::before,
+.starfield::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkling 2s infinite ease-in-out;
+}
+
+.starfield::before {
+  top: 20%;
+  left: 30%;
+  animation-delay: 0s;
+}
+
+.starfield::after {
+  top: 60%;
+  left: 70%;
+  animation-delay: 1s;
+}
+
+/* Dynamic Multiple Stars */
+@for $i from 1 through 50 {
+  .star-#{$i} {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    top: random(100)%;
+    left: random(100)%;
+    animation: twinkling #{random(3)}s infinite ease-in-out;
+    animation-delay: #{random(5)}s;
+  }
+}
+
+/* =======================
+   Animation Container Styling
+======================= */
+
 .animation-container {
-  background-color: rgba(8, 39, 58, 0.85); /* Increased opacity for better visibility */
+  background-color: rgba(8, 39, 58, 0.85); /* Semi-transparent for better visibility */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -49,14 +136,23 @@ body {
   border: 3px solid rgba(0, 255, 255, 0.5);
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
+  overflow: hidden;
 }
+
+/* =======================
+   Canvas Styling
+======================= */
 
 #animation {
   position: absolute;
-  width: 97%;
-  height: 97%;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
 }
+
+/* =======================
+   Controls Styling
+======================= */
 
 .controls {
   position: absolute;
@@ -96,17 +192,39 @@ body {
   animation: glowing 1.5s infinite;
 }
 
+.controls input[type="range"] {
+  width: 100px;
+  margin: 0 0.625em;
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0) 100%);
+  transition: background 0.3s ease;
+}
+
 .controls input[type="range"]:hover {
   cursor: pointer;
   background: linear-gradient(90deg, rgba(0, 255, 255, 0.7) 0%, rgba(0, 255, 255, 0) 100%);
 }
 
-.controls input[type="range"] {
-  width: 100%;
-  margin-bottom: 0.625em;
-  background: linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0) 100%);
-  transition: background 0.3s ease;
+.controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #00ffff;
+  cursor: pointer;
+  border-radius: 50%;
 }
+
+.controls input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background-color: #00ffff;
+  cursor: pointer;
+  border: none;
+}
+
+/* =======================
+   Go Back Button Styling
+======================= */
 
 #goBack {
   position: absolute;
@@ -114,7 +232,7 @@ body {
   bottom: 5em;
   padding: 0.625em 1.25em;
   border-radius: 1.25em;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, background-color 0.3s ease;
   background-color: rgba(0, 0, 0, 0.2);
   color: #00ffff;
   text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
@@ -129,43 +247,9 @@ body {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Style the dropdown */
-#shapeSelector {
-  background-color: #222222;
-  color: #ffffff;
-  border: 1px solid #00ffff;
-  font-size: 1em;
-  padding: 4px;
-  margin: 0 8px;
-}
-
-/* Style the range input */
-input[type='range'] {
-  -webkit-appearance: none;
-  margin: 0 8px;
-  width: 100px;
-  height: 8px;
-  background-color: #222222;
-  outline: none;
-}
-
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  background-color: #00ffff;
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-input[type='range']::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background-color: #00ffff;
-  cursor: pointer;
-  border: none;
-}
+/* =======================
+   Toggle Button Styling
+======================= */
 
 .toggle-btn-container {
   position: absolute;
@@ -189,20 +273,31 @@ input[type='range']::-moz-range-thumb {
   bottom: 5em;
   left: 1.25em;
   z-index: 3;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .toggle-btn:hover {
   background-color: rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
 }
 
-/* Add the styles for the mobile breakpoint */
+/* =======================
+   Responsive Design
+======================= */
+
+/* Mobile Devices */
 @media screen and (max-width: 768px) {
   .toggle-btn {
     display: block;
   }
+  
+  /* Adjust controls positioning */
+  .controls {
+    bottom: 8%;
+  }
 }
 
+/* Small Mobile Devices */
 @media only screen and (max-width: 480px) {
   .animation-container {
     margin: 1em auto;
@@ -213,6 +308,7 @@ input[type='range']::-moz-range-thumb {
     bottom: 5em;
     left: 1em;
     gap: 0.5em;
+    padding: 0.5em;
   }
 
   .controls input[type="range"] {
@@ -224,22 +320,12 @@ input[type='range']::-moz-range-thumb {
   }
 
   #animation {
-    width: 97%;
+    width: 100%;
     height: 86%;
   }
 
   .animation-container {
     height: 91%;
-  }
-
-  .controls {
-    bottom: 14%;
-  }
-
-  .toggle-btn-container {
-    left: 1.25em;
-    bottom: 0em;
-    transform: none;
   }
 
   #goBack {
@@ -250,9 +336,15 @@ input[type='range']::-moz-range-thumb {
     border-radius: 1.25em;
   }
 
+  .toggle-btn-container {
+    left: 1.25em;
+    bottom: 0;
+    transform: none;
+  }
+
   .toggle-btn {
     left: 1.25em;
-    bottom: 0em;
+    bottom: 0;
   }
 
   .controls label,
@@ -261,6 +353,7 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
+/* Tablet Devices */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .animation-container {
     width: 90%;
@@ -268,12 +361,17 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
+/* Desktop Devices */
 @media only screen and (min-width: 992px) {
   .animation-container {
     width: 92%;
     height: 92%;
   }
 }
+
+/* =======================
+   Pagination Styling
+======================= */
 
 #pagination {
   display: flex;
@@ -297,5 +395,3 @@ input[type='range']::-moz-range-thumb {
   background-color: #00ffff;
   color: #08273a;
 }
-
-

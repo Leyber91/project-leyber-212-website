@@ -11,31 +11,47 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
 </head>
 <body>
+  <!-- Starfield Container -->
+  <div class="starfield" id="starfield"></div>
+  
   <div class="animation-container">
-    <canvas id="animation"></canvas>
-    <div class="controls">
-      <label>
-        <select id="shapeSelector">
-          <option value="sphere">Sphere</option>
-          <option value="cube">Cube</option>
-          <option value="torus">Torus</option>
-          <option value="octahedron">Octahedron</option>
-          <option value="cone">Cone</option>
-        </select>
-      </label>
-      <button id="toggleAnimation">Stop Animation</button>
-      <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="50"></label>
-      <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="5"></label>
+    <canvas id="animation" aria-label="Black Hole Simulation Canvas"></canvas>
+    <div class="controls" aria-label="Simulation Controls">
+      <button id="toggleAnimation" aria-pressed="false" title="Start or stop the animation">Stop Animation</button>
+      <label for="rangeSize">Size:</label>
+      <input type="range" id="rangeSize" min="1" max="120" value="50" aria-valuemin="1" aria-valuemax="120" aria-valuenow="50" aria-label="Size Control" title="Adjust the size of the black hole">
+      <label for="rangeSpeed">Speed:</label>
+      <input type="range" id="rangeSpeed" min="1" max="100" value="5" aria-valuemin="1" aria-valuemax="100" aria-valuenow="5" aria-label="Speed Control" title="Adjust the rotation speed">
     </div>
   </div>
-  <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
+  
+  <button id="goBack" onclick="window.location.href='index.html'" aria-label="Go Back to Home">Go Back</button>
+  
   <div class="toggle-btn-container">
-    <button class="toggle-btn">Toggle Controls</button>
+    <button class="toggle-btn" aria-label="Toggle Controls">Toggle Controls</button>
   </div>
+  
   <div id="pagination">
-    <!-- Pagination buttons can be added here if needed -->
+    <!-- Pagination buttons can be dynamically added here if needed -->
   </div>
+  
   <!-- Main JavaScript Module -->
   <script type="module" src="./assets/js/black_hole/main.js"></script>
+  
+  <!-- JavaScript to Generate Stars -->
+  <script>
+    const starfield = document.getElementById('starfield');
+    const numberOfStars = 100; // Adjust as needed
+
+    for (let i = 0; i < numberOfStars; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.animationDuration = `${Math.random() * 3 + 2}s`; // 2s to 5s
+      star.style.animationDelay = `${Math.random() * 5}s`; // 0s to 5s
+      starfield.appendChild(star);
+    }
+  </script>
 </body>
 </html>
