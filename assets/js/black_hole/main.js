@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Configuration Object for Particle System
   // ======================
   const particleConfig = {
-    PARTICLE_COUNT: 10000,
+    PARTICLE_COUNT: 30000,
     ACCRETION_DISK_OUTER_RADIUS: 120.0,
     ACCRETION_DISK_HEIGHT: 0.5,
     EVENT_HORIZON_RADIUS: 8.0,

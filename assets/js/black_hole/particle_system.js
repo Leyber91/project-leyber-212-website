@@ -90,13 +90,19 @@ export function createParticleSystem(scene, blackHole, camera, config) {
       trailTexture: { value: generateTrailTexture() },
       time: { value: 0.0 },
       blackHolePosition: { value: blackHole.position },
-      schwarzschildRadius: { value: config.SCHWARZSCHILD_RADIUS }, // Accessed dynamically
+      schwarzschildRadius: { value: config.SCHWARZSCHILD_RADIUS },
       uCameraPosition: { value: camera.position },
+      backgroundSkybox: { value: scene.background }, // Assuming scene.background is a CubeTexture
+      lensingStrength: { value: config.LENSING_STRENGTH || 1.0 },
+      focalLength: { value: config.FOCAL_LENGTH || 1.0 },
     },
     vertexShader: `
       uniform vec3 uCameraPosition;
       uniform vec3 blackHolePosition;
       uniform float schwarzschildRadius;
+      uniform float lensingStrength;
+      uniform float focalLength;
+      
 
       const float PI = 3.14159265358979323846264;
 
@@ -112,49 +118,78 @@ export function createParticleSystem(scene, blackHole, camera, config) {
           float sinAngle = sin(angle);
           return center + (cosAngle * pos) + (sinAngle * cross(axis, pos)) + ((1.0 - cosAngle) * dot(axis, pos) * axis);
       }
+vec3 applyGravitationalLensing(vec3 position) {
+    vec3 toCamera = normalize(uCameraPosition - position);
+    vec3 toBlackHole = normalize(blackHolePosition - position);
+    vec3 displacement = position - blackHolePosition;
+    float r = length(displacement);
 
-      vec3 applyGravitationalLensing(vec3 position) {
-          vec3 toCamera = normalize(uCameraPosition - position);
-          vec3 toBlackHole = normalize(blackHolePosition - position);
-          vec3 displacement = position - blackHolePosition;
-          float r = length(displacement);
+    if (r > schwarzschildRadius) {
+        // Calculate the impact parameter 'b'
+        float impactParameter = length(cross(displacement, toCamera)) / length(toCamera);
 
-          if (r > schwarzschildRadius) {
-              // Calculate the impact parameter 'b'
-              float impactParameter = length(cross(displacement, toCamera)) / length(toCamera);
+        // Avoid division by zero
+        impactParameter = max(impactParameter, schwarzschildRadius * 0.001);
 
-              // Avoid division by zero
-              impactParameter = max(impactParameter, schwarzschildRadius * 0.001);
+        // Calculate the deflection angle 'alpha' using a more precise formula
+        // For small angles, alpha ≈ (4 * G * M) / (c^2 * b)
+        // Assuming normalized units where G = c = 1, alpha ≈ 4 * mass / b
+        float alpha = (4.0 * schwarzschildRadius) / impactParameter;
 
-              // Calculate the deflection angle 'alpha'
-              float deflectionAngle = (2.0 * schwarzschildRadius) / impactParameter;
+        // Limit the deflection angle to prevent extreme bending
+        alpha = min(alpha, PI / 2.0); // Adjusted limit for more realism
 
-              // Limit the deflection angle to avoid extreme bending
-              deflectionAngle = min(deflectionAngle, PI);
+        // Calculate the bending axis
+        vec3 bendAxis = normalize(cross(toCamera, toBlackHole));
+        if (length(bendAxis) < 0.001) {
+            // Handle the case when vectors are parallel
+            bendAxis = vec3(0.0, 1.0, 0.0);
+        }
 
-              // Calculate the bending axis
-              vec3 bendAxis = normalize(cross(toCamera, toBlackHole));
-              if (length(bendAxis) < 0.001) {
-                  // Handle the case when vectors are parallel
-                  bendAxis = vec3(0.0, 1.0, 0.0);
-              }
+        // Apply lensing strength and focal length
+        alpha *= lensingStrength;
+        float focal = focalLength;
 
-              // Rotate the position around the bend axis by the deflection angle
-              vec3 lensedPosition = rotateAroundAxis(position, blackHolePosition, bendAxis, deflectionAngle);
+        // Rotate the position around the bend axis by the deflection angle scaled by lensing strength
+        vec3 lensedPosition = rotateAroundAxis(position, blackHolePosition, bendAxis, alpha * focal);
 
-              return lensedPosition;
-          } else {
-              return position;
-          }
-      }
+        return lensedPosition;
+    } else {
+        return position;
+    }
+}
 
       void main() {
+          // Declare variables
+          vec3 lensedPosition;
+          vec4 mvPosition;
+          float distanceToCamera;
+          float sizeAttenuation;
+          
+          // Set color
           vColor = instanceColor;
 
-          vec3 lensedPosition = applyGravitationalLensing(instanceStart);
-          vec4 mvPosition = modelViewMatrix * vec4(lensedPosition, 1.0);
-          gl_PointSize = instanceSize * (300.0 / -mvPosition.z);
+          // Apply gravitational lensing
+          lensedPosition = applyGravitationalLensing(instanceStart);
+          
+          // Calculate model view position
+          mvPosition = modelViewMatrix * vec4(lensedPosition, 1.0);
+          
+          // Calculate distance to camera for size attenuation
+          distanceToCamera = -mvPosition.z;
+          
+          // Apply size attenuation with a minimum size to prevent disappearance
+          sizeAttenuation = max(300.0 / distanceToCamera, 0.1);
+          gl_PointSize = instanceSize * sizeAttenuation;
+          
+          // Set final position
           gl_Position = projectionMatrix * mvPosition;
+          
+          // Optional: Add time-based color variation
+          // vColor *= 0.8 + 0.2 * sin(time * 0.01);
+          
+          // Optional: Add distance-based alpha
+          // vColor.a *= smoothstep(100.0, 10.0, distanceToCamera);
       }
     `,
     fragmentShader: `
