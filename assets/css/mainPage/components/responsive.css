@@ -1,0 +1,39 @@
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #sidebar {
+        width: 200px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .project-card {
+        width: 250px;
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 0 10px;
+    }
+
+    #sidebar {
+        width: 180px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .project-card {
+        width: 200px;
+        height: 160px;
+    }
+}

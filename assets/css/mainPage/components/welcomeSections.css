@@ -1,0 +1,153 @@
+/* Welcome Sections Styling */
+
+.welcome-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #ffffff; /* Ensure text color is white */
+    text-align: center;
+    overflow: hidden;
+}
+
+.bg-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    z-index: 1;
+}
+
+.bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.bg-text {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    color: #ffffff; /* Set text color to white */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Enhance readability */
+}
+
+.bg-text h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: twinkle 2s infinite;
+    color: #ffffff; /* Ensure h1 is white */
+}
+
+.bg-text p {
+    font-size: 1.2rem;
+    color: #ffffff; /* Ensure p is white */
+}
+
+/* Add Parallax Layers */
+.parallax-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Adjust as needed */
+}
+
+.parallax-layer.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.parallax-layer.midground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Example midground */
+    z-index: 1;
+}
+
+/* Example for Content Above Parallax Layers */
+.bg-text {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Remove Blur if Using Parallax */
+.bg-blur {
+    display: none;
+}
+
+/* Twinkle Animation */
+@keyframes twinkle {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+/* Parallax Layer Styling */
+.parallax-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+}
+
+/* Example: Assign specific speeds using data attributes in HTML */
+
+/* Additional Styling for Better Readability */
+.parallax-layer.background,
+.parallax-layer.midground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.bg-text {
+    position: relative;
+    z-index: 2;
+    color: #ffffff; /* Set text color to white */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Enhance readability */
+}
+
+.bg-text h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ffffff; /* Ensure h1 is white */
+}
+
+.bg-text p {
+    font-size: 1.2rem;
+    color: #ffffff; /* Ensure p is white */
+}

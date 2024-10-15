@@ -1,9 +1,7 @@
-// assets/js/main_page/scripts.js
-
 import { addWelcomeSection } from './welcomeSection.js';
 import { addTryverseSection } from './tryverseSection.js';
-import { addParallaxEffect } from './parallaxEffect.js'; // Corrected import
-import { initializeCustomAnimations } from './gsapAnimations.js';
+import { addParallaxEffectToTitle } from './parallaxEffect.js';
+import { initializeGSAPAnimations } from './gsapAnimations.js';
 import { addSidebarBlockHoverEffects } from './sidebarHoverEffects.js';
 import { addIntersectionObserver } from './intersectionObserver.js';
 import { addInteractiveSidebar } from './interactiveSidebar.js';
@@ -16,12 +14,12 @@ import { addShootingStars } from './shootingStars.js';
 import { addAuroraEffect } from './auroraEffect.js';
 import { initializeProjectCards } from './projectCards.js';
 import { addSoundControls } from './soundControls.js';
-import { initializeTryverseAnimation, initializeWelcomeAnimation } from './vertexAnimation.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     addWelcomeSection();
     addTryverseSection();
-    addParallaxEffect();
-    initializeCustomAnimations();
+    addParallaxEffectToTitle();
+    initializeGSAPAnimations();
     addSidebarBlockHoverEffects();
     addIntersectionObserver();
     addInteractiveSidebar();
@@ -34,11 +32,4 @@ document.addEventListener('DOMContentLoaded', () => {
     addAuroraEffect();
     initializeProjectCards();
     addSoundControls();
-
-    // Initialize vertex animations for welcome sections
-
-    initializeTryverseAnimation('tryverseCanvas');
-    initializeWelcomeAnimation('welcomeCanvas');
-
-    // Initialize parallax effect
 });
