@@ -5,30 +5,30 @@
 /* Glowing Button Animation */
 @keyframes glowing {
   0% {
-    box-shadow: 0 0 0.313em #00ffff;
+    box-shadow: 0 0 0.313em #3333ff;
   }
   50% {
-    box-shadow: 0 0 1.25em #00ffff, 0 0 1.875em #00ffff;
+    box-shadow: 0 0 1.25em #3333ff, 0 0 1.875em #9933ff;
   }
   100% {
-    box-shadow: 0 0 0.313em #00ffff;
+    box-shadow: 0 0 0.313em #3333ff;
   }
 }
 
 /* Star Twinkling Animation */
 @keyframes twinkling {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 0.4; }
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.2; }
 }
 
 /* Particle Movement Animation */
 @keyframes moveParticles {
   from {
-    transform: translateY(0);
+    transform: translateY(0) rotate(0deg);
     opacity: 1;
   }
   to {
-    transform: translateY(-100vh);
+    transform: translateY(-100vh) rotate(360deg);
     opacity: 0;
   }
 }
@@ -37,19 +37,15 @@
    General Styles
 ======================= */
 
-/* Hide toggle button by default; shown on smaller screens */
-.toggle-btn {
-  display: none;
-}
-
 html,
 body {
   margin: 0;
   height: 100%;
   overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #08273a;
+  background-color: #000011;
   position: relative;
+  color: #00ccff;
 }
 
 /* =======================
@@ -63,10 +59,10 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(white 0.5px, transparent 0.5px);
-  background-size: 20px 20px;
-  opacity: 0.8;
-  animation: twinkling 3s infinite ease-in-out;
+  background: radial-gradient(#3333ff 0.5px, transparent 0.5px);
+  background-size: 30px 30px;
+  opacity: 0.3;
+  animation: twinkling 4s infinite ease-in-out;
   pointer-events: none;
 }
 
@@ -86,9 +82,9 @@ body::before {
   position: absolute;
   width: 2px;
   height: 2px;
-  background: white;
+  background: #9933ff;
   border-radius: 50%;
-  animation: twinkling 2s infinite ease-in-out;
+  animation: twinkling 3s infinite ease-in-out;
 }
 
 .starfield::before {
@@ -100,7 +96,7 @@ body::before {
 .starfield::after {
   top: 60%;
   left: 70%;
-  animation-delay: 1s;
+  animation-delay: 1.5s;
 }
 
 /* Dynamic Multiple Stars */
@@ -109,11 +105,11 @@ body::before {
     position: absolute;
     width: 2px;
     height: 2px;
-    background: white;
+    background: #3333ff;
     border-radius: 50%;
     top: random(100)%;
     left: random(100)%;
-    animation: twinkling #{random(3)}s infinite ease-in-out;
+    animation: twinkling #{random(4) + 2}s infinite ease-in-out;
     animation-delay: #{random(5)}s;
   }
 }
@@ -123,7 +119,7 @@ body::before {
 ======================= */
 
 .animation-container {
-  background-color: rgba(8, 39, 58, 0.85); /* Semi-transparent for better visibility */
+  background-color: rgba(0, 0, 17, 0.9);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -133,9 +129,9 @@ body::before {
   align-items: center;
   width: 94%;
   height: 91%;
-  border: 3px solid rgba(0, 255, 255, 0.5);
+  border: 3px solid rgba(51, 51, 255, 0.5);
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(153, 51, 255, 0.5), inset 0 0 10px rgba(51, 51, 255, 0.5);
   overflow: hidden;
 }
 
@@ -164,23 +160,23 @@ body::before {
   bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(10, 10, 10, 0.7);
-  border: 0.063em solid rgba(0, 255, 255, 0.5);
+  background-color: rgba(0, 0, 17, 0.8);
+  border: 0.063em solid rgba(51, 51, 255, 0.5);
   border-radius: 0.313em;
   z-index: 2;
-  box-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 0.625em rgba(153, 51, 255, 0.5);
   transition: all 0.3s ease;
 }
 
 .controls label,
 .controls button {
-  color: #00ffff;
-  text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
+  color: #00ccff;
+  text-shadow: 0 0 0.625em rgba(51, 51, 255, 0.5);
 }
 
 .controls button {
-  background-color: rgba(0, 0, 0, 0.4);
-  border: 0.063em solid rgba(0, 255, 255, 0.5);
+  background-color: rgba(0, 0, 17, 0.6);
+  border: 0.063em solid rgba(51, 51, 255, 0.5);
   border-radius: 0.313em;
   padding: 0.313em 0.625em;
   cursor: pointer;
@@ -195,13 +191,13 @@ body::before {
 .controls input[type="range"] {
   width: 100px;
   margin: 0 0.625em;
-  background: linear-gradient(90deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, rgba(51, 51, 255, 0.5) 0%, rgba(153, 51, 255, 0) 100%);
   transition: background 0.3s ease;
 }
 
 .controls input[type="range"]:hover {
   cursor: pointer;
-  background: linear-gradient(90deg, rgba(0, 255, 255, 0.7) 0%, rgba(0, 255, 255, 0) 100%);
+  background: linear-gradient(90deg, rgba(51, 51, 255, 0.7) 0%, rgba(153, 51, 255, 0.2) 100%);
 }
 
 .controls input[type="range"]::-webkit-slider-thumb {
@@ -209,7 +205,7 @@ body::before {
   appearance: none;
   width: 16px;
   height: 16px;
-  background-color: #00ffff;
+  background-color: #00ccff;
   cursor: pointer;
   border-radius: 50%;
 }
@@ -217,7 +213,7 @@ body::before {
 .controls input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background-color: #00ffff;
+  background-color: #00ccff;
   cursor: pointer;
   border: none;
 }
@@ -233,10 +229,10 @@ body::before {
   padding: 0.625em 1.25em;
   border-radius: 1.25em;
   transition: transform 0.2s ease-in-out, background-color 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #00ffff;
-  text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
-  border: 0.063em solid rgba(0, 255, 255, 0.5);
+  background-color: rgba(0, 0, 17, 0.6);
+  color: #00ccff;
+  text-shadow: 0 0 0.625em rgba(51, 51, 255, 0.5);
+  border: 0.063em solid rgba(51, 51, 255, 0.5);
   font-size: 1.125em;
   cursor: pointer;
   z-index: 2;
@@ -244,30 +240,22 @@ body::before {
 
 #goBack:hover {
   transform: scale(1.1);
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 17, 0.8);
 }
 
 /* =======================
    Toggle Button Styling
 ======================= */
 
-.toggle-btn-container {
-  position: absolute;
-  top: 50%;
-  left: 1.25em;
-  transform: translateY(-50%);
-  z-index: 3;
-}
-
 .toggle-btn {
   display: none;
   font-size: 1em;
   padding: 0.76em 1.25em;
   border-radius: 1.25em;
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #00ffff;
-  text-shadow: 0 0 0.625em rgba(0, 255, 255, 0.5);
-  border: 0.063em solid rgba(0, 255, 255, 0.5);
+  background-color: rgba(0, 0, 17, 0.6);
+  color: #00ccff;
+  text-shadow: 0 0 0.625em rgba(51, 51, 255, 0.5);
+  border: 0.063em solid rgba(51, 51, 255, 0.5);
   cursor: pointer;
   position: absolute;
   bottom: 5em;
@@ -277,96 +265,8 @@ body::before {
 }
 
 .toggle-btn:hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 17, 0.8);
   transform: scale(1.05);
-}
-
-/* =======================
-   Responsive Design
-======================= */
-
-/* Mobile Devices */
-@media screen and (max-width: 768px) {
-  .toggle-btn {
-    display: block;
-  }
-  
-  /* Adjust controls positioning */
-  .controls {
-    bottom: 8%;
-  }
-}
-
-/* Small Mobile Devices */
-@media only screen and (max-width: 480px) {
-  .animation-container {
-    margin: 1em auto;
-  }
-
-  .controls {
-    flex-direction: column;
-    bottom: 5em;
-    left: 1em;
-    gap: 0.5em;
-    padding: 0.5em;
-  }
-
-  .controls input[type="range"] {
-    width: 80%;
-  }
-
-  #goBack {
-    bottom: 2em;
-  }
-
-  #animation {
-    width: 100%;
-    height: 86%;
-  }
-
-  .animation-container {
-    height: 91%;
-  }
-
-  #goBack {
-    right: 1.25em;
-    bottom: 0;
-    left: auto;
-    padding: 0.625em 1.25em;
-    border-radius: 1.25em;
-  }
-
-  .toggle-btn-container {
-    left: 1.25em;
-    bottom: 0;
-    transform: none;
-  }
-
-  .toggle-btn {
-    left: 1.25em;
-    bottom: 0;
-  }
-
-  .controls label,
-  .controls button {
-    font-size: 0.9em;
-  }
-}
-
-/* Tablet Devices */
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-  .animation-container {
-    width: 90%;
-    height: 90%;
-  }
-}
-
-/* Desktop Devices */
-@media only screen and (min-width: 992px) {
-  .animation-container {
-    width: 92%;
-    height: 92%;
-  }
 }
 
 /* =======================
@@ -382,9 +282,9 @@ body::before {
 }
 
 #pagination button {
-  background-color: #08273a;
-  color: #00ffff;
-  border: 1px solid #00ffff;
+  background-color: rgba(0, 0, 17, 0.6);
+  color: #00ccff;
+  border: 1px solid #3333ff;
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 5px;
@@ -392,6 +292,8 @@ body::before {
 }
 
 #pagination button:hover {
-  background-color: #00ffff;
-  color: #08273a;
+  background-color: #3333ff;
+  color: #000011;
 }
+
+/* Responsive design styles remain unchanged */

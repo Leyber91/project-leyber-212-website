@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N-Dimensional Cube Renderer</title>
     <link rel="stylesheet" href="./assets/css/md/animation_control.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r153/three.min.js"></script>
+    <!-- Orbitron Font for the aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" type="module"></script>
+    <!-- Custom Post-Processing Modules -->
+    <script type="module" src="./assets/js/dimensional_mania/custom_effect_composer.js"></script>
+    <script type="module" src="./assets/js/dimensional_mania/custom_render_pass.js"></script>
+    <script type="module" src="./assets/js/dimensional_mania/custom_unreal_bloom_pass.js"></script>
 </head>
 <body>
     <div class="animation-container">
@@ -22,7 +29,6 @@
                     <option value="8">8D</option>
                     <option value="9">9D</option>
                     <option value="10">10D</option>
-
                 </select>
             </label>
             <button id="toggleAnimation">Stop Animation</button>
@@ -32,6 +38,7 @@
     </div>
     <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
 
-    <script src="./assets/js/dimensional_mania/main.js" type="module"></script>
+    <!-- Main JavaScript Module -->
+    <script type="module" src="./assets/js/dimensional_mania/main.js"></script>
 </body>
 </html>

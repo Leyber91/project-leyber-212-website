@@ -14,9 +14,11 @@ import { addStarfieldBackground } from './starfieldBackground.js';
 import { addGlitchEffect } from './glitchEffect.js';
 import { addShootingStars } from './shootingStars.js';
 import { addAuroraEffect } from './auroraEffect.js';
-import { initializeProjectCards } from './projectCards.js';
 import { addSoundControls } from './soundControls.js';
 import { initializeTryverseAnimation, initializeWelcomeAnimation } from './vertexAnimation.js';
+import { initializeCarousel } from './carousel.js';
+import { initializeProjectAnimations } from './projectAnimations.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     addWelcomeSection();
     addTryverseSection();
@@ -32,8 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
     addGlitchEffect();
     addShootingStars();
     addAuroraEffect();
-    initializeProjectCards();
+    
     addSoundControls();
+    initializeCarousel();
+    initializeProjectAnimations();
 
     // Initialize vertex animations for welcome sections
 

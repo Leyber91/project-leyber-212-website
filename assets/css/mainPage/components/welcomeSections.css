@@ -2,12 +2,10 @@
 
 .welcome-section {
     position: relative;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    color: #ffffff; /* Ensure text color is white */
-    text-align: center;
     overflow: hidden;
 }
 
@@ -33,26 +31,21 @@
 }
 
 .bg-text {
-    position: relative;
-    z-index: 2;
-    max-width: 800px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-    color: #ffffff; /* Set text color to white */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Enhance readability */
+    z-index: 10;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
 .bg-text h1 {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 20px;
-    animation: twinkle 2s infinite;
-    color: #ffffff; /* Ensure h1 is white */
 }
 
 .bg-text p {
     font-size: 1.2rem;
-    color: #ffffff; /* Ensure p is white */
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* Add Parallax Layers */
@@ -62,7 +55,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Adjust as needed */
+    transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .parallax-layer.background {

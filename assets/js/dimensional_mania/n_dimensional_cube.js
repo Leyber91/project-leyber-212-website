@@ -1,125 +1,163 @@
+// n_dimensional_cube.js
+
 export class NDimensionalCube {
-  constructor(dimension) {
-      this.dimension = dimension;
-      this.vertices = this.generateVertices();
-      this.edges = this.generateEdges();
-  }
+    constructor(dimension) {
+        this.dimension = dimension;
+        this.vertices = this.generateVertices();
+        this.edges = this.generateEdges();
+    }
 
-  generateVertices() {
-      const vertices = [];
-      const numVertices = Math.pow(2, this.dimension);
+    /**
+     * Generates the vertices of an N-dimensional cube.
+     * Each vertex is represented as an array of coordinates.
+     */
+    generateVertices() {
+        const vertices = [];
+        const numVertices = Math.pow(2, this.dimension);
 
-      for (let i = 0; i < numVertices; i++) {
-          const vertex = [];
-          for (let j = 0; j < this.dimension; j++) {
-              vertex.push((i & (1 << j)) ? 1 : -1);
-          }
-          vertices.push(vertex);
-      }
+        for (let i = 0; i < numVertices; i++) {
+            const vertex = [];
+            for (let j = 0; j < this.dimension; j++) {
+                vertex.push((i & (1 << j)) ? 1 : -1);
+            }
+            vertices.push(vertex);
+        }
 
-      return vertices;
-  }
+        return vertices;
+    }
 
-  generateEdges() {
-      const edges = [];
-      const numVertices = this.vertices.length;
+    /**
+     * Generates the edges of an N-dimensional cube.
+     * An edge connects two vertices that differ by exactly one coordinate.
+     */
+    generateEdges() {
+        const edges = [];
+        const numVertices = this.vertices.length;
 
-      for (let i = 0; i < numVertices; i++) {
-          for (let j = i + 1; j < numVertices; j++) {
-              let diffCount = 0;
-              for (let k = 0; k < this.dimension; k++) {
-                  if (this.vertices[i][k] !== this.vertices[j][k]) {
-                      diffCount++;
-                  }
-              }
-              if (diffCount === 1) {
-                  edges.push([i, j]);
-              }
-          }
-      }
+        for (let i = 0; i < numVertices; i++) {
+            for (let j = i + 1; j < numVertices; j++) {
+                let diffCount = 0;
+                for (let k = 0; k < this.dimension; k++) {
+                    if (this.vertices[i][k] !== this.vertices[j][k]) {
+                        diffCount++;
+                    }
+                }
+                if (diffCount === 1) {
+                    edges.push([i, j]);
+                }
+            }
+        }
 
-      return edges;
-  }
+        return edges;
+    }
 
-  project(rotationMatrices) {
-      // Recursively project vertices for a more nested, self-rotating effect
-      const recursiveProject = (vertex, depth) => {
-          if (depth === 0) return vertex.slice(0, 3).map(v => isFinite(v) ? v : 0);
+    /**
+     * Projects N-dimensional vertices down to 3D using rotation matrices.
+     * Applies rotation transformations to simulate higher-dimensional rotations.
+     */
+    project(rotationMatrices) {
+        const projectedVertices = this.vertices.map(vertex => {
+            let projected = [...vertex];
+            for (const matrix of rotationMatrices) {
+                projected = this.rotatePoint(projected, matrix);
+            }
+            // Apply perspective scaling based on the additional dimensions
+            projected = this.perspectiveProjection(projected);
+            return projected.slice(0, 3).map(v => isFinite(v) ? v : 0);
+        });
 
-          let projected = [...vertex];
-          for (const matrix of rotationMatrices) {
-              projected = this.rotatePoint(projected, matrix);
-          }
-          return recursiveProject(projected, depth - 1);
-      };
+        return {
+            vertices: projectedVertices,
+            edges: this.edges
+        };
+    }
 
-      const projectedVertices = this.vertices.map(vertex => recursiveProject(vertex, this.dimension));
+    /**
+     * Rotates a point using the provided rotation matrix.
+     */
+    rotatePoint(point, matrix) {
+        const result = new Array(point.length).fill(0);
+        for (let i = 0; i < matrix.length; i++) {
+            for (let j = 0; j < point.length; j++) {
+                result[i] += point[j] * matrix[i][j];
+            }
+        }
+        return result;
+    }
 
-      return {
-          vertices: projectedVertices,
-          edges: this.edges
-      };
-  }
+    /**
+     * Applies perspective projection to enhance the visualization of higher dimensions.
+     * This method scales the coordinates based on the magnitude in higher dimensions.
+     * Adjust the 'projectionDistance' to control the depth effect.
+     */
+    perspectiveProjection(vertex) {
+        const projectionDistance = 3; // Adjust for depth effect
+        const w = vertex.length > 3 ? vertex[3] : 0; // Handle 4D and higher
+        const scale = projectionDistance / (projectionDistance + w);
+        return vertex.map(coord => coord * scale);
+    }
 
-  rotatePoint(point, matrix) {
-      const result = new Array(point.length).fill(0);
-      for (let i = 0; i < matrix.length; i++) {
-          for (let j = 0; j < point.length; j++) {
-              result[i] += point[j] * matrix[i][j];
-          }
-      }
-      return result;
-  }
+    /**
+     * Creates a Three.js geometry for the N-dimensional cube.
+     * Converts vertices and edges into a format suitable for Three.js LineSegments.
+     */
+    createThreeGeometry(rotationMatrices) {
+        const projected = this.project(rotationMatrices);
+        const positions = projected.vertices.flat(); // Flatten the array
+        const indices = projected.edges.flat();
 
-  draw(context, projectedData, canvasWidth, canvasHeight) {
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-      context.strokeStyle = '#00ffff';
-      context.lineWidth = 1;
-      context.beginPath();
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setIndex(indices);
+        geometry.computeBoundingSphere();
 
-      // Draw edges first
-      projectedData.edges.forEach(([start, end]) => {
-          const startPoint = projectedData.vertices[start];
-          const endPoint = projectedData.vertices[end];
+        return geometry;
+    }
 
-          const x1 = (startPoint[0] * 0.5 + 0.5) * canvasWidth;
-          const y1 = (startPoint[1] * 0.5 + 0.5) * canvasHeight;
-          const x2 = (endPoint[0] * 0.5 + 0.5) * canvasWidth;
-          const y2 = (endPoint[1] * 0.5 + 0.5) * canvasHeight;
+    /**
+     * Creates a Three.js LineSegments object representing the N-dimensional cube.
+     * Applies dynamic coloring based on rotation or other visual cues.
+     */
+    createThreeLineSegments(rotationMatrices) {
+        const geometry = this.createThreeGeometry(rotationMatrices);
 
-          context.moveTo(x1, y1);
-          context.lineTo(x2, y2);
-      });
+        // Dynamic color based on rotation matrices or other properties
+        const material = new THREE.LineBasicMaterial({
+            color: 0x9b59b6, // Neon Purple color
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.8
+        });
 
-      context.stroke();
+        const lineSegments = new THREE.LineSegments(geometry, material);
+        return lineSegments;
+    }
 
-      // Draw vertices
-      projectedData.vertices.forEach(vertex => {
-          const x = (vertex[0] * 0.5 + 0.5) * canvasWidth;
-          const y = (vertex[1] * 0.5 + 0.5) * canvasHeight;
-          context.beginPath();
-          context.arc(x, y, 3, 0, Math.PI * 2);
-          context.fillStyle = '#ffffff';
-          context.fill();
-      });
-  }
+    /**
+     * Updates the Three.js LineSegments object with new vertex positions.
+     * Useful for animating rotations dynamically.
+     */
+    updateThreeGeometry(lineSegments, rotationMatrices, size) {
+        const projected = this.project(rotationMatrices);
+        const positions = projected.vertices.flat();
+        const geometry = lineSegments.geometry;
 
-  rotateVerticesIndependently(rotationMatrices) {
-      // Rotate each vertex independently with a unique rotation matrix for added complexity
-      const rotatedVertices = this.vertices.map((vertex, index) => {
-          let rotated = [...vertex];
-          // Create a pseudo-random rotation matrix for each vertex
-          const vertexRotationMatrices = rotationMatrices.map(matrix => {
-              return matrix.map(row => row.map(value => value * Math.sin(index + 1)));
-          });
+        // Update positions
+        const positionAttribute = geometry.getAttribute('position');
+        for (let i = 0; i < positions.length; i++) {
+            positionAttribute.array[i] = (projected.vertices[Math.floor(i / 3)][i % 3] * size) / 100;
+        }
+        positionAttribute.needsUpdate = true;
 
-          for (const matrix of vertexRotationMatrices) {
-              rotated = this.rotatePoint(rotated, matrix);
-          }
+        // Optionally, update colors or other attributes here
+    }
 
-          return rotated;
-      });
-
-      return rotatedVertices;
-  }
+    /**
+     * Removes the Three.js LineSegments object from the scene.
+     */
+    removeFromScene(scene, lineSegments) {
+        scene.remove(lineSegments);
+        lineSegments.geometry.dispose();
+        lineSegments.material.dispose();
+    }
 }

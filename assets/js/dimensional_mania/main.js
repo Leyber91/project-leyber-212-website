@@ -1,3 +1,4 @@
+// main.js
 import { NDimensionalCube } from './n_dimensional_cube.js';
 import { CustomOrbitControls } from '../controls/custom_orbit_controls.js';
 
@@ -11,19 +12,36 @@ let isAnimating = true;
 const rotationMatrices = [];
 
 function init() {
+    // Initialize scene
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    scene.background = new THREE.Color(0x000000); // Black background for visibility
+
+    // Initialize camera
+    camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+    );
+    camera.position.z = 5;
+
+    // Initialize renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('animation').appendChild(renderer.domElement);
 
-    camera.position.z = 5;
-
+    // Initialize controls
     controls = new CustomOrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
 
+    // Create the initial cube
     createCube();
+
+    // Setup event listeners
     setupEventListeners();
 
+    // Start animation
     animate();
 }
 
@@ -42,7 +60,11 @@ function createCube() {
     projectedCube.vertices.forEach(vertex => {
         // Check for NaN values before adding to positions
         if (!vertex.some(isNaN)) {
-            positions.push(vertex[0] * size / 100, vertex[1] * size / 100, vertex[2] * size / 100);
+            positions.push(
+                (vertex[0] * size) / 100,
+                (vertex[1] * size) / 100,
+                (vertex[2] * size) / 100
+            );
         }
     });
 
@@ -55,10 +77,18 @@ function createCube() {
 
     // Only create the geometry if we have valid positions
     if (positions.length > 0) {
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setAttribute(
+            'position',
+            new THREE.Float32BufferAttribute(positions, 3)
+        );
         geometry.setIndex(lines);
 
-        const material = new THREE.LineBasicMaterial({ color: 0x00ffff });
+        const material = new THREE.LineBasicMaterial({
+            color: 0x00ffff, // Cyan color for visibility
+            linewidth: 2,
+            transparent: true
+        });
+
         cube = new THREE.LineSegments(geometry, material);
         scene.add(cube);
 
@@ -69,7 +99,7 @@ function createCube() {
         // Set the target of the controls to the center of the cube
         controls.setTarget(center.x, center.y, center.z);
 
-        // Optionally, you can also move the cube to the origin
+        // Move the cube to the origin
         cube.position.sub(center);
     } else {
         console.warn('No valid positions for cube geometry');
@@ -107,9 +137,9 @@ function animate(time) {
             const positions = cube.geometry.attributes.position.array;
             projectedCube.vertices.forEach((vertex, index) => {
                 if (index * 3 + 2 < positions.length) {
-                    positions[index * 3] = vertex[0] * size / 100;
-                    positions[index * 3 + 1] = vertex[1] * size / 100;
-                    positions[index * 3 + 2] = vertex[2] * size / 100;
+                    positions[index * 3] = (vertex[0] * size) / 100;
+                    positions[index * 3 + 1] = (vertex[1] * size) / 100;
+                    positions[index * 3 + 2] = (vertex[2] * size) / 100;
                 }
             });
             cube.geometry.attributes.position.needsUpdate = true;

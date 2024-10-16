@@ -1,3 +1,5 @@
+/* animation_control.css */
+
 /* Universal Reset */
 * {
     margin: 0;
@@ -10,7 +12,7 @@ body, html {
     width: 100%;
     height: 100%;
     font-family: 'Orbitron', sans-serif;
-    background: #000000;
+    background: #0d0d0d; /* Dark background for neon contrast */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,9 +26,9 @@ body, html {
     position: relative;
     width: 95%;
     height: 90vh;
-    background-color: #000000;
+    background-color: #1a1a1a; /* Slightly lighter than background */
     border-radius: 15px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 30px rgba(154, 0, 255, 0.7); /* Neon purple glow */
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -38,9 +40,9 @@ body, html {
 #animation {
     width: 100%;
     height: calc(100% - 60px);
-    background-color: #000000;
+    background-color: #0d0d0d;
     border-radius: 15px;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 0 20px rgba(154, 0, 255, 0.7); /* Inner glow */
     position: relative;
     overflow: hidden;
 }
@@ -56,10 +58,11 @@ body, html {
 .controls label, .controls select, .controls button {
     font-family: 'Orbitron', sans-serif;
     color: #FFFFFF;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(154, 0, 255, 0.3); /* Semi-transparent purple */
     border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 5px 10px;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .controls select, .controls button {
@@ -81,8 +84,18 @@ body, html {
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background: #FFFFFF;
+    background: #9b59b6; /* Purple slider thumb */
     cursor: pointer;
+    box-shadow: 0 0 5px #9b59b6;
+}
+
+/* Controls Hover Effects */
+.controls button:hover, .controls select:hover, .controls label:hover {
+    background-color: rgba(154, 0, 255, 0.5);
+}
+
+.controls button:active, .controls select:active, .controls label:active {
+    background-color: rgba(154, 0, 255, 0.7);
 }
 
 /* Go Back Button Styling */
@@ -91,23 +104,23 @@ body, html {
     top: 20px;
     left: 20px;
     padding: 12px 24px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(154, 0, 255, 0.3);
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     color: #FFFFFF;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(154, 0, 255, 0.5);
 }
 
 #goBack:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(154, 0, 255, 0.5);
     transform: scale(1.05);
 }
 
 #goBack:active {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(154, 0, 255, 0.7);
     transform: scale(0.95);
 }
 
@@ -131,7 +144,7 @@ body, html {
 
 /* Dimension Toggle Styling */
 #dimensionSelector {
-    background-color: #000000;
+    background-color: rgba(154, 0, 255, 0.3);
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
     padding: 5px 10px;
@@ -140,6 +153,6 @@ body, html {
 }
 
 #dimensionSelector option {
-    background-color: #000000;
+    background-color: #1a1a1a;
     color: #FFFFFF;
 }
