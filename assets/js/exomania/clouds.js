@@ -2,7 +2,6 @@
 
 import { noiseFunctions } from './materials/shaderChunks.js';
 import { getPlanetType } from './utils.js';
-import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 
 /**
  * Creates a dynamic cloud layer around the planet mesh.

@@ -559,3 +559,24 @@ header {
   margin-top: 2rem;
   font-size: 1.2rem;
 }
+/* Space background */
+body {
+    background-image: url('../images/space_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Ensure content is readable over the background */
+#planet-info, #planet-carousel, .go-back-button, .load-more-button {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+/* Adjust header for better visibility */
+header {
+    background-color: rgba(0, 0, 0, 0.8);
+}
