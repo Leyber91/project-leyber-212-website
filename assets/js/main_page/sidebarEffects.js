@@ -52,7 +52,7 @@ export function addInteractiveSidebar() {
                 ease: 'ease-out'
             });
         } else {
-            customAnimate.from(sidebar, {
+            customAnimate.to(sidebar, {
                 duration: 0.5,
                 x: '-100%',
                 boxShadow: '0 0 0 rgba(0,0,0,0)',
@@ -70,7 +70,7 @@ export function addInteractiveSidebar() {
             const href = link.getAttribute('href');
 
             // Warp out animation
-            customAnimate.from(document.querySelector('main'), {
+            customAnimate.to(document.querySelector('main'), {
                 duration: 0.5,
                 scale: '0.9',
                 ease: 'ease-in',
@@ -81,7 +81,7 @@ export function addInteractiveSidebar() {
 
             // Close the sidebar after clicking a link
             sidebar.classList.remove('open');
-            customAnimate.from(sidebar, {
+            customAnimate.to(sidebar, {
                 duration: 0.5,
                 x: '-100%',
                 boxShadow: '0 0 0 rgba(0,0,0,0)',

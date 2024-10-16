@@ -1,26 +1,41 @@
+<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exomania</title>
-  <link rel="stylesheet" href="./assets/css/exomania.css">
-  <script src="./assets/js/exomania.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.min.js"></script>
-
+  <title>Exomania - Explore Exoplanets</title>
+  <link rel="stylesheet" href="assets/css/exomania.css">
+  <!-- Include Three.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
   <header>
     <h1 class="logo">Exomania</h1>
+    <button class="load-more-button">Load More Planets</button>
+    <a href="index.html" class="go-back-button">Go Back</a>
   </header>
-  
-  <section class="carousel">
-    <!-- Carousel items (exoplanet cards) will be populated by JavaScript -->
-  </section>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+
+  <!-- Planet Carousel -->
+  <div id="planet-carousel">
+    <!-- Planet cards will be dynamically generated here -->
+  </div>
+
+  <!-- 3D Scene Container -->
+  <div id="scene-container">
+    <!-- Three.js scene will be rendered here -->
+  </div>
+
+  <!-- Planet Information Panel -->
+  <div id="planet-info">
+    <!-- Planet details will be populated here -->
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Include External JavaScript Files -->
+  <script type="module" src="assets/js/exomania/exomania.js" defer></script>
 </body>
 </html>

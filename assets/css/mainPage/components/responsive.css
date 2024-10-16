@@ -17,6 +17,30 @@
         width: 250px;
         height: 180px;
     }
+
+    /* Adjust parallax layer speeds for smaller screens */
+    [data-parallax="0.2"] {
+        /* Example: reduce speed */
+    }
+
+    [data-parallax="0.5"] {
+        /* Example: adjust speed */
+    }
+
+    /* Navbar adjustments */
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-nav {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .header-nav a {
+        margin: 10px 0;
+    }
 }
 
 @media (max-width: 480px) {
@@ -35,5 +59,21 @@
     .project-card {
         width: 200px;
         height: 160px;
+    }
+
+    /* Further adjustments for very small screens */
+
+    /* Adjust font sizes */
+    .header-nav a {
+        font-size: 0.8rem;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    /* Sidebar adjustments */
+    #sidebar {
+        width: 200px;
     }
 }
