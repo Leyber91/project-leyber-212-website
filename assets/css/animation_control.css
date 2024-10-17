@@ -1,299 +1,306 @@
-/* =======================
-   Keyframe Animations
-======================= */
+/* animation_control.css */
 
-/* Glowing Button Animation */
-@keyframes glowing {
-  0% {
-    box-shadow: 0 0 0.313em #3333ff;
-  }
-  50% {
-    box-shadow: 0 0 1.25em #3333ff, 0 0 1.875em #9933ff;
-  }
-  100% {
-    box-shadow: 0 0 0.313em #3333ff;
-  }
-}
-
-/* Star Twinkling Animation */
-@keyframes twinkling {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.2; }
-}
-
-/* Particle Movement Animation */
-@keyframes moveParticles {
-  from {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* =======================
-   General Styles
-======================= */
-
-html,
-body {
+/* Universal Reset */
+* {
   margin: 0;
-  height: 100%;
-  overflow: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #000011;
-  position: relative;
-  color: #00ccff;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* =======================
-   Animated Starfield
-======================= */
-
-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Body and HTML Styling */
+body, html {
   width: 100%;
   height: 100%;
-  background: radial-gradient(#3333ff 0.5px, transparent 0.5px);
-  background-size: 30px 30px;
-  opacity: 0.3;
-  animation: twinkling 4s infinite ease-in-out;
-  pointer-events: none;
-}
-
-.starfield {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.starfield::before,
-.starfield::after {
-  content: '';
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: #9933ff;
-  border-radius: 50%;
-  animation: twinkling 3s infinite ease-in-out;
-}
-
-.starfield::before {
-  top: 20%;
-  left: 30%;
-  animation-delay: 0s;
-}
-
-.starfield::after {
-  top: 60%;
-  left: 70%;
-  animation-delay: 1.5s;
-}
-
-/* Dynamic Multiple Stars */
-@for $i from 1 through 50 {
-  .star-#{$i} {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #3333ff;
-    border-radius: 50%;
-    top: random(100)%;
-    left: random(100)%;
-    animation: twinkling #{random(4) + 2}s infinite ease-in-out;
-    animation-delay: #{random(5)}s;
-  }
-}
-
-/* =======================
-   Animation Container Styling
-======================= */
-
-.animation-container {
-  background-color: rgba(0, 0, 17, 0.9);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  font-family: 'Orbitron', sans-serif;
+  background: #0d0d0d; /* Dark background for neon contrast */
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 94%;
-  height: 91%;
-  border: 3px solid rgba(51, 51, 255, 0.5);
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(153, 51, 255, 0.5), inset 0 0 10px rgba(51, 51, 255, 0.5);
+  flex-direction: column;
+  color: #FFFFFF;
   overflow: hidden;
 }
 
-/* =======================
-   Canvas Styling
-======================= */
-
-#animation {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-}
-
-/* =======================
-   Controls Styling
-======================= */
-
-.controls {
-  position: absolute;
+/* Animation Container Styling */
+.animation-container {
+  position: relative;
+  width: 95%;
+  height: 90vh;
+  background-color: #1a1a1a; /* Slightly lighter than background */
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(154, 0, 255, 0.7); /* Neon purple glow */
+  overflow: hidden;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  transition: box-shadow 0.5s ease;
+}
+
+/* Canvas Styling */
+#animation {
+  width: 100%;
+  height: 60%; /* Adjusted to accommodate controls and explanatory panel */
+  background-color: #0d0d0d;
+  border-radius: 15px;
+  box-shadow: inset 0 0 20px rgba(154, 0, 255, 0.7); /* Inner glow */
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.5s ease;
+}
+
+/* Controls Styling */
+.controls {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.625em;
-  padding: 0.625em;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 17, 0.8);
-  border: 0.063em solid rgba(51, 51, 255, 0.5);
-  border-radius: 0.313em;
-  z-index: 2;
-  box-shadow: 0 0 0.625em rgba(153, 51, 255, 0.5);
-  transition: all 0.3s ease;
+  padding: 10px 0;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.controls label,
-.controls button {
-  color: #00ccff;
-  text-shadow: 0 0 0.625em rgba(51, 51, 255, 0.5);
+.control-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 150px;
 }
 
-.controls button {
-  background-color: rgba(0, 0, 17, 0.6);
-  border: 0.063em solid rgba(51, 51, 255, 0.5);
-  border-radius: 0.313em;
-  padding: 0.313em 0.625em;
+.control-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.control-group select, 
+.control-group input[type="range"] {
+  width: 100%;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button-group button {
+  flex: 1;
+  min-width: 120px;
+  background-color: rgba(154, 0, 255, 0.3); /* Semi-transparent purple */
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 14px;
+  box-shadow: 0 0 10px rgba(154, 0, 255, 0.5);
 }
 
-.controls button:hover,
-#goBack:hover {
-  animation: glowing 1.5s infinite;
+.button-group button:hover {
+  background-color: rgba(154, 0, 255, 0.5);
+  box-shadow: 0 0 15px rgba(154, 0, 255, 0.7);
 }
 
+.button-group button:active {
+  background-color: rgba(154, 0, 255, 0.7);
+  transform: scale(0.98);
+  box-shadow: 0 0 20px rgba(154, 0, 255, 0.9);
+}
+
+/* Range Inputs Styling */
 .controls input[type="range"] {
-  width: 100px;
-  margin: 0 0.625em;
-  background: linear-gradient(90deg, rgba(51, 51, 255, 0.5) 0%, rgba(153, 51, 255, 0) 100%);
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
   transition: background 0.3s ease;
-}
-
-.controls input[type="range"]:hover {
-  cursor: pointer;
-  background: linear-gradient(90deg, rgba(51, 51, 255, 0.7) 0%, rgba(153, 51, 255, 0.2) 100%);
 }
 
 .controls input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
-  background-color: #00ccff;
-  cursor: pointer;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
+  background: #9b59b6; /* Purple slider thumb */
+  cursor: pointer;
+  box-shadow: 0 0 10px #9b59b6;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .controls input[type="range"]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background-color: #00ccff;
-  cursor: pointer;
+  width: 20px;
+  height: 20px;
   border: none;
+  border-radius: 50%;
+  background: #9b59b6;
+  cursor: pointer;
+  box-shadow: 0 0 10px #9b59b6;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* =======================
-   Go Back Button Styling
-======================= */
+.controls input[type="range"]:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
 
+.controls input[type="range"]::-webkit-slider-thumb:hover,
+.controls input[type="range"]::-moz-range-thumb:hover {
+  background: #b368d0;
+  box-shadow: 0 0 15px #b368d0;
+}
+
+.controls input[type="range"]::-webkit-slider-thumb:active,
+.controls input[type="range"]::-moz-range-thumb:active {
+  background: #d08ee3;
+  box-shadow: 0 0 20px #d08ee3;
+}
+
+/* Go Back Button Styling */
 #goBack {
   position: absolute;
-  right: 1.25em;
-  bottom: 5em;
-  padding: 0.625em 1.25em;
-  border-radius: 1.25em;
-  transition: transform 0.2s ease-in-out, background-color 0.3s ease;
-  background-color: rgba(0, 0, 17, 0.6);
-  color: #00ccff;
-  text-shadow: 0 0 0.625em rgba(51, 51, 255, 0.5);
-  border: 0.063em solid rgba(51, 51, 255, 0.5);
-  font-size: 1.125em;
+  top: 20px;
+  left: 20px;
+  padding: 12px 24px;
+  background-color: rgba(154, 0, 255, 0.3);
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  z-index: 2;
+  font-size: 16px;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 15px rgba(154, 0, 255, 0.5);
 }
 
 #goBack:hover {
-  transform: scale(1.1);
-  background-color: rgba(0, 0, 17, 0.8);
-}
-
-/* =======================
-   Toggle Button Styling
-======================= */
-
-.toggle-btn {
-  display: none;
-  font-size: 1em;
-  padding: 0.76em 1.25em;
-  border-radius: 1.25em;
-  background-color: rgba(0, 0, 17, 0.6);
-  color: #00ccff;
-  text-shadow: 0 0 0.625em rgba(51, 51, 255, 0.5);
-  border: 0.063em solid rgba(51, 51, 255, 0.5);
-  cursor: pointer;
-  position: absolute;
-  bottom: 5em;
-  left: 1.25em;
-  z-index: 3;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.toggle-btn:hover {
-  background-color: rgba(0, 0, 17, 0.8);
+  background-color: rgba(154, 0, 255, 0.5);
   transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(154, 0, 255, 0.7);
 }
 
-/* =======================
-   Pagination Styling
-======================= */
-
-#pagination {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+#goBack:active {
+  background-color: rgba(154, 0, 255, 0.7);
+  transform: scale(0.95);
+  box-shadow: 0 0 25px rgba(154, 0, 255, 0.9);
 }
 
-#pagination button {
-  background-color: rgba(0, 0, 17, 0.6);
-  color: #00ccff;
-  border: 1px solid #3333ff;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
+/* Explanatory Panel Styling */
+#explanatoryPanel {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 30%;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: background 0.3s ease;
 }
 
-#pagination button:hover {
-  background-color: #3333ff;
-  color: #000011;
+#explanatoryPanel h2,
+#explanatoryPanel h3 {
+  color: #9b59b6; /* Neon purple for headings */
 }
 
-/* Responsive design styles remain unchanged */
+#explanatoryPanel p,
+#explanatoryPanel li {
+  color: #dddddd;
+}
+
+#explanatoryPanel a {
+  color: #e74c3c; /* Neon red for links */
+  text-decoration: none;
+}
+
+#explanatoryPanel a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 1024px) {
+  #animation {
+      height: 50%;
+  }
+  
+  #explanatoryPanel {
+      max-height: 35%;
+  }
+}
+
+@media (max-width: 768px) {
+  .animation-container {
+      width: 100%;
+      height: 95vh;
+      padding: 15px;
+  }
+
+  .controls {
+      flex-direction: column;
+      align-items: stretch;
+  }
+
+  .control-group {
+      min-width: 100%;
+  }
+
+  .button-group {
+      flex-direction: column;
+  }
+
+  #goBack {
+      top: 10px;
+      left: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+  }
+
+  #explanatoryPanel {
+      max-height: 40%;
+  }
+}
+
+/* Dimensional Transformation Indicator Styling */
+#dimensionIndicator {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: rgba(154, 0, 255, 0.3);
+  border-radius: 8px;
+  font-size: 16px;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 0 15px rgba(154, 0, 255, 0.5);
+}
+
+#dimensionIndicator.active {
+  background-color: rgba(154, 0, 255, 0.5);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(154, 0, 255, 0.7);
+}
+
+#dimensionIndicator.hidden {
+  display: none;
+}
+
+/* Animation Enhancements */
+@keyframes pulse {
+  0% {
+      box-shadow: 0 0 10px rgba(154, 0, 255, 0.5);
+  }
+  50% {
+      box-shadow: 0 0 20px rgba(154, 0, 255, 0.8);
+  }
+  100% {
+      box-shadow: 0 0 10px rgba(154, 0, 255, 0.5);
+  }
+}
+
+.animation-container:hover {
+  animation: pulse 2s infinite;
+}
+
+#animation:hover {
+  animation: pulse 3s infinite;
+}

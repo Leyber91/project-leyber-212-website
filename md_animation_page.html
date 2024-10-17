@@ -2,43 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N-Dimensional Cube Renderer</title>
-    <link rel="stylesheet" href="./assets/css/md/animation_control.css">
-    <!-- Orbitron Font for the aesthetic -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" type="module"></script>
-    <!-- Custom Post-Processing Modules -->
-    <script type="module" src="./assets/js/dimensional_mania/custom_effect_composer.js"></script>
-    <script type="module" src="./assets/js/dimensional_mania/custom_render_pass.js"></script>
-    <script type="module" src="./assets/js/dimensional_mania/custom_unreal_bloom_pass.js"></script>
+    <title>N-Dimensional Cube Visualization</title>
+    <link rel="stylesheet" href="assets/css/md/animation_control.css">
+    <!-- Include Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <div class="animation-container">
+        <button id="goBack">Go Back</button>
         <div id="animation"></div>
-        <div class="controls">
-            <label>
-                Dimension:
-                <select id="dimensionSelector">
-                    <option value="3">3D</option>
-                    <option value="4">4D</option>
-                    <option value="5">5D</option>
-                    <option value="6">6D</option>
-                    <option value="7">7D</option>
-                    <option value="8">8D</option>
-                    <option value="9">9D</option>
-                    <option value="10">10D</option>
-                </select>
-            </label>
-            <button id="toggleAnimation">Stop Animation</button>
-            <label>Size: <input type="range" id="rangeSize" min="1" max="120" value="50"></label>
-            <label>Speed: <input type="range" id="rangeSpeed" min="1" max="100" value="50"></label>
+        
+        <!-- Toggle Button for Panel -->
+        <button id="togglePanel" class="toggle-button">Hide Controls & Info</button>
+        
+        <!-- Panel containing Controls and Explanatory Panel -->
+        <div id="panel" class="visible">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="dimensionSelector"><strong>Select Dimension:</strong></label>
+                    <select id="dimensionSelector">
+                        <option value="1">1D</option>
+                        <option value="2">2D</option>
+                        <option value="3" selected>3D</option>
+                        <option value="4">4D</option>
+                        <option value="5">5D</option>
+                        <option value="6">6D</option>
+                        <option value="7">7D</option>
+                        <option value="8">8D</option>
+                        <option value="9">9D</option>
+                        <option value="10">10D</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="rangeSize"><strong>Size:</strong></label>
+                    <input type="range" id="rangeSize" min="10" max="100" value="50">
+                </div>
+
+                <div class="control-group">
+                    <label for="rangeSpeed"><strong>Speed:</strong></label>
+                    <input type="range" id="rangeSpeed" min="10" max="100" value="50">
+                </div>
+
+                <div class="button-group">
+                    <button id="toggleAnimation">Stop Animation</button>
+                    <button id="toggleStaticMode">Switch to Static Mode</button>
+                    <button id="nextDimension">Next Dimension</button>
+                    <button id="transformDimension">Transform Dimension</button>
+                </div>
+            </div>
+            <div id="explanatoryPanel">
+                <!-- Explanatory content will be injected here -->
+            </div>
+        </div>
+        
+        <div id="dimensionIndicator" class="hidden">
+            Current Dimension: 3D
         </div>
     </div>
-    <button id="goBack" onclick="window.location.href='index.html'">Go Back</button>
 
-    <!-- Main JavaScript Module -->
-    <script type="module" src="./assets/js/dimensional_mania/main.js"></script>
+    <!-- Include your custom scripts as modules -->
+    <script type="module" src="assets/js/dimensional_mania/main.js"></script>
 </body>
 </html>
